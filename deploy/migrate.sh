@@ -18,7 +18,7 @@ for migration in "$PROJECT_DIR"/database/migrations/*.sql; do
     if [ -f "$migration" ]; then
         filename=$(basename "$migration")
         echo "Running migration: $filename"
-        docker exec -i mkl-db psql -U mkl -d mkl < "$migration" || true
+        docker exec -i mkl-db psql -U mkl -d mkl_platform < "$migration" || true
     fi
 done
 
