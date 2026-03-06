@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS public_team_members (
   display_order INTEGER DEFAULT 0,
   is_visible BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(name, category)
 );
 
 -- Indexes
@@ -68,23 +69,6 @@ ON CONFLICT (section, key) DO NOTHING;
 
 -- Seed team members
 INSERT INTO public_team_members (name, role, title, bio, category, email, linkedin_url, display_order) VALUES
-  ('Dr. Ronald Miller', 'Director', NULL, 'Leading the Stats Lab with expertise in statistical methodology and psychometric research.', 'leadership', 'ronald.miller@uvu.edu', '#', 1),
-  ('Dr. David Benson', 'Director', NULL, 'Co-director providing strategic guidance and research oversight.', 'leadership', 'david.benson@uvu.edu', '#', 2),
-  ('Dr. Phil Witt', 'Leadership', NULL, 'Faculty advisor supporting student research initiatives.', 'leadership', NULL, '#', 3),
-  ('Prof. Greg Cronin', 'Leadership', NULL, 'Faculty advisor with expertise in business analytics.', 'leadership', NULL, '#', 4),
-  ('Sam Johnston', 'Lab Lead', NULL, 'Student leader coordinating project teams and client relationships.', 'lab_lead', 'sam.johnston@uvu.edu', '#', 1),
-  ('Joseph White', 'Lab Lead', NULL, 'Student leader managing research operations and team development.', 'lab_lead', NULL, '#', 2),
-  ('Jared Williams', 'Project Member', NULL, '', 'member', NULL, NULL, 1),
-  ('Emery Holden', 'Project Member', NULL, '', 'member', NULL, NULL, 2),
-  ('Parris Holden', 'Project Member', NULL, '', 'member', NULL, NULL, 3),
-  ('Isaac Davis', 'Project Member', NULL, '', 'member', NULL, NULL, 4),
-  ('Park Anderson', 'Project Member', NULL, '', 'member', NULL, NULL, 5),
-  ('Connor Ross', 'Project Member', NULL, '', 'member', NULL, NULL, 6),
-  ('Harry Nemelka', 'Project Member', NULL, '', 'member', NULL, NULL, 7),
-  ('James Douglas', 'Project Member', NULL, '', 'member', NULL, NULL, 8),
-  ('Landon Memmott', 'Project Member', NULL, '', 'member', NULL, NULL, 9),
-  ('Weston Hutchings', 'Project Member', NULL, '', 'member', NULL, NULL, 10),
-  ('Wyatt Richard', 'Project Member', NULL, '', 'member', NULL, NULL, 11),
-  ('Zach Peterson', 'Project Member', NULL, '', 'member', NULL, NULL, 12),
-  ('Vasu Chetty', 'Professional Acquaintance', NULL, 'Industry partner supporting Stats Lab initiatives.', 'partner', NULL, NULL, 1)
+  ('Joseph White', 'Co-Founder', NULL, 'Co-founder of Michael Kairos Labs. Research operations and analytics leadership.', 'leadership', 'jmw@michaelkairoslabs.com', '#', 1),
+  ('Jared Williams', 'Co-Founder', NULL, 'Co-founder of Michael Kairos Labs. Strategy and client engagement.', 'leadership', NULL, '#', 2)
 ON CONFLICT (name, category) DO NOTHING;

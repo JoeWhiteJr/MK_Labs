@@ -18,6 +18,7 @@ const forgotPasswordLimiter = rateLimit({
   max: 5,
   message: { error: { message: 'Too many password reset requests, please try again later' } },
   keyGenerator: (req) => req.body?.email || req.ip,
+  validate: false,
 });
 
 // Register - disabled, users must apply and be approved by an admin

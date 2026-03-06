@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
-const auth = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 const { body, param, validationResult } = require('express-validator');
 
 // All routes require authentication
-router.use(auth);
+router.use(authenticate);
 
 const VALID_STATUSES = ['discovery', 'proposal', 'negotiation', 'won', 'lost'];
 

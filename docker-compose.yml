@@ -3,18 +3,18 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: stats-lab-db
+    container_name: mkl-db
     environment:
-      POSTGRES_USER: statslab
-      POSTGRES_PASSWORD: statslab_dev_password
-      POSTGRES_DB: statslab
+      POSTGRES_USER: mkl
+      POSTGRES_PASSWORD: mkl_dev_password
+      POSTGRES_DB: mkl_platform
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/migrations:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U statslab"]
+      test: ["CMD-SHELL", "pg_isready -U mkl"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -23,10 +23,10 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: stats-lab-backend
+    container_name: mkl-backend
     environment:
       NODE_ENV: development
-      DATABASE_URL: postgresql://statslab:statslab_dev_password@postgres:5432/statslab
+      DATABASE_URL: postgresql://mkl:mkl_dev_password@postgres:5432/mkl_platform
       JWT_SECRET: dev-jwt-secret-change-in-production
       PORT: 3001
       UPLOAD_DIR: /app/uploads
@@ -46,7 +46,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: stats-lab-frontend
+    container_name: mkl-frontend
     environment:
       VITE_API_URL: http://localhost:3001/api
     ports:

@@ -5,6 +5,6 @@ CREATE INDEX IF NOT EXISTS idx_notes_project_id ON notes(project_id);
 CREATE INDEX IF NOT EXISTS idx_action_items_project_id ON action_items(project_id);
 CREATE INDEX IF NOT EXISTS idx_action_items_assigned_to ON action_items(assigned_to);
 CREATE INDEX IF NOT EXISTS idx_files_project_id ON files(project_id);
-CREATE INDEX IF NOT EXISTS idx_chat_messages_room_id ON chat_messages(room_id);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_room_id ON messages(room_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_unread ON notifications(user_id) WHERE read_at IS NULL;
