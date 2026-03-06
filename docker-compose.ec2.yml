@@ -1,0 +1,89 @@
+# Single EC2 deployment - all services on one instance
+# Usage: docker-compose -f docker-compose.ec2.yml up -d
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: statslab-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-statslab}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-statslab}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-statslab}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - statslab-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    container_name: statslab-backend
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${DB_USER:-statslab}:${DB_PASSWORD}@db:5432/${DB_NAME:-statslab}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3001
+      UPLOAD_DIR: /app/uploads
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"const r=require('http').get('http://127.0.0.1:3001/api/health',s=>{process.exit(s.statusCode===200?0:1)});r.on('error',()=>process.exit(1))\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - statslab-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+    container_name: statslab-frontend
+    restart: unless-stopped
+    networks:
+      - statslab-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: statslab-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+      - /etc/nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      frontend:
+        condition: service_started
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - statslab-network
+
+volumes:
+  postgres_data:
+  uploads_data:
+
+networks:
+  statslab-network:
+    driver: bridge

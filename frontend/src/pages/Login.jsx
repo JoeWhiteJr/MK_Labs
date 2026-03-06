@@ -1,0 +1,114 @@
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../store/authStore'
+import Input from '../components/Input'
+import Button from '../components/Button'
+
+export default function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { login, error, clearError, pendingApproval, token } = useAuthStore()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    document.title = 'Sign In - MKL'
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      navigate('/dashboard')
+    }
+  }, [token, navigate])
+
+  useEffect(() => {
+    clearError()
+  }, [email, password, clearError])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    const result = await login(email, password)
+    setIsSubmitting(false)
+    if (result.success) {
+      navigate('/dashboard')
+    } else if (result.code === 'ACCOUNT_DELETED') {
+      navigate('/access-revoked')
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="font-display font-bold text-3xl text-teal">Michael Kairos Labs</h1>
+          <p className="mt-2 text-text-secondary">Welcome back! Sign in to continue.</p>
+        </div>
+
+        {/* Form */}
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <Input
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+            />
+
+            <Input
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+
+            {pendingApproval && (
+              <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-sm text-amber-800">
+                <p className="font-medium mb-1">Application Under Review</p>
+                <p>Your application is currently under review by the admins. Thank you for your patience.</p>
+              </div>
+            )}
+            {error && !pendingApproval && (
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
+            <div className="flex justify-end">
+              <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
+                Forgot password?
+              </Link>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
+              loading={isSubmitting}
+            >
+              Sign in
+            </Button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-text-secondary">
+            Want to join the team?{' '}
+            <Link to="/apply" className="text-primary-600 hover:text-primary-700 font-medium">
+              Apply here
+            </Link>
+          </p>
+        </div>
+
+        {/* Home Link */}
+        <div className="mt-6 text-center">
+          <Link to="/" className="text-sm text-text-secondary hover:text-primary-600 transition-colors">
+            ← Back to Home
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}

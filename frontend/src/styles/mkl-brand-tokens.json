@@ -1,0 +1,298 @@
+{
+  "brand": {
+    "name": "Michael Kairos Labs",
+    "shortName": "MKL",
+    "tagline": "Research. Analytics. Impact.",
+    "url": "michaelkairoslabs.com",
+    "description": "Boutique research and analytics consultancy. Modern alternative to Big Four — academic rigor, practical delivery."
+  },
+
+  "colors": {
+    "primary": {
+      "midnight": { "hex": "#0F172A", "rgb": "15, 23, 42", "hsl": "222, 47%, 11%", "usage": "Primary brand color. Headers, nav backgrounds, dark sections, primary text, hero backgrounds. Should represent 60%+ of visual weight." },
+      "deepSlate": { "hex": "#1E293B", "rgb": "30, 41, 59", "hsl": "217, 33%, 17%", "usage": "Secondary dark. Card backgrounds on dark sections, footer, sidebar backgrounds." },
+      "slate": { "hex": "#334155", "rgb": "51, 65, 85", "hsl": "215, 25%, 27%", "usage": "Tertiary dark. Borders on dark backgrounds, subtle dark UI elements." }
+    },
+
+    "accent": {
+      "deepTeal": { "hex": "#0D9488", "rgb": "13, 148, 136", "hsl": "174, 84%, 32%", "usage": "PRIMARY ACCENT. CTAs, links, accent bars, data highlights, key metrics, hover states, focus rings. The main 'modern edge' color." },
+      "teal": { "hex": "#14B8A6", "rgb": "20, 184, 166", "hsl": "173, 80%, 40%", "usage": "Lighter teal for hover states, secondary buttons, icon backgrounds, chart colors." },
+      "forestTeal": { "hex": "#0F766E", "rgb": "15, 118, 110", "hsl": "175, 77%, 26%", "usage": "Darker teal for active/pressed states, visited links, dark-mode accent." }
+    },
+
+    "secondary": {
+      "amberGold": { "hex": "#D97706", "rgb": "217, 119, 6", "hsl": "32, 95%, 44%", "usage": "RESERVED for Oxford partner content, premium tier, impact reports, formal/institutional contexts. Do NOT use for general UI." },
+      "amber": { "hex": "#F59E0B", "rgb": "245, 158, 11", "hsl": "38, 92%, 50%", "usage": "Lighter gold for Oxford badges, premium highlights, warm callout backgrounds." },
+      "amberDark": { "hex": "#B45309", "rgb": "180, 83, 9", "hsl": "26, 90%, 37%", "usage": "Dark gold for pressed states on gold elements." }
+    },
+
+    "neutral": {
+      "white": { "hex": "#FFFFFF", "rgb": "255, 255, 255", "usage": "Pure white. Card backgrounds, content areas." },
+      "cloud": { "hex": "#F8FAFC", "rgb": "248, 250, 252", "usage": "Page background. Light sections. Form field backgrounds." },
+      "mist": { "hex": "#F1F5F9", "rgb": "241, 245, 249", "usage": "Subtle background differentiation. Alternating table rows. Code blocks." },
+      "border": { "hex": "#E2E8F0", "rgb": "226, 232, 240", "usage": "Default borders. Dividers. Card outlines." },
+      "muted": { "hex": "#94A3B8", "rgb": "148, 163, 184", "usage": "Placeholder text. Disabled states. Timestamps. Captions." },
+      "secondaryText": { "hex": "#64748B", "rgb": "100, 116, 139", "usage": "Secondary body text. Subtitles. Descriptions. Meta info." },
+      "bodyText": { "hex": "#475569", "rgb": "71, 85, 105", "usage": "Primary body text for paragraphs and descriptions." },
+      "headingText": { "hex": "#0F172A", "rgb": "15, 23, 42", "usage": "Headlines, titles, navigation items. Same as midnight primary." }
+    },
+
+    "semantic": {
+      "success": { "hex": "#10B981", "rgb": "16, 185, 129", "usage": "Success states, positive metrics, confirmations, completed items." },
+      "successLight": { "hex": "#D1FAE5", "usage": "Success background tint." },
+      "warning": { "hex": "#F59E0B", "rgb": "245, 158, 11", "usage": "Warning states, caution notices. Note: same as amber." },
+      "warningLight": { "hex": "#FEF3C7", "usage": "Warning background tint." },
+      "error": { "hex": "#EF4444", "rgb": "239, 68, 68", "usage": "Error states, destructive actions, validation errors." },
+      "errorLight": { "hex": "#FEE2E2", "usage": "Error background tint." },
+      "info": { "hex": "#0EA5E9", "rgb": "14, 165, 233", "usage": "Informational notices, tooltips, help text." },
+      "infoLight": { "hex": "#E0F2FE", "usage": "Info background tint." },
+      "oxford": { "hex": "#7C3AED", "rgb": "124, 58, 237", "usage": "Oxford partner callouts, academic credibility badges. Use alongside gold for premium." },
+      "oxfordLight": { "hex": "#F5F3FF", "usage": "Oxford badge/callout background." }
+    }
+  },
+
+  "typography": {
+    "fonts": {
+      "display": {
+        "family": "'Space Grotesk', sans-serif",
+        "fallback": "'Calibri', 'Arial', sans-serif",
+        "googleFonts": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap",
+        "weights": [500, 600, 700],
+        "usage": "Headlines, titles, hero text, stat callouts, navigation brand name. Never for body paragraphs."
+      },
+      "body": {
+        "family": "'Inter', sans-serif",
+        "fallback": "'Segoe UI', 'Calibri', sans-serif",
+        "googleFonts": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap",
+        "weights": [400, 500, 600],
+        "usage": "Body copy, card descriptions, navigation links, form labels, buttons, captions, meta text."
+      },
+      "mono": {
+        "family": "'JetBrains Mono', monospace",
+        "fallback": "'Consolas', 'Courier New', monospace",
+        "googleFonts": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap",
+        "weights": [400, 500],
+        "usage": "Data values, hex codes, invoice numbers, code snippets, technical specs, prices."
+      }
+    },
+
+    "scale": {
+      "display": { "size": "40px", "lineHeight": "1.1", "weight": 700, "font": "display", "tracking": "-0.02em" },
+      "h1": { "size": "32px", "lineHeight": "1.2", "weight": 700, "font": "display", "tracking": "-0.01em" },
+      "h2": { "size": "24px", "lineHeight": "1.3", "weight": 600, "font": "display", "tracking": "0" },
+      "h3": { "size": "20px", "lineHeight": "1.4", "weight": 600, "font": "display", "tracking": "0" },
+      "h4": { "size": "18px", "lineHeight": "1.4", "weight": 600, "font": "display", "tracking": "0" },
+      "bodyLarge": { "size": "18px", "lineHeight": "1.7", "weight": 400, "font": "body", "tracking": "0" },
+      "body": { "size": "16px", "lineHeight": "1.7", "weight": 400, "font": "body", "tracking": "0" },
+      "small": { "size": "14px", "lineHeight": "1.6", "weight": 400, "font": "body", "tracking": "0" },
+      "caption": { "size": "12px", "lineHeight": "1.5", "weight": 400, "font": "body", "tracking": "0.01em" },
+      "overline": { "size": "12px", "lineHeight": "1.5", "weight": 700, "font": "body", "tracking": "0.08em", "textTransform": "uppercase" },
+      "data": { "size": "14px", "lineHeight": "1.4", "weight": 500, "font": "mono", "tracking": "0" },
+      "statLarge": { "size": "48px", "lineHeight": "1.1", "weight": 700, "font": "display", "tracking": "-0.02em" },
+      "statMedium": { "size": "32px", "lineHeight": "1.1", "weight": 700, "font": "display", "tracking": "-0.01em" }
+    }
+  },
+
+  "spacing": {
+    "unit": "4px",
+    "scale": {
+      "0": "0px",
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "8": "32px",
+      "10": "40px",
+      "12": "48px",
+      "16": "64px",
+      "20": "80px",
+      "24": "96px",
+      "32": "128px"
+    },
+    "sectionPadding": { "desktop": "96px", "tablet": "64px", "mobile": "48px" },
+    "containerMaxWidth": "1200px",
+    "containerPadding": { "desktop": "24px", "tablet": "20px", "mobile": "16px" }
+  },
+
+  "borderRadius": {
+    "none": "0px",
+    "sm": "4px",
+    "md": "8px",
+    "lg": "12px",
+    "xl": "16px",
+    "2xl": "24px",
+    "full": "9999px"
+  },
+
+  "shadows": {
+    "sm": "0 1px 2px rgba(15, 23, 42, 0.05)",
+    "md": "0 4px 6px rgba(15, 23, 42, 0.07)",
+    "lg": "0 10px 25px rgba(15, 23, 42, 0.1)",
+    "xl": "0 20px 50px rgba(15, 23, 42, 0.15)",
+    "card": "0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04)",
+    "cardHover": "0 10px 25px rgba(15, 23, 42, 0.08)",
+    "navBar": "0 1px 3px rgba(15, 23, 42, 0.1)"
+  },
+
+  "components": {
+    "button": {
+      "primary": {
+        "bg": "#0D9488",
+        "bgHover": "#0F766E",
+        "bgActive": "#115E59",
+        "text": "#FFFFFF",
+        "borderRadius": "8px",
+        "padding": "12px 24px",
+        "fontSize": "16px",
+        "fontWeight": 600,
+        "fontFamily": "body",
+        "transition": "all 150ms ease"
+      },
+      "secondary": {
+        "bg": "transparent",
+        "bgHover": "#F0FDFA",
+        "border": "1px solid #0D9488",
+        "text": "#0D9488",
+        "textHover": "#0F766E",
+        "borderRadius": "8px",
+        "padding": "12px 24px"
+      },
+      "gold": {
+        "bg": "#D97706",
+        "bgHover": "#B45309",
+        "text": "#FFFFFF",
+        "borderRadius": "8px",
+        "padding": "12px 24px",
+        "usage": "ONLY for Oxford partner CTAs or premium/institutional contexts"
+      },
+      "dark": {
+        "bg": "#0F172A",
+        "bgHover": "#1E293B",
+        "text": "#FFFFFF",
+        "borderRadius": "8px",
+        "padding": "12px 24px"
+      }
+    },
+
+    "card": {
+      "default": {
+        "bg": "#FFFFFF",
+        "border": "1px solid #E2E8F0",
+        "borderRadius": "12px",
+        "padding": "24px",
+        "shadow": "0 1px 3px rgba(15, 23, 42, 0.06)",
+        "shadowHover": "0 10px 25px rgba(15, 23, 42, 0.08)",
+        "transition": "all 200ms ease"
+      },
+      "service": {
+        "bg": "#FFFFFF",
+        "border": "1px solid #E2E8F0",
+        "borderTop": "3px solid #0D9488",
+        "borderRadius": "12px",
+        "padding": "24px"
+      },
+      "oxford": {
+        "bg": "#FFFBEB",
+        "border": "1px solid #FDE68A",
+        "borderRadius": "12px",
+        "padding": "24px",
+        "accentColor": "#D97706"
+      },
+      "dark": {
+        "bg": "#1E293B",
+        "border": "1px solid #334155",
+        "borderRadius": "12px",
+        "padding": "24px"
+      }
+    },
+
+    "navigation": {
+      "height": "72px",
+      "bg": "#0F172A",
+      "brandColor": "#FFFFFF",
+      "brandFont": "display",
+      "linkColor": "#94A3B8",
+      "linkHoverColor": "#FFFFFF",
+      "activeLinkColor": "#0D9488",
+      "ctaButton": {
+        "bg": "#0D9488",
+        "text": "#FFFFFF",
+        "borderRadius": "8px",
+        "padding": "8px 20px"
+      }
+    },
+
+    "hero": {
+      "darkVariant": {
+        "bg": "#0F172A",
+        "titleColor": "#FFFFFF",
+        "titleFont": "display",
+        "subtitleColor": "#94A3B8",
+        "accentColor": "#0D9488"
+      },
+      "lightVariant": {
+        "bg": "#F8FAFC",
+        "titleColor": "#0F172A",
+        "titleFont": "display",
+        "subtitleColor": "#64748B",
+        "accentColor": "#0D9488"
+      }
+    },
+
+    "footer": {
+      "bg": "#0F172A",
+      "textColor": "#94A3B8",
+      "headingColor": "#FFFFFF",
+      "linkColor": "#94A3B8",
+      "linkHoverColor": "#0D9488",
+      "dividerColor": "#1E293B"
+    },
+
+    "input": {
+      "bg": "#FFFFFF",
+      "border": "1px solid #E2E8F0",
+      "borderFocus": "2px solid #0D9488",
+      "borderRadius": "8px",
+      "padding": "12px 16px",
+      "fontSize": "16px",
+      "placeholderColor": "#94A3B8",
+      "textColor": "#0F172A"
+    },
+
+    "badge": {
+      "teal": { "bg": "#F0FDFA", "text": "#0D9488", "border": "#99F6E4" },
+      "gold": { "bg": "#FFFBEB", "text": "#D97706", "border": "#FDE68A" },
+      "slate": { "bg": "#F1F5F9", "text": "#475569", "border": "#E2E8F0" },
+      "oxford": { "bg": "#F5F3FF", "text": "#7C3AED", "border": "#DDD6FE" }
+    },
+
+    "divider": {
+      "default": { "color": "#E2E8F0", "width": "1px" },
+      "accent": { "gradient": "linear-gradient(90deg, #0D9488, #14B8A6, transparent)", "width": "2px" },
+      "gold": { "gradient": "linear-gradient(90deg, #D97706, #F59E0B, transparent)", "width": "2px" }
+    }
+  },
+
+  "breakpoints": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px"
+  },
+
+  "transitions": {
+    "fast": "150ms ease",
+    "normal": "200ms ease",
+    "slow": "300ms ease"
+  },
+
+  "zIndex": {
+    "dropdown": 10,
+    "sticky": 20,
+    "nav": 50,
+    "modal": 100,
+    "tooltip": 200
+  }
+}

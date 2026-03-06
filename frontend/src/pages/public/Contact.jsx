@@ -1,0 +1,197 @@
+import { useState } from 'react'
+import { Mail, Phone, Clock } from 'lucide-react'
+
+const serviceOptions = [
+  'MaxDiff & Conjoint Analysis',
+  'UX / Usability Research',
+  'Psychometrics & Scale Development',
+  'AI Integration & Automation',
+  'Statistical Modeling & Forecasting',
+  'Process Mapping & Optimization',
+  'Impact Measurement & Evaluation',
+  'Not sure yet',
+]
+
+export default function Contact() {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    company: '',
+    service: '',
+    message: '',
+  })
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // TODO: Wire to backend contact endpoint
+    setSubmitted(true)
+  }
+
+  const handleChange = (e) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  return (
+    <div>
+      {/* Hero */}
+      <section className="section-dark py-20 md:py-24">
+        <div className="max-w-container mx-auto px-6 text-center">
+          <p className="text-sm font-semibold text-teal uppercase tracking-widest mb-4">Contact</p>
+          <h1 className="font-display text-display text-white mb-6">
+            Let&apos;s Talk
+          </h1>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            Book a free 30-minute discovery call, or send us a message.
+            We respond within one business day.
+          </p>
+        </div>
+      </section>
+
+      <section className="section-white py-20 md:py-24">
+        <div className="max-w-container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
+            {/* Contact Form */}
+            <div className="lg:col-span-3">
+              {submitted ? (
+                <div className="card text-center py-16">
+                  <div className="w-16 h-16 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto mb-4">
+                    <Mail size={32} />
+                  </div>
+                  <h3 className="font-display text-h2 text-midnight mb-3">Message Sent</h3>
+                  <p className="text-body-text">
+                    Thanks for reaching out! We&apos;ll get back to you within one business day.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-midnight mb-2">Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        value={form.name}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-midnight mb-2">Email *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        value={form.email}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors"
+                        placeholder="you@company.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-midnight mb-2">Company / Organization</label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={form.company}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors"
+                      placeholder="Your organization"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-midnight mb-2">Service Interest</label>
+                    <select
+                      name="service"
+                      value={form.service}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors bg-white"
+                    >
+                      <option value="">Select a service (optional)</option>
+                      {serviceOptions.map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-midnight mb-2">Message *</label>
+                    <textarea
+                      name="message"
+                      required
+                      rows={5}
+                      value={form.message}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors resize-none"
+                      placeholder="Tell us about your challenge or project..."
+                    />
+                  </div>
+
+                  <button type="submit" className="btn btn-primary w-full sm:w-auto px-8 py-3">
+                    Send Message
+                  </button>
+                </form>
+              )}
+            </div>
+
+            {/* Contact Info Sidebar */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="card-service">
+                <h3 className="font-display text-h3 text-midnight mb-6">Get in Touch</h3>
+
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal flex items-center justify-center flex-shrink-0">
+                      <Mail size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-midnight">Email</p>
+                      <a href="mailto:jmw@michaelkairoslabs.com" className="text-sm text-teal hover:text-teal-dark">
+                        jmw@michaelkairoslabs.com
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal flex items-center justify-center flex-shrink-0">
+                      <Phone size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-midnight mb-1">Joe White</p>
+                      <p className="text-sm text-secondary-text">joe@michaelkairoslabs.com</p>
+                      <p className="text-sm font-medium text-midnight mb-1 mt-3">Jared Wasden</p>
+                      <p className="text-sm text-secondary-text">jared@michaelkairoslabs.com</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal flex items-center justify-center flex-shrink-0">
+                      <Clock size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-midnight">Response Time</p>
+                      <p className="text-sm text-secondary-text">Within 1 business day</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card bg-teal-50 border-teal-200">
+                <h4 className="font-display text-h4 text-midnight mb-2">Free Discovery Call</h4>
+                <p className="text-sm text-body-text leading-relaxed">
+                  30 minutes, no commitment. We&apos;ll discuss your challenge, suggest
+                  an approach, and give you an honest assessment of fit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

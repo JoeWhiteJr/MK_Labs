@@ -1,0 +1,437 @@
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const { body, validationResult } = require('express-validator');
+const db = require('../config/database');
+const { authenticate, requireRole } = require('../middleware/auth');
+
+const router = express.Router();
+
+// Helper: log user activity for streak tracking
+async function logActivity(userId, type) {
+  try {
+    await db.query(
+      `INSERT INTO user_activity_log (user_id, activity_date, activity_type)
+       VALUES ($1, CURRENT_DATE, $2)
+       ON CONFLICT (user_id, activity_date, activity_type) DO NOTHING`,
+      [userId, type]
+    );
+  } catch (error) {
+    // Activity logging is best-effort; swallow errors silently
+  }
+}
+
+// Get all users (admin only)
+router.get('/', authenticate, requireRole('admin'), async (req, res, next) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+    const offset = parseInt(req.query.offset) || 0;
+
+    const countResult = await db.query(
+      'SELECT COUNT(*) FROM users WHERE deleted_at IS NULL'
+    );
+    const total = parseInt(countResult.rows[0].count);
+
+    const result = await db.query(
+      'SELECT id, email, name, role, created_at FROM users WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+      [limit, offset]
+    );
+    res.json({ users: result.rows, total, limit, offset });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get all team members (for assignment dropdowns)
+router.get('/team', authenticate, async (req, res, next) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+    const offset = parseInt(req.query.offset) || 0;
+
+    const countResult = await db.query(
+      'SELECT COUNT(*) FROM users WHERE deleted_at IS NULL'
+    );
+    const total = parseInt(countResult.rows[0].count);
+
+    const result = await db.query(
+      'SELECT id, name, email, role, avatar_url FROM users WHERE deleted_at IS NULL ORDER BY name ASC LIMIT $1 OFFSET $2',
+      [limit, offset]
+    );
+    res.json({ users: result.rows, total, limit, offset });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get user notification preferences
+router.get('/preferences', authenticate, async (req, res, next) => {
+  try {
+    let result = await db.query(
+      'SELECT * FROM user_preferences WHERE user_id = $1',
+      [req.user.id]
+    );
+
+    // If no preferences exist, create default ones
+    if (result.rows.length === 0) {
+      result = await db.query(
+        'INSERT INTO user_preferences (user_id) VALUES ($1) RETURNING *',
+        [req.user.id]
+      );
+    }
+
+    const prefs = result.rows[0];
+    // Remove internal fields
+    delete prefs.id;
+    delete prefs.user_id;
+    delete prefs.created_at;
+    delete prefs.updated_at;
+
+    res.json({ preferences: prefs });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update user notification preferences
+router.put('/preferences', authenticate, [
+  body('email_chat').optional().isBoolean(),
+  body('email_applications').optional().isBoolean(),
+  body('email_mentions').optional().isBoolean(),
+  body('email_system').optional().isBoolean(),
+  body('in_app_chat').optional().isBoolean(),
+  body('in_app_applications').optional().isBoolean(),
+  body('in_app_mentions').optional().isBoolean(),
+  body('in_app_system').optional().isBoolean()
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
+    }
+
+    const allowedFields = [
+      'email_chat', 'email_applications', 'email_mentions', 'email_system',
+      'in_app_chat', 'in_app_applications', 'in_app_mentions', 'in_app_system'
+    ];
+
+    const updates = [];
+    const values = [];
+    let paramCount = 1;
+
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates.push(`${field} = $${paramCount++}`);
+        values.push(req.body[field]);
+      }
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: { message: 'No fields to update' } });
+    }
+
+    // Upsert preferences
+    values.push(req.user.id);
+    const result = await db.query(`
+      INSERT INTO user_preferences (user_id, ${allowedFields.filter(f => req.body[f] !== undefined).join(', ')})
+      VALUES ($${paramCount}, ${values.slice(0, -1).map((_, i) => `$${i + 1}`).join(', ')})
+      ON CONFLICT (user_id) DO UPDATE SET ${updates.join(', ')}
+      RETURNING *
+    `, values);
+
+    const prefs = result.rows[0];
+    delete prefs.id;
+    delete prefs.user_id;
+    delete prefs.created_at;
+    delete prefs.updated_at;
+
+    res.json({ preferences: prefs, message: 'Preferences updated' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get user activity streak
+router.get('/streak', authenticate, async (req, res, next) => {
+  try {
+    const result = await db.query(
+      `SELECT DISTINCT activity_date FROM user_activity_log
+       WHERE user_id = $1 AND activity_date <= CURRENT_DATE
+       ORDER BY activity_date DESC`,
+      [req.user.id]
+    );
+
+    const rows = result.rows;
+    if (rows.length === 0) return res.json({ streak: 0, lastActive: null });
+
+    let streak = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < rows.length; i++) {
+      const activityDate = new Date(rows[i].activity_date);
+      activityDate.setHours(0, 0, 0, 0);
+
+      const expectedDate = new Date(today);
+      expectedDate.setDate(today.getDate() - i);
+
+      if (activityDate.getTime() === expectedDate.getTime()) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    res.json({ streak, lastActive: rows[0].activity_date });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get blocked users list
+router.get('/blocks', authenticate, async (req, res, next) => {
+  try {
+    const result = await db.query(
+      `SELECT ub.id, ub.blocked_id, ub.created_at, u.name, u.avatar_url
+       FROM user_blocks ub
+       JOIN users u ON ub.blocked_id = u.id
+       WHERE ub.blocker_id = $1
+       ORDER BY ub.created_at DESC`,
+      [req.user.id]
+    );
+    res.json({ blocks: result.rows });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Block a user
+router.post('/:userId/block', authenticate, async (req, res, next) => {
+  try {
+    if (req.params.userId === req.user.id) {
+      return res.status(400).json({ error: { message: 'Cannot block yourself' } });
+    }
+    await db.query(
+      'INSERT INTO user_blocks (blocker_id, blocked_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [req.user.id, req.params.userId]
+    );
+    res.json({ message: 'User blocked' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Unblock a user
+router.delete('/:userId/block', authenticate, async (req, res, next) => {
+  try {
+    await db.query(
+      'DELETE FROM user_blocks WHERE blocker_id = $1 AND blocked_id = $2',
+      [req.user.id, req.params.userId]
+    );
+    res.json({ message: 'User unblocked' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get user by ID
+router.get('/:id', authenticate, async (req, res, next) => {
+  try {
+    const result = await db.query(
+      'SELECT id, email, name, role, created_at FROM users WHERE id = $1 AND deleted_at IS NULL',
+      [req.params.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: { message: 'User not found' } });
+    }
+
+    res.json({ user: result.rows[0] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update user profile
+router.put('/profile', authenticate, [
+  body('firstName').optional().trim().notEmpty(),
+  body('lastName').optional().trim().notEmpty(),
+  body('email').optional().isEmail().normalizeEmail()
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
+    }
+
+    const { firstName, lastName, email } = req.body;
+
+    // Check if email is already taken by another user
+    if (email) {
+      const existing = await db.query(
+        'SELECT id FROM users WHERE email = $1 AND id != $2 AND deleted_at IS NULL',
+        [email, req.user.id]
+      );
+      if (existing.rows.length > 0) {
+        return res.status(409).json({ error: { message: 'Email already in use' } });
+      }
+    }
+
+    const updates = [];
+    const values = [];
+    let paramCount = 1;
+
+    if (firstName !== undefined) { updates.push(`first_name = $${paramCount++}`); values.push(firstName); }
+    if (lastName !== undefined) { updates.push(`last_name = $${paramCount++}`); values.push(lastName); }
+    if (email !== undefined) { updates.push(`email = $${paramCount++}`); values.push(email); }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: { message: 'No fields to update' } });
+    }
+
+    values.push(req.user.id);
+    const result = await db.query(
+      `UPDATE users SET ${updates.join(', ')} WHERE id = $${paramCount} RETURNING id, email, name, first_name, last_name, role, avatar_url`,
+      values
+    );
+
+    res.json({ user: result.rows[0] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Change password
+router.put('/password', authenticate, [
+  body('currentPassword').notEmpty(),
+  body('newPassword').isLength({ min: 8 })
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    const result = await db.query(
+      'SELECT password_hash FROM users WHERE id = $1',
+      [req.user.id]
+    );
+
+    const validPassword = await bcrypt.compare(currentPassword, result.rows[0].password_hash);
+    if (!validPassword) {
+      return res.status(401).json({ error: { message: 'Current password is incorrect' } });
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 12);
+    await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [newHash, req.user.id]);
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update user role (admin only, super admin required for admin role changes)
+router.put('/:id/role', authenticate, requireRole('admin'), [
+  body('role').isIn(['admin', 'project_lead', 'researcher', 'viewer'])
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
+    }
+
+    const { role } = req.body;
+
+    // Check if target user is currently an admin
+    const targetUser = await db.query('SELECT role FROM users WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
+    if (targetUser.rows.length === 0) {
+      return res.status(404).json({ error: { message: 'User not found' } });
+    }
+
+    // Require super admin to change to/from admin role
+    if (role === 'admin' || targetUser.rows[0].role === 'admin') {
+      if (!req.user.is_super_admin) {
+        return res.status(403).json({ error: { message: 'Only super admin can change admin roles' } });
+      }
+    }
+
+    const result = await db.query(
+      'UPDATE users SET role = $1 WHERE id = $2 RETURNING id, email, name, role',
+      [role, req.params.id]
+    );
+
+    res.json({ user: result.rows[0] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Delete user (admin only, super admin required for deleting admins)
+router.delete('/:id', authenticate, requireRole('admin'), async (req, res, next) => {
+  try {
+    if (req.params.id === req.user.id) {
+      return res.status(400).json({ error: { message: 'Cannot delete your own account' } });
+    }
+
+    // Check if target is an admin — require super admin
+    const targetUser = await db.query('SELECT role FROM users WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
+    if (targetUser.rows.length === 0) {
+      return res.status(404).json({ error: { message: 'User not found' } });
+    }
+    if (targetUser.rows[0].role === 'admin' && !req.user.is_super_admin) {
+      return res.status(403).json({ error: { message: 'Only super admin can delete admin users' } });
+    }
+
+    await db.query('UPDATE users SET deleted_at = NOW() WHERE id = $1 AND deleted_at IS NULL RETURNING id', [req.params.id]);
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Avatar upload
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+
+const avatarStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = path.join(process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads'), 'avatars');
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${uuidv4()}${path.extname(file.originalname)}`);
+  }
+});
+
+const avatarUpload = multer({
+  storage: avatarStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only images allowed'), false);
+  }
+});
+
+router.post('/avatar', authenticate, avatarUpload.single('avatar'), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: { message: 'No image uploaded' } });
+    }
+    const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+    const result = await db.query(
+      'UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING id, email, name, role, avatar_url',
+      [avatarUrl, req.user.id]
+    );
+    res.json({ user: result.rows[0] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
+module.exports.logActivity = logActivity;
