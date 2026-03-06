@@ -199,7 +199,7 @@ const typeToEmailPref = {
 };
 
 // Send email notifications to users who have opted in
-const sendNotificationEmails = async (userIds, type, title, body, referenceId) => {
+const sendNotificationEmails = async (userIds, type, title, body, _referenceId) => {
   if (!userIds || userIds.length === 0) return;
 
   const ALLOWED_PREF_COLUMNS = ['email_chat', 'email_mentions', 'email_applications', 'email_system'];

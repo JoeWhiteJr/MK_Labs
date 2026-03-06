@@ -229,7 +229,7 @@ router.put('/content', requireRole('admin'), [
 // ─── Resource File Uploads ──────────────────────────────────────────
 
 // POST /api/lab-dashboard/resources/upload  (admin only)
-router.post('/resources/upload', requireRole('admin'), (req, res, next) => {
+router.post('/resources/upload', requireRole('admin'), (req, res, _next) => {
   resourceUpload.single('file')(req, res, (err) => {
     if (err) {
       if (err instanceof multer.MulterError) {

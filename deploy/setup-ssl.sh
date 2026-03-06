@@ -1,9 +1,9 @@
 #!/bin/bash
-# setup-ssl.sh — One-time Let's Encrypt SSL setup for utahvalleyresearchlab.com
-# Run on EC2 host as root: sudo bash ~/uvrl/deploy/setup-ssl.sh
+# setup-ssl.sh — One-time Let's Encrypt SSL setup for michaelkairoslabs.com
+# Run on EC2 host as root: sudo bash ~/mkl/deploy/setup-ssl.sh
 set -euo pipefail
 
-DOMAIN="utahvalleyresearchlab.com"
+DOMAIN="michaelkairoslabs.com"
 WEBROOT="/var/www/certbot"
 NGINX_CONF_DIR="/etc/nginx/conf.d"
 EMAIL="${CERTBOT_EMAIL:-}"
@@ -51,11 +51,11 @@ mkdir -p "${NGINX_CONF_DIR}"
 cat > "${NGINX_CONF_DIR}/ssl.conf" <<'SSLCONF'
 server {
     listen 443 ssl;
-    server_name utahvalleyresearchlab.com www.utahvalleyresearchlab.com;
+    server_name michaelkairoslabs.com www.michaelkairoslabs.com;
 
     # Let's Encrypt certificates
-    ssl_certificate /etc/letsencrypt/live/utahvalleyresearchlab.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/utahvalleyresearchlab.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/michaelkairoslabs.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/michaelkairoslabs.com/privkey.pem;
 
     # SSL settings
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -155,7 +155,7 @@ SSLCONF
 
 # 5. Set up auto-renewal cron (twice daily with nginx reload)
 echo "Setting up auto-renewal cron..."
-CRON_CMD="0 0,12 * * * certbot renew --quiet --post-hook 'docker exec statslab-nginx nginx -s reload'"
+CRON_CMD="0 0,12 * * * certbot renew --quiet --post-hook 'docker exec mkl-nginx nginx -s reload'"
 (crontab -l 2>/dev/null | grep -v 'certbot renew' || true; echo "${CRON_CMD}") | crontab -
 
 echo ""
@@ -163,7 +163,7 @@ echo "=== SSL setup complete! ==="
 echo ""
 echo "Next steps:"
 echo "  1. Restart nginx to load SSL config:"
-echo "     cd ~/uvrl && docker compose -f docker-compose.ec2.yml restart nginx"
+echo "     cd ~/mkl && docker compose -f docker-compose.ec2.yml restart nginx"
 echo "  2. Test: curl -I https://${DOMAIN}"
 echo "  3. Update .env: CORS_ORIGIN=https://${DOMAIN}"
 echo "  4. Rebuild: docker compose -f docker-compose.ec2.yml up -d --build backend"

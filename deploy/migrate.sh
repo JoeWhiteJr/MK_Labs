@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stats Lab Manager - Database Migration Script
+# Michael Kairos Labs - Database Migration Script
 # Run this after starting the containers to set up the database
 
 set -e
@@ -18,7 +18,7 @@ for migration in "$PROJECT_DIR"/database/migrations/*.sql; do
     if [ -f "$migration" ]; then
         filename=$(basename "$migration")
         echo "Running migration: $filename"
-        docker exec -i statslab-db psql -U statslab -d statslab < "$migration" || true
+        docker exec -i mkl-db psql -U mkl -d mkl < "$migration" || true
     fi
 done
 

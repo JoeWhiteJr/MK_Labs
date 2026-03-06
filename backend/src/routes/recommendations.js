@@ -1,6 +1,6 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const { body, param, query, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authenticate, optionalAuthenticate, requireRole } = require('../middleware/auth');
 const { sanitizeBody } = require('../middleware/sanitize');

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: stats-lab-db
+    container_name: mkl-db
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -21,7 +21,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.prod
-    container_name: stats-lab-backend
+    container_name: mkl-backend
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
@@ -42,7 +42,7 @@ services:
       dockerfile: Dockerfile.prod
       args:
         VITE_API_URL: ${API_URL}
-    container_name: stats-lab-frontend
+    container_name: mkl-frontend
     ports:
       - "80:80"
     depends_on:
@@ -51,12 +51,12 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: stats-lab-proxy
+    container_name: mkl-proxy
     ports:
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - frontend
       - backend

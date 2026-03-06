@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# deploy-ec2.sh - Deploy Stats Lab Manager to EC2
+# deploy-ec2.sh - Deploy Michael Kairos Labs to EC2
 # Usage: ssh ubuntu@<EC2_IP> 'bash -s' < deploy/deploy-ec2.sh
-#    OR: Run directly on the EC2 instance: bash /opt/stats-lab-manager/deploy/deploy-ec2.sh
+#    OR: Run directly on the EC2 instance: bash /opt/MK_Labs/deploy/deploy-ec2.sh
 set -euo pipefail
 
-APP_DIR="/opt/stats-lab-manager"
+APP_DIR="/opt/MK_Labs"
 SWAP_SIZE="2G"
 SWAP_FILE="/swapfile"
 
-echo "=== Stats Lab Manager EC2 Deployment ==="
+echo "=== Michael Kairos Labs EC2 Deployment ==="
 
 # -------------------------------------------------------
 # 1. Set up swap space (prevents OOM during Vite build)
@@ -47,7 +47,7 @@ docker compose -f docker-compose.ec2.yml up -d --build --remove-orphans
 # -------------------------------------------------------
 echo "[4/5] Waiting for database to be healthy..."
 RETRIES=30
-until docker exec statslab-db pg_isready -U statslab -q 2>/dev/null; do
+until docker exec mkl-db pg_isready -U mkl -q 2>/dev/null; do
     RETRIES=$((RETRIES - 1))
     if [ "$RETRIES" -le 0 ]; then
         echo "    ERROR: Database did not become healthy in time"
@@ -59,7 +59,7 @@ echo "    Database is ready. Running migrations..."
 
 for f in database/migrations/*.sql; do
     echo "    Running $(basename "$f")..."
-    docker exec -i statslab-db psql -U statslab -d statslab < "$f" || true
+    docker exec -i mkl-db psql -U mkl -d mkl < "$f" || true
 done
 echo "    Migrations complete."
 
@@ -97,4 +97,4 @@ docker system prune -f 2>/dev/null || true
 
 echo ""
 echo "=== Deployment complete! ==="
-echo "Site should be live at: https://utahvalleyresearchlab.com"
+echo "Site should be live at: https://michaelkairoslabs.com"

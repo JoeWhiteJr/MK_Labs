@@ -1,11 +1,11 @@
 #!/bin/bash
-# Stats Lab Manager - EC2 Setup Script
+# Michael Kairos Labs - EC2 Setup Script
 # Run this on a fresh Amazon Linux 2023 or Ubuntu 22.04 EC2 instance
 
 set -e
 
 echo "=========================================="
-echo "Stats Lab Manager - EC2 Setup"
+echo "Michael Kairos Labs - EC2 Setup"
 echo "=========================================="
 
 # Detect OS
@@ -117,8 +117,8 @@ echo ""
 echo "Next steps:"
 echo "1. Log out and back in (for docker group)"
 echo "2. Clone the repository:"
-echo "   git clone https://github.com/JoeWhiteJr/Utah-Valley-Research-Lab.git"
-echo "   cd Utah-Valley-Research-Lab"
+echo "   git clone https://github.com/JoeWhiteJr/MK_Labs.git"
+echo "   cd MK_Labs"
 echo ""
 echo "3. Create your .env file:"
 echo "   cp deploy/.env.example .env"
@@ -133,5 +133,5 @@ echo ""
 echo "6. Run database migrations:"
 echo "   ./deploy/migrate.sh"
 echo ""
-echo "7. Access the app at: https://utahvalleyresearchlab.com"
+echo "7. Access the app at: https://michaelkairoslabs.com"
 echo ""

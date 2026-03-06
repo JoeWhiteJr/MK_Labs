@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stats Lab Manager - Quick Start for EC2
+# Michael Kairos Labs - Quick Start for EC2
 # This script sets up the application after the repo is cloned
 
 set -e
@@ -10,7 +10,7 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$PROJECT_DIR"
 
 echo "=========================================="
-echo "Stats Lab Manager - Quick Start"
+echo "Michael Kairos Labs - Quick Start"
 echo "=========================================="
 
 # Check if .env exists
@@ -50,7 +50,7 @@ echo "=========================================="
 echo "Deployment Complete!"
 echo "=========================================="
 echo ""
-echo "Your Stats Lab Manager is now running!"
+echo "Your Michael Kairos Labs is now running!"
 echo ""
 echo "Access it at: http://$(curl -s ifconfig.me 2>/dev/null || echo 'YOUR_IP')"
 echo ""

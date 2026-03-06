@@ -1,6 +1,6 @@
-# AWS Deployment Guide - Stats Lab Manager
+# AWS Deployment Guide - Michael Kairos Labs
 
-This guide walks you through deploying Stats Lab Manager to a single EC2 instance with the ability to stop/start to minimize costs.
+This guide walks you through deploying Michael Kairos Labs to a single EC2 instance with the ability to stop/start to minimize costs.
 
 ## Cost Summary
 
@@ -17,7 +17,7 @@ This guide walks you through deploying Stats Lab Manager to a single EC2 instanc
 
 1. Go to **EC2 → Launch Instance**
 
-2. **Name:** `stats-lab-manager`
+2. **Name:** `MK_Labs`
 
 3. **AMI:** Amazon Linux 2023 (or Ubuntu 22.04)
 
@@ -69,7 +69,7 @@ ssh -i your-key.pem ec2-user@YOUR_ELASTIC_IP
 
 ```bash
 # Download and run setup script (installs Docker, Docker Compose, Git)
-curl -fsSL https://raw.githubusercontent.com/JoeWhiteJr/stats-lab-manager/main/deploy/setup-ec2.sh | bash
+curl -fsSL https://raw.githubusercontent.com/JoeWhiteJr/MK_Labs/main/deploy/setup-ec2.sh | bash
 
 # Log out and back in for docker group to take effect
 exit
@@ -83,8 +83,8 @@ Then SSH back in.
 
 ```bash
 # Clone the repository
-git clone https://github.com/JoeWhiteJr/stats-lab-manager.git
-cd stats-lab-manager
+git clone https://github.com/JoeWhiteJr/MK_Labs.git
+cd MK_Labs
 
 # Create your environment file
 cp deploy/.env.example .env
@@ -135,7 +135,7 @@ docker-compose -f docker-compose.ec2.yml logs -f
 ## Step 6: Verify
 
 1. Open `http://YOUR_ELASTIC_IP` in your browser
-2. You should see the Stats Lab Manager homepage
+2. You should see the Michael Kairos Labs homepage
 3. Click "Login" and register your first admin account
 
 ---
@@ -145,7 +145,7 @@ docker-compose -f docker-compose.ec2.yml logs -f
 ### Control commands:
 
 ```bash
-cd ~/stats-lab-manager
+cd ~/MK_Labs
 
 # Check status
 ./deploy/control.sh status
@@ -193,7 +193,7 @@ Docker containers auto-restart because of `restart: unless-stopped`.
 ## Updating the Application
 
 ```bash
-cd ~/stats-lab-manager
+cd ~/MK_Labs
 
 # Pull latest code
 git pull origin main
@@ -216,26 +216,26 @@ git pull origin main
 docker ps -a
 
 # Check logs for specific container
-docker logs statslab-backend
-docker logs statslab-db
-docker logs statslab-nginx
+docker logs mkl-backend
+docker logs mkl-db
+docker logs mkl-nginx
 ```
 
 ### Database connection issues:
 
 ```bash
 # Check if database is healthy
-docker exec statslab-db pg_isready
+docker exec mkl-db pg_isready
 
 # Connect to database directly
-docker exec -it statslab-db psql -U statslab
+docker exec -it mkl-db psql -U mkl
 ```
 
 ### Can't access the website:
 
 1. Check security group allows port 80
 2. Check nginx is running: `docker ps | grep nginx`
-3. Check nginx logs: `docker logs statslab-nginx`
+3. Check nginx logs: `docker logs mkl-nginx`
 
 ### Out of disk space:
 

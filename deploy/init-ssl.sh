@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-DOMAIN="utahvalleyresearchlab.com"
+DOMAIN="michaelkairoslabs.com"
 EMAIL="${1:-}"
 
 if [ -z "$EMAIL" ]; then
@@ -45,7 +45,7 @@ sudo certbot certonly --standalone \
 
 # Set up auto-renewal via cron (runs daily at 3am, reloads nginx after renewal)
 echo "Setting up auto-renewal cron job..."
-CRON_CMD="0 3 * * * certbot renew --quiet --deploy-hook 'docker exec statslab-nginx nginx -s reload'"
+CRON_CMD="0 3 * * * certbot renew --quiet --deploy-hook 'docker exec mkl-nginx nginx -s reload'"
 (sudo crontab -l 2>/dev/null | grep -v "certbot renew" ; echo "$CRON_CMD") | sudo crontab -
 
 echo ""

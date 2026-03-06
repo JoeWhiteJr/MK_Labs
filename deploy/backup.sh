@@ -1,5 +1,5 @@
 #!/bin/bash
-# Database backup script for UVRL
+# Database backup script for MKL
 # Run inside the EC2 instance where docker compose is running
 
 set -e
@@ -7,11 +7,11 @@ set -e
 BACKUP_DIR="/home/ubuntu/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 DATE_PREFIX=$(date +%Y-%m-%d)
-CONTAINER_NAME="statslab-db"
-DB_USER="${DB_USER:-statslab}"
-DB_NAME="${DB_NAME:-statslab}"
+CONTAINER_NAME="mkl-db"
+DB_USER="${DB_USER:-mkl}"
+DB_NAME="${DB_NAME:-mkl}"
 RETENTION_DAYS=7
-S3_BUCKET="${S3_BACKUP_BUCKET:-uvrl-db-backups}"
+S3_BUCKET="${S3_BACKUP_BUCKET:-mkl-db-backups}"
 
 # Create backup directory
 mkdir -p "$BACKUP_DIR"

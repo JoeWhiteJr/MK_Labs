@@ -1,15 +1,15 @@
 #!/bin/bash
-# Database restore script for UVRL
+# Database restore script for MKL
 # Usage: ./restore.sh <backup_file.dump>
-#        ./restore.sh s3://uvrl-db-backups/2025-01-15/backup_20250115_020000.dump
+#        ./restore.sh s3://mkl-db-backups/2025-01-15/backup_20250115_020000.dump
 #        ./restore.sh --list-s3
 
 set -e
 
-S3_BUCKET="${S3_BACKUP_BUCKET:-uvrl-db-backups}"
-CONTAINER_NAME="statslab-db"
-DB_USER="${DB_USER:-statslab}"
-DB_NAME="${DB_NAME:-statslab}"
+S3_BUCKET="${S3_BACKUP_BUCKET:-mkl-db-backups}"
+CONTAINER_NAME="mkl-db"
+DB_USER="${DB_USER:-mkl}"
+DB_NAME="${DB_NAME:-mkl}"
 
 # List S3 backups
 if [ "$1" = "--list-s3" ]; then

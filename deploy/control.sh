@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stats Lab Manager - Control Script
+# Michael Kairos Labs - Control Script
 # Manage the application containers
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -21,14 +21,14 @@ usage() {
 }
 
 start() {
-    echo "Starting Stats Lab Manager..."
+    echo "Starting Michael Kairos Labs..."
     cd "$PROJECT_DIR"
     docker-compose -f "$COMPOSE_FILE" up -d
     echo "Started. Access at http://YOUR_IP"
 }
 
 stop() {
-    echo "Stopping Stats Lab Manager..."
+    echo "Stopping Michael Kairos Labs..."
     cd "$PROJECT_DIR"
     docker-compose -f "$COMPOSE_FILE" down
     echo "Stopped."
@@ -41,7 +41,7 @@ restart() {
 
 status() {
     echo "Container Status:"
-    docker ps -a --filter "name=statslab"
+    docker ps -a --filter "name=mkl"
     echo ""
     echo "Docker Compose Status:"
     cd "$PROJECT_DIR"
@@ -54,7 +54,7 @@ logs() {
 }
 
 rebuild() {
-    echo "Rebuilding Stats Lab Manager..."
+    echo "Rebuilding Michael Kairos Labs..."
     cd "$PROJECT_DIR"
     docker-compose -f "$COMPOSE_FILE" down
     docker-compose -f "$COMPOSE_FILE" up -d --build
@@ -65,17 +65,17 @@ backup() {
     BACKUP_DIR="$PROJECT_DIR/backups"
     mkdir -p "$BACKUP_DIR"
     TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    BACKUP_FILE="$BACKUP_DIR/statslab_backup_$TIMESTAMP.sql"
+    BACKUP_FILE="$BACKUP_DIR/mkl_backup_$TIMESTAMP.sql"
 
     echo "Backing up database to $BACKUP_FILE..."
-    docker exec statslab-db pg_dump -U statslab statslab > "$BACKUP_FILE"
+    docker exec mkl-db pg_dump -U mkl mkl > "$BACKUP_FILE"
 
     # Compress the backup
     gzip "$BACKUP_FILE"
     echo "Backup complete: ${BACKUP_FILE}.gz"
 
     # Keep only last 7 backups
-    ls -t "$BACKUP_DIR"/statslab_backup_*.sql.gz 2>/dev/null | tail -n +8 | xargs -r rm
+    ls -t "$BACKUP_DIR"/mkl_backup_*.sql.gz 2>/dev/null | tail -n +8 | xargs -r rm
     echo "Old backups cleaned up (keeping last 7)"
 }
 
