@@ -252,16 +252,22 @@ router.post('/resources/upload', requireRole('admin'), (req, res, _next) => {
 });
 
 // DELETE /api/lab-dashboard/resources/file/:filename  (admin only)
-router.delete('/resources/file/:filename', authenticate, requireRole('admin'), (req, res) => {
-  const filename = path.basename(req.params.filename); // prevent path traversal
-  const filePath = path.join(resourceUploadDir, filename);
+router.delete('/resources/file/:filename', authenticate, requireRole('admin'), async (req, res, next) => {
+  try {
+    const filename = path.basename(req.params.filename); // prevent path traversal
+    const filePath = path.join(resourceUploadDir, filename);
 
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ error: { message: 'File not found' } });
+    try {
+      await fs.promises.access(filePath);
+    } catch {
+      return res.status(404).json({ error: { message: 'File not found' } });
+    }
+
+    await fs.promises.unlink(filePath);
+    res.json({ message: 'File deleted' });
+  } catch (error) {
+    next(error);
   }
-
-  fs.unlinkSync(filePath);
-  res.json({ message: 'File deleted' });
 });
 
 module.exports = router;
