@@ -23,6 +23,40 @@ function isStrongPassword(value) {
   return true;
 }
 
+// --- Account lockout after failed login attempts ---
+// NOTE: In-memory store is suitable for single-instance deployments.
+// For production with multiple instances, migrate to a DB-backed table
+// (e.g., failed_login_attempts with email, attempt_count, locked_until columns).
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
+const failedLoginAttempts = new Map(); // email -> { count, lockedUntil }
+
+function checkAccountLock(email) {
+  const record = failedLoginAttempts.get(email);
+  if (!record) return null;
+  if (record.lockedUntil && record.lockedUntil > Date.now()) {
+    const minutesLeft = Math.ceil((record.lockedUntil - Date.now()) / 60000);
+    return minutesLeft;
+  }
+  if (record.lockedUntil && record.lockedUntil <= Date.now()) {
+    failedLoginAttempts.delete(email);
+  }
+  return null;
+}
+
+function recordFailedLogin(email) {
+  const record = failedLoginAttempts.get(email) || { count: 0, lockedUntil: null };
+  record.count += 1;
+  if (record.count >= MAX_FAILED_ATTEMPTS) {
+    record.lockedUntil = Date.now() + LOCKOUT_DURATION_MS;
+  }
+  failedLoginAttempts.set(email, record);
+}
+
+function resetFailedLogins(email) {
+  failedLoginAttempts.delete(email);
+}
+
 // Stricter rate limit for password reset to prevent email enumeration
 const forgotPasswordLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -60,12 +94,21 @@ router.post('/login', [
 
     const { email, password } = req.body;
 
+    // Check if account is locked due to too many failed attempts
+    const minutesLocked = checkAccountLock(email);
+    if (minutesLocked !== null) {
+      return res.status(423).json({
+        error: { message: `Account temporarily locked. Try again in ${minutesLocked} minute${minutesLocked === 1 ? '' : 's'}.` }
+      });
+    }
+
     const result = await db.query(
       'SELECT id, email, password_hash, name, first_name, last_name, role, is_super_admin, avatar_url FROM users WHERE email = $1 AND deleted_at IS NULL',
       [email]
     );
 
     if (result.rows.length === 0) {
+      recordFailedLogin(email);
       return res.status(401).json({ error: { message: 'Invalid credentials' } });
     }
 
@@ -73,8 +116,12 @@ router.post('/login', [
     const validPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!validPassword) {
+      recordFailedLogin(email);
       return res.status(401).json({ error: { message: 'Invalid credentials' } });
     }
+
+    // Successful login — reset failed attempt counter
+    resetFailedLogins(email);
 
     const token = generateToken(user.id);
 
