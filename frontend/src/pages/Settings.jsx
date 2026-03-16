@@ -298,9 +298,7 @@ export default function Settings() {
                     <h3 className="text-sm font-semibold text-text-primary mb-3">In-App Notifications</h3>
                     <div className="space-y-3">
                       {[
-                        { key: 'in_app_chat', label: 'Chat Messages', desc: 'New messages in your chat rooms' },
                         { key: 'in_app_mentions', label: 'Mentions', desc: 'When someone mentions you' },
-                        { key: 'in_app_applications', label: 'Applications', desc: 'New application submissions' },
                         { key: 'in_app_system', label: 'System', desc: 'System announcements and updates' },
                       ].map(({ key, label, desc }) => (
                         <div key={key} className="flex items-center justify-between py-2">
@@ -329,9 +327,7 @@ export default function Settings() {
                     <p className="text-xs text-text-secondary mb-3">Get notified via email when important things happen.</p>
                     <div className="space-y-3">
                       {[
-                        { key: 'email_chat', label: 'Chat Messages', desc: 'New messages in your chat rooms' },
                         { key: 'email_mentions', label: 'Mentions', desc: 'When someone mentions you' },
-                        { key: 'email_applications', label: 'Applications', desc: 'New application submissions' },
                         { key: 'email_system', label: 'System', desc: 'System announcements and updates' },
                       ].map(({ key, label, desc }) => (
                         <div key={key} className="flex items-center justify-between py-2">

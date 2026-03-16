@@ -26,7 +26,6 @@ export default function Admin() {
   const [recNewCount, setRecNewCount] = useState(0)
 
   const tabNotifications = {
-    applications: (unreadCountsByType.application || 0) > 0,
     projects: (unreadCountsByType.join_request || 0) > 0,
     recommendations: recNewCount > 0,
   }
@@ -78,9 +77,6 @@ export default function Admin() {
       if (activeTab === 'projects') loadTeam()
     }
     // Mark relevant notifications as read when switching to the tab
-    if (activeTab === 'applications') {
-      markReadByType('application')
-    }
     if (activeTab === 'projects') {
       markReadByType('join_request')
     }
@@ -218,21 +214,15 @@ export default function Admin() {
               </div>
             </div>
             <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <div className="text-sm text-text-secondary">Pending</div>
-              <div className="text-3xl font-bold text-text-primary">
-                {stats ? stats.applications?.pending || 0 : <span className="inline-block h-8 w-16 bg-gray-100 rounded animate-pulse" />}
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <div className="text-sm text-text-secondary">Projects</div>
+              <div className="text-sm text-text-secondary">Active Projects</div>
               <div className="text-3xl font-bold text-text-primary">
                 {stats ? stats.projects?.active || 0 : <span className="inline-block h-8 w-16 bg-gray-100 rounded animate-pulse" />}
               </div>
             </div>
             <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <div className="text-sm text-text-secondary">Messages</div>
+              <div className="text-sm text-text-secondary">Completed</div>
               <div className="text-3xl font-bold text-text-primary">
-                {stats ? stats.chats?.messages_this_week || 0 : <span className="inline-block h-8 w-16 bg-gray-100 rounded animate-pulse" />}
+                {stats ? stats.projects?.completed || 0 : <span className="inline-block h-8 w-16 bg-gray-100 rounded animate-pulse" />}
               </div>
             </div>
           </div>
