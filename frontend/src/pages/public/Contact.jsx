@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Mail, Phone, Clock } from 'lucide-react'
+import { Mail, Phone, Clock, Loader2 } from 'lucide-react'
+import { contactApi } from '../../services/api'
 
 const serviceOptions = [
   'MaxDiff & Conjoint Analysis',
@@ -21,11 +22,28 @@ export default function Contact() {
     message: '',
   })
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Wire to backend contact endpoint
-    setSubmitted(true)
+    setIsSubmitting(true)
+    setError('')
+    try {
+      await contactApi.submit({
+        name: form.name,
+        email: form.email,
+        organization: form.company,
+        subject: form.service,
+        message: form.message,
+      })
+      setSubmitted(true)
+    } catch (err) {
+      const msg = err.response?.data?.error?.message || 'Something went wrong. Please try again.'
+      setError(msg)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -132,8 +150,25 @@ export default function Contact() {
                     />
                   </div>
 
-                  <button type="submit" className="btn btn-primary w-full sm:w-auto px-8 py-3">
-                    Send Message
+                  {error && (
+                    <div className="p-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-600">
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn btn-primary w-full sm:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={18} className="animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      'Send Message'
+                    )}
                   </button>
                 </form>
               )}
