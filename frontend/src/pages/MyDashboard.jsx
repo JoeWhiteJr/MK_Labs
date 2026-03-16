@@ -10,6 +10,7 @@ import { CalendarView } from '../components/calendar/CalendarView'
 import Modal from '../components/Modal'
 import RichTextEditor from '../components/RichTextEditor'
 import Button from '../components/Button'
+import ConfirmDialog from '../components/ConfirmDialog'
 import DailyPlanCard from '../components/planner/DailyPlanCard'
 import PlannerEmptyState from '../components/planner/PlannerEmptyState'
 import CheckinModal from '../components/planner/CheckinModal'
@@ -50,6 +51,7 @@ export default function MyDashboard() {
   const [showNoteModal, setShowNoteModal] = useState(false)
   const [editingNote, setEditingNote] = useState(null)
   const [noteData, setNoteData] = useState({ title: '', content: '' })
+  const [confirmAction, setConfirmAction] = useState(null)
 
   const loadMyTasks = useCallback(async () => {
     setLoadingTasks(true)
@@ -188,14 +190,22 @@ export default function MyDashboard() {
     }
   }
 
-  const handleDeleteNote = async (e, id) => {
+  const handleDeleteNote = (e, id, title) => {
     e.stopPropagation()
-    try {
-      await personalNotesApi.delete(id)
-      setPersonalNotes(prev => prev.filter(n => n.id !== id))
-    } catch {
-      toast.error('Failed to delete note')
-    }
+    setConfirmAction({
+      title: 'Delete Note',
+      message: 'Delete this note? This cannot be undone.',
+      onConfirm: async () => {
+        try {
+          await personalNotesApi.delete(id)
+          setPersonalNotes(prev => prev.filter(n => n.id !== id))
+        } catch {
+          toast.error('Failed to delete note')
+        }
+        setConfirmAction(null)
+      },
+      confirmLabel: 'Delete Note',
+    })
   }
 
   const completedCount = myTasks.filter(t => t.completed).length
@@ -733,7 +743,7 @@ export default function MyDashboard() {
                           {format(parseISO(note.updated_at), 'MMM d')}
                         </span>
                         <button
-                          onClick={(e) => handleDeleteNote(e, note.id)}
+                          onClick={(e) => handleDeleteNote(e, note.id, note.title)}
                           className="p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-red-100 text-gray-400 hover:text-red-500 transition-all flex-shrink-0"
                           title="Delete note"
                         >
@@ -795,6 +805,16 @@ export default function MyDashboard() {
           </div>
         </div>
       </Modal>
+
+      {/* Confirm Dialog for destructive actions */}
+      <ConfirmDialog
+        isOpen={!!confirmAction}
+        onClose={() => setConfirmAction(null)}
+        onConfirm={confirmAction?.onConfirm}
+        title={confirmAction?.title || 'Are you sure?'}
+        message={confirmAction?.message}
+        confirmLabel={confirmAction?.confirmLabel || 'Delete'}
+      />
     </div>
   )
 }

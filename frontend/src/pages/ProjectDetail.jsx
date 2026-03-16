@@ -109,6 +109,9 @@ export default function ProjectDetail() {
   // Settings menu state
   const [showSettingsMenu, setShowSettingsMenu] = useState(false)
 
+  // Confirm dialog state for destructive actions
+  const [confirmAction, setConfirmAction] = useState(null)
+
   // AI Summary state
   const [showAiSummary, setShowAiSummary] = useState(false)
   const [aiSummary, setAiSummary] = useState(null)
@@ -964,7 +967,7 @@ export default function ProjectDetail() {
                         {filteredActions.map((action) => (
                           <ActionItem key={action.id} action={action} users={teamMembers} categories={categories}
                             onToggle={(actionId, completed) => updateAction(actionId, { completed })}
-                            onDelete={deleteAction} onEdit={handleEditAction} onUpdateCategory={updateAction} />
+                            onDelete={(aid) => setConfirmAction({ title: 'Delete Task', message: 'Delete this task? This cannot be undone.', onConfirm: () => { deleteAction(aid); setConfirmAction(null) }, confirmLabel: 'Delete Task' })} onEdit={handleEditAction} onUpdateCategory={updateAction} />
                         ))}
                       </div>
                     </SortableContext>
@@ -1075,7 +1078,7 @@ export default function ProjectDetail() {
                     <button onClick={(e) => { e.stopPropagation(); const name = prompt('Rename folder:', folder.name); if (name) renameFolder(folder.id, name) }}
                       className="text-xs text-teal-600 hover:text-teal-700">Rename</button>
                     <span className="text-gray-300">|</span>
-                    <button onClick={(e) => { e.stopPropagation(); if (confirm('Delete this folder?')) deleteFolder(folder.id) }}
+                    <button onClick={(e) => { e.stopPropagation(); setConfirmAction({ title: 'Delete Folder', message: 'Delete this folder? This cannot be undone.', onConfirm: () => { deleteFolder(folder.id); setConfirmAction(null) }, confirmLabel: 'Delete Folder' }) }}
                       className="text-xs text-red-500 hover:text-red-700">Delete</button>
                   </div>
                 </div>
@@ -1083,7 +1086,7 @@ export default function ProjectDetail() {
               {filesInCurrentDir.map((file) => (
                 <div key={file.id} draggable
                   onDragStart={(e) => e.dataTransfer.setData('text/file-id', file.id)}>
-                  <FileCard file={file} onDownload={handleDownloadFile} onDelete={deleteFile} onPreview={setPreviewFile} />
+                  <FileCard file={file} onDownload={handleDownloadFile} onDelete={(fid) => setConfirmAction({ title: 'Delete File', message: 'Delete this file? This cannot be undone.', onConfirm: () => { deleteFile(fid); setConfirmAction(null) }, confirmLabel: 'Delete File' })} onPreview={setPreviewFile} />
                 </div>
               ))}
             </div>
@@ -1195,7 +1198,7 @@ export default function ProjectDetail() {
                     key={note.id}
                     note={note}
                     onEdit={handleEditNote}
-                    onDelete={deleteNote}
+                    onDelete={(nid) => setConfirmAction({ title: 'Delete Note', message: 'Delete this note? This cannot be undone.', onConfirm: () => { deleteNote(nid); setConfirmAction(null) }, confirmLabel: 'Delete Note' })}
                     onTogglePin={toggleNotePin}
                     onToggleProjectPin={toggleNoteProjectPin}
                     canManageProject={canEdit}
@@ -1226,7 +1229,7 @@ export default function ProjectDetail() {
             {meetings.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {meetings.map((meeting) => (
-                  <MeetingCard key={meeting.id} meeting={meeting} onView={handleViewMeeting} onDelete={deleteMeeting} />
+                  <MeetingCard key={meeting.id} meeting={meeting} onView={handleViewMeeting} onDelete={(mid) => setConfirmAction({ title: 'Delete Meeting', message: 'Delete this meeting? This cannot be undone.', onConfirm: () => { deleteMeeting(mid); setConfirmAction(null) }, confirmLabel: 'Delete Meeting' })} />
                 ))}
               </div>
             ) : (
@@ -1648,7 +1651,7 @@ export default function ProjectDetail() {
 
       {/* File Preview Modal */}
       <FilePreviewModal file={previewFile} onClose={() => setPreviewFile(null)} onDownload={handleDownloadFile}
-        onDelete={(fileId) => { deleteFile(fileId); setPreviewFile(null) }} />
+        onDelete={(fileId) => setConfirmAction({ title: 'Delete File', message: 'Delete this file? This cannot be undone.', onConfirm: () => { deleteFile(fileId); setPreviewFile(null); setConfirmAction(null) }, confirmLabel: 'Delete File' })} />
 
       {/* New Folder Modal */}
       <Modal isOpen={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} title="New Folder" size="sm">
@@ -1697,6 +1700,16 @@ export default function ProjectDetail() {
           </div>
         </div>
       </Modal>
+
+      {/* Generic Confirm Dialog for destructive actions */}
+      <ConfirmDialog
+        isOpen={!!confirmAction}
+        onClose={() => setConfirmAction(null)}
+        onConfirm={confirmAction?.onConfirm}
+        title={confirmAction?.title || 'Are you sure?'}
+        message={confirmAction?.message}
+        confirmLabel={confirmAction?.confirmLabel || 'Delete'}
+      />
     </div>
   )
 }
