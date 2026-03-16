@@ -8,6 +8,7 @@ const logger = require('../config/logger');
 const { authenticate, requireProjectAccess } = require('../middleware/auth');
 const { logAdminAction } = require('../middleware/auditLog');
 const { indexFile } = require('../services/ragIndexingService');
+const { parsePagination } = require('../utils/pagination');
 
 const router = express.Router();
 
@@ -67,8 +68,7 @@ const upload = multer({
 // Get files for a project
 router.get('/project/:projectId', authenticate, requireProjectAccess(), async (req, res, next) => {
   try {
-    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
-    const offset = parseInt(req.query.offset) || 0;
+    const { limit, offset } = parsePagination(req.query);
     const folderId = req.query.folder_id;
 
     const countResult = await db.query(

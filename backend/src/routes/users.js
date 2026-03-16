@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authenticate, requireRole } = require('../middleware/auth');
+const { parsePagination } = require('../utils/pagination');
 
 const router = express.Router();
 
@@ -23,8 +24,7 @@ async function logActivity(userId, type) {
 // Get all users (admin only)
 router.get('/', authenticate, requireRole('admin'), async (req, res, next) => {
   try {
-    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
-    const offset = parseInt(req.query.offset) || 0;
+    const { limit, offset } = parsePagination(req.query);
 
     const countResult = await db.query(
       'SELECT COUNT(*) FROM users WHERE deleted_at IS NULL'
@@ -44,8 +44,7 @@ router.get('/', authenticate, requireRole('admin'), async (req, res, next) => {
 // Get all team members (for assignment dropdowns)
 router.get('/team', authenticate, async (req, res, next) => {
   try {
-    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
-    const offset = parseInt(req.query.offset) || 0;
+    const { limit, offset } = parsePagination(req.query);
 
     const countResult = await db.query(
       'SELECT COUNT(*) FROM users WHERE deleted_at IS NULL'
