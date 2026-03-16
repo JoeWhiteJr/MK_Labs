@@ -6,15 +6,15 @@ import Modal from '../Modal'
 import Button from '../Button'
 
 const STATUS_OPTIONS = [
-  { value: 'new', label: 'New', color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
-  { value: 'in_progress', label: 'In Progress', color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' },
-  { value: 'completed', label: 'Completed', color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' }
+  { value: 'new', label: 'New', color: 'bg-blue-100 text-blue-700' },
+  { value: 'in_progress', label: 'In Progress', color: 'bg-amber-100 text-amber-700' },
+  { value: 'completed', label: 'Completed', color: 'bg-green-100 text-green-700' }
 ]
 
 const PRIORITY_OPTIONS = [
-  { value: 'low', label: 'Low', color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400' },
-  { value: 'medium', label: 'Medium', color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' },
-  { value: 'high', label: 'High', color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' }
+  { value: 'low', label: 'Low', color: 'bg-gray-100 text-gray-600' },
+  { value: 'medium', label: 'Medium', color: 'bg-amber-100 text-amber-700' },
+  { value: 'high', label: 'High', color: 'bg-red-100 text-red-700' }
 ]
 
 const PAGE_SIZE = 10
@@ -109,7 +109,7 @@ export default function RecommendationsTab() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               statusFilter === opt.value
                 ? 'bg-primary-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-text-secondary dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-gray-100 text-text-secondary hover:bg-gray-200'
             }`}
           >
             {opt.label}
@@ -120,14 +120,14 @@ export default function RecommendationsTab() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-24 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
+            <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />
           ))}
         </div>
       ) : recommendations.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
-          <Lightbulb size={40} className="mx-auto text-gray-300 dark:text-gray-600 mb-3" />
-          <h3 className="font-display font-semibold text-lg text-text-primary dark:text-gray-100 mb-1">No recommendations</h3>
-          <p className="text-text-secondary dark:text-gray-400 text-sm">
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+          <Lightbulb size={40} className="mx-auto text-gray-300 mb-3" />
+          <h3 className="font-display font-semibold text-lg text-text-primary mb-1">No recommendations</h3>
+          <p className="text-text-secondary text-sm">
             {statusFilter ? `No ${statusFilter.replace('_', ' ')} recommendations found.` : 'No recommendations have been submitted yet.'}
           </p>
         </div>
@@ -137,28 +137,28 @@ export default function RecommendationsTab() {
             const isExpanded = expandedId === rec.id
             const isMember = !!rec.submitter_user_id
             return (
-              <div key={rec.id} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div key={rec.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 {/* Header row */}
                 <div className="p-4 flex items-start gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <div className="flex items-center gap-1.5">
-                        <User size={14} className="text-text-secondary dark:text-gray-400" />
-                        <span className="font-medium text-text-primary dark:text-gray-100 text-sm">
+                        <User size={14} className="text-text-secondary" />
+                        <span className="font-medium text-text-primary text-sm">
                           {rec.submitter_name || 'Anonymous'}
                         </span>
                       </div>
                       <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                        isMember ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                        isMember ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-600'
                       }`}>
                         {isMember ? 'Member' : 'Visitor'}
                       </span>
-                      <div className="flex items-center gap-1 text-xs text-text-secondary dark:text-gray-500">
+                      <div className="flex items-center gap-1 text-xs text-text-secondary">
                         <Clock size={12} />
                         {new Date(rec.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </div>
                     </div>
-                    <p className={`text-sm text-text-primary dark:text-gray-200 ${isExpanded ? '' : 'line-clamp-2'}`}>
+                    <p className={`text-sm text-text-primary ${isExpanded ? '' : 'line-clamp-2'}`}>
                       {rec.message}
                     </p>
                     {rec.message.length > 150 && (
@@ -197,7 +197,7 @@ export default function RecommendationsTab() {
                     {/* Delete button */}
                     <button
                       onClick={() => setDeleteConfirm(rec)}
-                      className="p-1.5 rounded-lg text-text-secondary dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                      className="p-1.5 rounded-lg text-text-secondary hover:text-red-600 hover:bg-red-50"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -206,15 +206,15 @@ export default function RecommendationsTab() {
 
                 {/* Admin notes (expandable) */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700 pt-3">
-                    <label className="block text-xs font-medium text-text-secondary dark:text-gray-400 mb-1">Admin Notes</label>
+                  <div className="px-4 pb-4 border-t border-gray-100 pt-3">
+                    <label className="block text-xs font-medium text-text-secondary mb-1">Admin Notes</label>
                     <textarea
                       value={editingNotes[rec.id] ?? rec.admin_notes ?? ''}
                       onChange={(e) => setEditingNotes(prev => ({ ...prev, [rec.id]: e.target.value }))}
                       onBlur={() => handleNotesBlur(rec.id)}
                       placeholder="Add internal notes..."
                       rows={2}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-text-primary dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
+                      className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-gray-50 text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
                     />
                   </div>
                 )}
@@ -226,22 +226,22 @@ export default function RecommendationsTab() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
-          <span className="text-sm text-text-secondary dark:text-gray-400">
+        <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-200">
+          <span className="text-sm text-text-secondary">
             Showing {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} of {total}
           </span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage(p => p - 1)}
               disabled={page === 0}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-text-secondary dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-text-secondary hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Previous
             </button>
             <button
               onClick={() => setPage(p => p + 1)}
               disabled={page + 1 >= totalPages}
-              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-text-secondary dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 text-text-secondary hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>
@@ -256,7 +256,7 @@ export default function RecommendationsTab() {
         title="Delete Recommendation"
         size="sm"
       >
-        <p className="text-text-secondary dark:text-gray-400">
+        <p className="text-text-secondary">
           Are you sure you want to delete this recommendation? This action cannot be undone.
         </p>
         <div className="flex justify-end gap-3 mt-6">

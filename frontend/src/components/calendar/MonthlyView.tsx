@@ -38,7 +38,7 @@ function DraggableEventPill({ event, onEditEvent }: { event: CalendarEvent; onEd
       {...listeners}
       {...attributes}
       data-event-item
-      className="text-[0.55rem] truncate px-1 py-0.5 rounded text-gray-900 dark:text-gray-100"
+      className="text-[0.55rem] truncate px-1 py-0.5 rounded text-gray-900"
       style={style}
       onClick={(e) => { e.stopPropagation(); onEditEvent(event); }}
     >
@@ -148,11 +148,11 @@ export function MonthlyView({
   };
 
   return (
-    <div className="flex flex-col bg-white dark:bg-gray-900">
+    <div className="flex flex-col bg-white">
       {/* Day Headers */}
-      <div className="grid grid-cols-7 border-b border-gray-200 dark:border-gray-700">
+      <div className="grid grid-cols-7 border-b border-gray-200">
         {DAYS_SHORT.map((dayName) => (
-          <div key={dayName} className="py-2 text-center text-[0.65rem] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
+          <div key={dayName} className="py-2 text-center text-[0.65rem] font-medium uppercase tracking-wide text-gray-400">
             {dayName}
           </div>
         ))}
@@ -162,7 +162,7 @@ export function MonthlyView({
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="flex-1 grid grid-rows-6">
         {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className="grid grid-cols-7 border-b border-gray-100 dark:border-gray-800">
+          <div key={weekIndex} className="grid grid-cols-7 border-b border-gray-100">
             {week.map((day, dayIndex) => {
               const inCurrentMonth = isSameMonth(day, selectedDate);
               const selected = isSameDay(day, selectedDate);
@@ -183,16 +183,16 @@ export function MonthlyView({
                   }}
                   onMouseEnter={() => onCellMouseEnter(day)}
                   className={`
-                    relative flex flex-col p-1.5 border-r border-gray-100 dark:border-gray-800 text-left transition-colors cursor-pointer select-none
-                    ${inDragRange ? 'bg-indigo-100 dark:bg-indigo-900/30' : selected ? 'bg-indigo-50 dark:bg-indigo-900/30' : ''}
+                    relative flex flex-col p-1.5 border-r border-gray-100 text-left transition-colors cursor-pointer select-none
+                    ${inDragRange ? 'bg-indigo-100' : selected ? 'bg-indigo-50' : ''}
                     ${!inCurrentMonth ? 'opacity-40' : ''}
-                    ${!inDragRange ? 'hover:bg-gray-50 dark:hover:bg-gray-800' : ''}
+                    ${!inDragRange ? 'hover:bg-gray-50' : ''}
                   `}
                   style={{ minHeight: '70px' }}
                 >
                   <div className={`
                     w-6 h-6 flex items-center justify-center rounded-full text-sm font-medium mb-1
-                    ${today ? 'bg-indigo-500 text-white' : selected ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-900 dark:text-gray-100'}
+                    ${today ? 'bg-indigo-500 text-white' : selected ? 'text-indigo-600' : 'text-gray-900'}
                   `}>
                     {format(day, 'd')}
                   </div>
@@ -202,14 +202,14 @@ export function MonthlyView({
                       <DraggableEventPill key={event.id} event={event} onEditEvent={onEditEvent} />
                     ))}
                     {dayEvents.length > 3 && (
-                      <div className="text-[0.5rem] px-1 text-gray-400 dark:text-gray-500">
+                      <div className="text-[0.5rem] px-1 text-gray-400">
                         +{dayEvents.length - 3} more
                       </div>
                     )}
                     {dayDeadlines.map((dl) => (
                       <div
                         key={dl.id}
-                        className="text-[0.55rem] truncate px-1 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+                        className="text-[0.55rem] truncate px-1 py-0.5 rounded bg-amber-100 text-amber-700"
                       >
                         {dl.title}
                       </div>
@@ -225,7 +225,7 @@ export function MonthlyView({
       <DragOverlay>
         {activeEvent ? (
           <div
-            className="text-[0.55rem] truncate px-1 py-0.5 rounded text-gray-900 dark:text-gray-100 shadow-lg"
+            className="text-[0.55rem] truncate px-1 py-0.5 rounded text-gray-900 shadow-lg"
             style={{ backgroundColor: `${activeEvent.category_color || '#6366f1'}40` }}
           >
             {activeEvent.title}

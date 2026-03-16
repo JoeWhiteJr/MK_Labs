@@ -47,32 +47,32 @@ export default function RecommendationButton() {
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Submit a Suggestion" size="md">
         <form onSubmit={handleSubmit}>
-          <p className="text-sm text-text-secondary dark:text-gray-400 mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             Have an idea to improve the site? We&apos;d love to hear it!
           </p>
 
           {user ? (
-            <p className="text-sm text-text-secondary dark:text-gray-400 mb-4">
-              Submitting as <span className="font-medium text-text-primary dark:text-gray-200">{user.name}</span>
+            <p className="text-sm text-text-secondary mb-4">
+              Submitting as <span className="font-medium text-text-primary">{user.name}</span>
             </p>
           ) : (
             <div className="mb-4">
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">
-                Your name <span className="text-text-secondary dark:text-gray-400 font-normal">(optional)</span>
+              <label className="block text-sm font-medium text-text-primary mb-1">
+                Your name <span className="text-text-secondary font-normal">(optional)</span>
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Anonymous"
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
                 maxLength={255}
               />
             </div>
           )}
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">
+            <label className="block text-sm font-medium text-text-primary mb-1">
               Your suggestion
             </label>
             <textarea
@@ -80,11 +80,11 @@ export default function RecommendationButton() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="What would you like to see improved or added?"
               rows={4}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
               maxLength={5000}
               required
             />
-            <p className="text-xs text-text-secondary dark:text-gray-500 mt-1 text-right">
+            <p className="text-xs text-text-secondary mt-1 text-right">
               {message.length}/5000
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function RecommendationButton() {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-text-secondary dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
+              className="px-4 py-2 rounded-lg border border-gray-300 text-text-secondary hover:bg-gray-50 text-sm"
             >
               Cancel
             </button>

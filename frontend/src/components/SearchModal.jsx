@@ -87,11 +87,11 @@ export default function SearchModal({ isOpen, onClose }) {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" onClick={onClose}>
       <div className="fixed inset-0 bg-black/50" />
       <div
-        className="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+        className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-          <Search size={20} className="text-text-secondary dark:text-gray-400" />
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200">
+          <Search size={20} className="text-text-secondary" />
           <input
             ref={inputRef}
             type="text"
@@ -99,20 +99,20 @@ export default function SearchModal({ isOpen, onClose }) {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Search projects, tasks, messages..."
-            className="flex-1 text-sm outline-none bg-transparent text-text-primary dark:text-gray-100 placeholder-text-secondary dark:placeholder-gray-500"
+            className="flex-1 text-sm outline-none bg-transparent text-text-primary placeholder-text-secondary"
           />
-          <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 text-xs text-text-secondary dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">
+          <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 text-xs text-text-secondary bg-gray-100 rounded border border-gray-200">
             ESC
           </kbd>
         </div>
 
         <div className="max-h-80 overflow-y-auto">
           {isSearching && (
-            <div className="p-4 text-center text-sm text-text-secondary dark:text-gray-400">Searching...</div>
+            <div className="p-4 text-center text-sm text-text-secondary">Searching...</div>
           )}
 
           {!isSearching && query.length >= 2 && results.length === 0 && (
-            <div className="p-8 text-center text-sm text-text-secondary dark:text-gray-400">
+            <div className="p-8 text-center text-sm text-text-secondary">
               No results found for &ldquo;{query}&rdquo;
             </div>
           )}
@@ -121,18 +121,18 @@ export default function SearchModal({ isOpen, onClose }) {
             <button
               key={`${result.type}-${result.id}`}
               onClick={() => handleSelect(result)}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                idx === selectedIndex ? 'bg-primary-50 dark:bg-primary-900/30' : ''
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
+                idx === selectedIndex ? 'bg-primary-50' : ''
               }`}
             >
               {getIcon(result.type)}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-text-primary dark:text-gray-100 truncate">{result.title}</p>
+                <p className="text-sm font-medium text-text-primary truncate">{result.title}</p>
                 {result.subtitle && (
-                  <p className="text-xs text-text-secondary dark:text-gray-400 truncate">{result.subtitle}</p>
+                  <p className="text-xs text-text-secondary truncate">{result.subtitle}</p>
                 )}
               </div>
-              <span className="text-xs text-text-secondary dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+              <span className="text-xs text-text-secondary bg-gray-100 px-2 py-0.5 rounded">
                 {getTypeLabel(result.type)}
               </span>
             </button>
@@ -140,10 +140,10 @@ export default function SearchModal({ isOpen, onClose }) {
         </div>
 
         {query.length < 2 && (
-          <div className="px-4 py-3 border-t border-gray-100 dark:border-gray-700 text-xs text-text-secondary dark:text-gray-400 flex items-center gap-4">
-            <span><kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 text-text-secondary dark:text-gray-300">↑↓</kbd> Navigate</span>
-            <span><kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 text-text-secondary dark:text-gray-300">↵</kbd> Select</span>
-            <span><kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 text-text-secondary dark:text-gray-300">Esc</kbd> Close</span>
+          <div className="px-4 py-3 border-t border-gray-100 text-xs text-text-secondary flex items-center gap-4">
+            <span><kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200 text-text-secondary">↑↓</kbd> Navigate</span>
+            <span><kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200 text-text-secondary">↵</kbd> Select</span>
+            <span><kbd className="px-1.5 py-0.5 bg-gray-100 rounded border border-gray-200 text-text-secondary">Esc</kbd> Close</span>
           </div>
         )}
       </div>

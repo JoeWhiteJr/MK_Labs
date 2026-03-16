@@ -50,27 +50,27 @@ export default function JoinRequestModal({ projectId, onClose }) {
         <div className="space-y-5">
           {/* Project title */}
           {project && (
-            <h3 className="font-display font-semibold text-text-primary dark:text-gray-100">
+            <h3 className="font-display font-semibold text-text-primary">
               {project.title}
             </h3>
           )}
 
           {/* Project lead card */}
           {project?.lead_name && (
-            <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
-              <p className="text-xs font-medium text-text-secondary dark:text-gray-400 uppercase tracking-wide mb-2">
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <p className="text-xs font-medium text-text-secondary uppercase tracking-wide mb-2">
                 Project Lead
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                  <User size={18} className="text-primary-600 dark:text-primary-400" />
+                <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
+                  <User size={18} className="text-primary-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-text-primary dark:text-gray-100">{project.lead_name}</p>
+                  <p className="font-medium text-text-primary">{project.lead_name}</p>
                   {project.lead_email && (
                     <a
                       href={`mailto:${project.lead_email}`}
-                      className="flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+                      className="flex items-center gap-1 text-sm text-primary-600 hover:underline"
                     >
                       <Mail size={13} />
                       {project.lead_email}
@@ -84,31 +84,31 @@ export default function JoinRequestModal({ projectId, onClose }) {
           {/* Pending join requests */}
           {requests.length === 0 ? (
             <div className="text-center py-4">
-              <div className="w-12 h-12 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-3">
-                <CheckCircle2 size={24} className="text-green-600 dark:text-green-400" />
+              <div className="w-12 h-12 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-3">
+                <CheckCircle2 size={24} className="text-green-600" />
               </div>
-              <p className="text-sm text-text-secondary dark:text-gray-400">No pending requests</p>
+              <p className="text-sm text-text-secondary">No pending requests</p>
             </div>
           ) : (
             <div className="space-y-3">
-              <p className="text-xs font-medium text-text-secondary dark:text-gray-400 uppercase tracking-wide">
+              <p className="text-xs font-medium text-text-secondary uppercase tracking-wide">
                 Pending Requests
               </p>
               {requests.map((req) => (
                 <div
                   key={req.id}
-                  className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4"
+                  className="rounded-lg border border-gray-200 bg-gray-50 p-4"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-                      <User size={18} className="text-amber-600 dark:text-amber-400" />
+                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+                      <User size={18} className="text-amber-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-text-primary dark:text-gray-100">{req.user_name || req.name}</p>
+                      <p className="font-medium text-text-primary">{req.user_name || req.name}</p>
                       {(req.user_email || req.email) && (
                         <a
                           href={`mailto:${req.user_email || req.email}`}
-                          className="flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+                          className="flex items-center gap-1 text-sm text-primary-600 hover:underline"
                         >
                           <Mail size={13} />
                           {req.user_email || req.email}
@@ -117,7 +117,7 @@ export default function JoinRequestModal({ projectId, onClose }) {
                     </div>
                   </div>
                   {req.message && (
-                    <p className="text-sm text-text-secondary dark:text-gray-400 mb-3 italic">
+                    <p className="text-sm text-text-secondary mb-3 italic">
                       &ldquo;{req.message}&rdquo;
                     </p>
                   )}

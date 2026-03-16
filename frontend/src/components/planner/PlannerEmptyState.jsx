@@ -9,41 +9,41 @@ export default function PlannerEmptyState({
 }) {
   return (
     <div className="p-8 text-center">
-      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-violet-100 dark:from-violet-900/30 to-primary-100 dark:to-primary-900/30 flex items-center justify-center">
+      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-violet-100 to-primary-100 flex items-center justify-center">
         <Sparkles size={28} className="text-violet-500" />
       </div>
-      <h3 className="font-display font-semibold text-lg text-text-primary dark:text-gray-100 mb-2">
+      <h3 className="font-display font-semibold text-lg text-text-primary mb-2">
         {title}
       </h3>
-      <p className="text-text-secondary dark:text-gray-400 max-w-md mx-auto mb-6">
+      <p className="text-text-secondary max-w-md mx-auto mb-6">
         {description}
       </p>
 
       <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto mb-6">
         <div className="text-center">
-          <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-            <ListChecks size={18} className="text-blue-600 dark:text-blue-300" />
+          <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-blue-100 flex items-center justify-center">
+            <ListChecks size={18} className="text-blue-600" />
           </div>
-          <p className="text-xs text-text-secondary dark:text-gray-400">Bite-sized steps</p>
+          <p className="text-xs text-text-secondary">Bite-sized steps</p>
         </div>
         <div className="text-center">
-          <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-            <Clock size={18} className="text-amber-600 dark:text-amber-300" />
+          <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-amber-100 flex items-center justify-center">
+            <Clock size={18} className="text-amber-600" />
           </div>
-          <p className="text-xs text-text-secondary dark:text-gray-400">Time estimates</p>
+          <p className="text-xs text-text-secondary">Time estimates</p>
         </div>
         <div className="text-center">
-          <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-            <TrendingUp size={18} className="text-green-600 dark:text-green-300" />
+          <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-green-100 flex items-center justify-center">
+            <TrendingUp size={18} className="text-green-600" />
           </div>
-          <p className="text-xs text-text-secondary dark:text-gray-400">Weekly reviews</p>
+          <p className="text-xs text-text-secondary">Weekly reviews</p>
         </div>
       </div>
 
       <button
         onClick={onGenerate}
         disabled={isGenerating}
-        className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-violet-600 to-primary-600 text-white font-medium rounded-xl hover:from-violet-700 hover:to-primary-700 transition-all shadow-lg shadow-violet-200 dark:shadow-violet-900/30 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-violet-600 to-primary-600 text-white font-medium rounded-xl hover:from-violet-700 hover:to-primary-700 transition-all shadow-lg shadow-violet-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isGenerating ? (
           <>

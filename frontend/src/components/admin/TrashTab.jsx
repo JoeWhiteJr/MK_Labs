@@ -61,21 +61,21 @@ export default function TrashTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-lg text-text-primary dark:text-gray-100">
+        <h2 className="font-display font-semibold text-lg text-text-primary">
           Trash ({totalCount} items)
         </h2>
       </div>
 
       {/* Type tabs */}
-      <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5 w-fit">
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-0.5 w-fit">
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveType(id)}
             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
               activeType === id
-                ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             <Icon size={14} />
@@ -88,16 +88,16 @@ export default function TrashTab() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />
+            <div key={i} className="h-16 bg-gray-100 rounded-lg animate-pulse" />
           ))}
         </div>
       ) : items.length > 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">
+        <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
           {items.map((item) => (
             <div key={item.id} className="flex items-center justify-between p-4">
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-text-primary dark:text-gray-100 truncate">{item.title}</p>
-                <p className="text-xs text-text-secondary dark:text-gray-400">
+                <p className="font-medium text-text-primary truncate">{item.title}</p>
+                <p className="text-xs text-text-secondary">
                   Deleted {item.deleted_at ? formatDistanceToNow(new Date(item.deleted_at), { addSuffix: true }) : 'recently'}
                   {item.deleted_by_name ? ` by ${item.deleted_by_name}` : ''}
                 </p>
@@ -124,9 +124,9 @@ export default function TrashTab() {
           ))}
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
-          <Trash2 size={40} className="mx-auto text-gray-300 dark:text-gray-600 mb-3" />
-          <p className="text-text-secondary dark:text-gray-400">No deleted {activeType} found.</p>
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+          <Trash2 size={40} className="mx-auto text-gray-300 mb-3" />
+          <p className="text-text-secondary">No deleted {activeType} found.</p>
         </div>
       )}
 

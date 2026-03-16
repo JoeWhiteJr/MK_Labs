@@ -10,10 +10,10 @@ import { commentsApi } from '../services/api'
 import { toast } from '../store/toastStore'
 
 const PRIORITY_COLORS = {
-  urgent: { bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-300' },
-  high: { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300' },
-  medium: { bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-700 dark:text-yellow-300' },
-  low: { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-600 dark:text-gray-400' }
+  urgent: { bg: 'bg-red-100', text: 'text-red-700' },
+  high: { bg: 'bg-orange-100', text: 'text-orange-700' },
+  medium: { bg: 'bg-yellow-100', text: 'text-yellow-700' },
+  low: { bg: 'bg-gray-100', text: 'text-gray-600' }
 }
 
 const ActionItem = memo(function ActionItem({
@@ -83,10 +83,10 @@ const ActionItem = memo(function ActionItem({
         style={style}
         className={`group flex items-start gap-3 p-3 rounded-lg border transition-colors ${
           action.completed
-            ? 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
+            ? 'bg-gray-50 border-gray-200'
             : isOverdue
-            ? 'bg-red-50/50 dark:bg-red-900/20 border-red-300 dark:border-red-700 hover:border-red-400 dark:hover:border-red-600'
-            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-700'
+            ? 'bg-red-50/50 border-red-300 hover:border-red-400'
+            : 'bg-white border-gray-200 hover:border-primary-200'
         }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -94,7 +94,7 @@ const ActionItem = memo(function ActionItem({
         <button
           {...attributes}
           {...listeners}
-          className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-grab active:cursor-grabbing"
+          className="p-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
           aria-label="Drag to reorder"
         >
           <GripVertical size={16} />
@@ -105,7 +105,7 @@ const ActionItem = memo(function ActionItem({
           className={`flex-shrink-0 w-5 h-5 mt-0.5 rounded-md border-2 transition-colors ${
             action.completed
               ? 'bg-secondary-500 border-secondary-500'
-              : 'border-gray-300 dark:border-gray-600 hover:border-primary-400'
+              : 'border-gray-300 hover:border-primary-400'
           }`}
         >
           {action.completed && (
@@ -117,7 +117,7 @@ const ActionItem = memo(function ActionItem({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className={`text-sm ${action.completed ? 'text-text-secondary dark:text-gray-400 line-through' : 'text-text-primary dark:text-gray-100'}`}>
+            <p className={`text-sm ${action.completed ? 'text-text-secondary line-through' : 'text-text-primary'}`}>
               {action.title}
             </p>
             {action.category_name && (
@@ -138,8 +138,8 @@ const ActionItem = memo(function ActionItem({
             {action.due_date && (
               <span className={`flex items-center gap-1 text-xs ${
                 new Date(action.due_date) < new Date() && !action.completed
-                  ? 'text-red-600 dark:text-red-400'
-                  : 'text-text-secondary dark:text-gray-400'
+                  ? 'text-red-600'
+                  : 'text-text-secondary'
               }`}>
                 <Calendar size={12} />
                 {format(new Date(action.due_date), 'MMM d')}
@@ -147,7 +147,7 @@ const ActionItem = memo(function ActionItem({
             )}
             {/* Display multiple assignees with avatars */}
             {assignees.length > 0 ? (
-              <span className="flex items-center gap-1.5 text-xs text-text-secondary dark:text-gray-400">
+              <span className="flex items-center gap-1.5 text-xs text-text-secondary">
                 <span className="flex items-center -space-x-1.5">
                   {assignees.map(a => {
                     const fullUser = users.find(u => u.id === a.user_id)
@@ -157,7 +157,7 @@ const ActionItem = memo(function ActionItem({
                         name={a.user_name}
                         src={fullUser?.avatar_url}
                         size="xs"
-                        className="ring-1 ring-white dark:ring-gray-800"
+                        className="ring-1 ring-white"
                       />
                     )
                   })}
@@ -165,7 +165,7 @@ const ActionItem = memo(function ActionItem({
                 {assignees.map(a => a.user_name).join(', ')}
               </span>
             ) : assignedUser ? (
-              <span className="flex items-center gap-1.5 text-xs text-text-secondary dark:text-gray-400">
+              <span className="flex items-center gap-1.5 text-xs text-text-secondary">
                 <Avatar
                   name={assignedUser.name}
                   src={assignedUser.avatar_url}
@@ -179,7 +179,7 @@ const ActionItem = memo(function ActionItem({
               <div className="relative">
                 <button
                   onClick={() => setShowCategoryPicker(!showCategoryPicker)}
-                  className={`flex items-center gap-1 text-xs text-text-secondary dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-opacity ${
+                  className={`flex items-center gap-1 text-xs text-text-secondary hover:text-primary-600 transition-opacity ${
                     isHovered || showCategoryPicker ? 'opacity-100' : 'opacity-0'
                   }`}
                 >
@@ -187,11 +187,11 @@ const ActionItem = memo(function ActionItem({
                   {action.category_name ? 'Change' : 'Add category'}
                 </button>
                 {showCategoryPicker && (
-                  <div className="absolute top-full left-0 mt-1 z-10 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px]">
+                  <div className="absolute top-full left-0 mt-1 z-10 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[140px]">
                     {action.category_id && (
                       <button
                         onClick={() => handleCategorySelect(null)}
-                        className="w-full px-3 py-1.5 text-left text-xs text-text-secondary dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        className="w-full px-3 py-1.5 text-left text-xs text-text-secondary hover:bg-gray-50"
                       >
                         Remove category
                       </button>
@@ -200,8 +200,8 @@ const ActionItem = memo(function ActionItem({
                       <button
                         key={cat.id}
                         onClick={() => handleCategorySelect(cat.id)}
-                        className={`w-full px-3 py-1.5 text-left text-xs hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 ${
-                          cat.id === action.category_id ? 'bg-gray-50 dark:bg-gray-700' : ''
+                        className={`w-full px-3 py-1.5 text-left text-xs hover:bg-gray-50 flex items-center gap-2 ${
+                          cat.id === action.category_id ? 'bg-gray-50' : ''
                         }`}
                       >
                         <span
@@ -217,7 +217,7 @@ const ActionItem = memo(function ActionItem({
             )}
             <button
               onClick={() => setShowComments(!showComments)}
-              className={`flex items-center gap-1 text-xs text-text-secondary dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 ${showComments ? 'text-primary-600 dark:text-primary-400' : ''}`}
+              className={`flex items-center gap-1 text-xs text-text-secondary hover:text-primary-600 ${showComments ? 'text-primary-600' : ''}`}
             >
               <MessageSquare size={12} />
               {commentCount > 0 && <span>{commentCount}</span>}
@@ -228,7 +228,7 @@ const ActionItem = memo(function ActionItem({
         {onEdit && (
           <button
             onClick={() => onEdit(action)}
-            className={`p-1.5 rounded text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all ${
+            className={`p-1.5 rounded text-gray-400 hover:text-primary-600 hover:bg-primary-50 transition-all ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
             aria-label="Edit task"
@@ -239,7 +239,7 @@ const ActionItem = memo(function ActionItem({
 
         <button
           onClick={() => onDelete(action.id)}
-          className={`p-1.5 rounded text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-all ${
+          className={`p-1.5 rounded text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
           aria-label="Delete task"
@@ -249,27 +249,27 @@ const ActionItem = memo(function ActionItem({
       </div>
 
       {showComments && (
-        <div className="ml-8 mt-1 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-100 dark:border-gray-700">
+        <div className="ml-8 mt-1 p-3 bg-gray-50 rounded-lg border border-gray-100">
           {loadingComments ? (
-            <p className="text-xs text-text-secondary dark:text-gray-400">Loading...</p>
+            <p className="text-xs text-text-secondary">Loading...</p>
           ) : (
             <>
               {comments.map(c => (
                 <div key={c.id} className="mb-2 last:mb-0 group/comment">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xs font-medium text-text-primary dark:text-gray-100">{c.user_name}</span>
-                    <span className="text-[10px] text-text-secondary dark:text-gray-400">
+                    <span className="text-xs font-medium text-text-primary">{c.user_name}</span>
+                    <span className="text-[10px] text-text-secondary">
                       {new Date(c.created_at).toLocaleDateString()}
                     </span>
                     <button
                       onClick={() => setDeleteCommentTarget(c)}
-                      className="ml-auto opacity-0 group-hover/comment:opacity-100 p-0.5 text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-opacity"
+                      className="ml-auto opacity-0 group-hover/comment:opacity-100 p-0.5 text-gray-400 hover:text-red-500 transition-opacity"
                       title="Delete comment"
                     >
                       <Trash2 size={10} />
                     </button>
                   </div>
-                  <p className="text-xs text-text-secondary dark:text-gray-400 mt-0.5">{c.content}</p>
+                  <p className="text-xs text-text-secondary mt-0.5">{c.content}</p>
                 </div>
               ))}
               <form
@@ -291,7 +291,7 @@ const ActionItem = memo(function ActionItem({
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="Add a comment..."
-                  className="flex-1 text-xs px-2 py-1.5 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-text-primary dark:text-gray-100 placeholder:text-text-secondary dark:placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-primary-300"
+                  className="flex-1 text-xs px-2 py-1.5 rounded border border-gray-300 bg-white text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary-300"
                 />
                 <button type="submit" className="p-1.5 rounded bg-primary-500 text-white hover:bg-primary-600">
                   <SendIcon size={12} />
