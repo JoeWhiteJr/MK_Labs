@@ -670,9 +670,10 @@ export default function MyDashboard() {
               <div className="border-t border-gray-100">
                 <div className="divide-y divide-gray-100">
                   {isLoading ? (
-                    <div className="p-6 text-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-500 mx-auto"></div>
-                      <p className="text-text-secondary mt-2 text-sm">Loading projects...</p>
+                    <div className="p-1">
+                      {[1, 2, 3].map((i) => (
+                        <SkeletonListItem key={i} />
+                      ))}
                     </div>
                   ) : myProjects.length > 0 ? (
                     myProjects.map(project => (
@@ -726,9 +727,14 @@ export default function MyDashboard() {
               <div className="border-t border-gray-100">
                 <div className="divide-y divide-gray-100">
                   {loadingNotes ? (
-                    <div className="p-6 text-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-500 mx-auto"></div>
-                      <p className="text-text-secondary mt-2 text-sm">Loading notes...</p>
+                    <div className="p-2 space-y-1">
+                      {[1, 2].map((i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 animate-pulse">
+                          <div className="w-4 h-4 rounded bg-gray-200 flex-shrink-0" />
+                          <SkeletonText width="w-2/3" />
+                          <SkeletonText width="w-12" className="ml-auto" />
+                        </div>
+                      ))}
                     </div>
                   ) : personalNotes.length > 0 ? (
                     personalNotes.map(note => (
