@@ -84,8 +84,13 @@ export default function Settings() {
       return
     }
 
-    if (passwordData.newPassword.length < 8) {
-      setPasswordMessage({ type: 'error', text: 'Password must be at least 8 characters' })
+    const pw = passwordData.newPassword
+    const hasUpper = /[A-Z]/.test(pw)
+    const hasLower = /[a-z]/.test(pw)
+    const hasNumber = /[0-9]/.test(pw)
+    const hasSpecial = /[^A-Za-z0-9]/.test(pw)
+    if (pw.length < 8 || !hasUpper || !hasLower || !hasNumber || !hasSpecial) {
+      setPasswordMessage({ type: 'error', text: 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character' })
       return
     }
 
@@ -238,14 +243,19 @@ export default function Settings() {
                   onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                   required
                 />
-                <Input
-                  label="New password"
-                  type="password"
-                  value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  placeholder="At least 8 characters"
-                  required
-                />
+                <div>
+                  <Input
+                    label="New password"
+                    type="password"
+                    value={passwordData.newPassword}
+                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                    placeholder="At least 8 characters"
+                    required
+                  />
+                  <p className="mt-1 text-xs text-text-secondary">
+                    Must include uppercase, lowercase, number, and special character.
+                  </p>
+                </div>
                 <Input
                   label="Confirm new password"
                   type="password"

@@ -22,8 +22,12 @@ export default function ResetPassword() {
     e.preventDefault()
     setError('')
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters')
+    const hasUpper = /[A-Z]/.test(password)
+    const hasLower = /[a-z]/.test(password)
+    const hasNumber = /[0-9]/.test(password)
+    const hasSpecial = /[^A-Za-z0-9]/.test(password)
+    if (password.length < 8 || !hasUpper || !hasLower || !hasNumber || !hasSpecial) {
+      setError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character')
       return
     }
     if (password !== confirmPassword) {
@@ -76,14 +80,19 @@ export default function ResetPassword() {
             <>
               <h2 className="font-display font-semibold text-xl text-text-primary mb-6">Set new password</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <Input
-                  label="New password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 8 characters"
-                  required
-                />
+                <div>
+                  <Input
+                    label="New password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="At least 8 characters"
+                    required
+                  />
+                  <p className="mt-1 text-xs text-text-secondary">
+                    Must include uppercase, lowercase, number, and special character.
+                  </p>
+                </div>
                 <Input
                   label="Confirm password"
                   type="password"
