@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authenticate, requireRole } = require('../middleware/auth');
 const { parsePagination } = require('../utils/pagination');
+const { isStrongPassword, PASSWORD_RULES_MESSAGE } = require('./auth');
 
 const router = express.Router();
 
@@ -301,7 +302,10 @@ router.put('/profile', authenticate, [
 // Change password
 router.put('/password', authenticate, [
   body('currentPassword').notEmpty(),
-  body('newPassword').isLength({ min: 8 })
+  body('newPassword').custom((value) => {
+    if (!isStrongPassword(value)) throw new Error(PASSWORD_RULES_MESSAGE);
+    return true;
+  })
 ], async (req, res, next) => {
   try {
     const errors = validationResult(req);

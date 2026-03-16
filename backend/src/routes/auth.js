@@ -12,6 +12,17 @@ const rateLimit = require('express-rate-limit');
 
 const router = express.Router();
 
+// Password complexity: 8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special character
+const PASSWORD_RULES_MESSAGE = 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character';
+function isStrongPassword(value) {
+  if (value.length < 8) return false;
+  if (!/[A-Z]/.test(value)) return false;
+  if (!/[a-z]/.test(value)) return false;
+  if (!/[0-9]/.test(value)) return false;
+  if (!/[^A-Za-z0-9]/.test(value)) return false;
+  return true;
+}
+
 // Stricter rate limit for password reset to prevent email enumeration
 const forgotPasswordLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -145,12 +156,15 @@ router.post('/forgot-password', forgotPasswordLimiter, [
 // Reset password with token
 router.post('/reset-password', resetPasswordLimiter, [
   body('token').notEmpty(),
-  body('password').isLength({ min: 8 })
+  body('password').custom((value) => {
+    if (!isStrongPassword(value)) throw new Error(PASSWORD_RULES_MESSAGE);
+    return true;
+  })
 ], async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ error: { message: 'Token and password (min 8 chars) are required' } });
+      return res.status(400).json({ error: { message: errors.array()[0].msg } });
     }
 
     const { token, password } = req.body;
@@ -192,3 +206,5 @@ router.post('/reset-password', resetPasswordLimiter, [
 });
 
 module.exports = router;
+module.exports.isStrongPassword = isStrongPassword;
+module.exports.PASSWORD_RULES_MESSAGE = PASSWORD_RULES_MESSAGE;
