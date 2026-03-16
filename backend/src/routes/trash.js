@@ -14,6 +14,21 @@ const ENTITY_TYPES = {
   file: { table: 'files', titleCol: 'original_filename' },
 };
 
+// Hardcoded allowlist of valid table names — never interpolate user input into SQL
+const ALLOWED_TABLES = new Set(['projects', 'notes', 'action_items', 'meetings', 'files']);
+
+/**
+ * Returns a safe table name from the entity type, validated against a hardcoded allowlist.
+ * Throws if the table name is not in the allowlist, preventing SQL injection.
+ */
+function getSafeTableName(entityType) {
+  const table = entityType.table;
+  if (!ALLOWED_TABLES.has(table)) {
+    throw new Error(`Invalid table name: ${table}`);
+  }
+  return table;
+}
+
 // GET /api/trash - list all trashed items
 router.get('/', authenticate, async (req, res, next) => {
   try {
@@ -113,11 +128,13 @@ router.post('/:type/:id/restore', authenticate, async (req, res, next) => {
     let query;
     let params;
 
+    const tableName = getSafeTableName(entityType);
+
     if (isAdmin) {
-      query = `UPDATE ${entityType.table} SET deleted_at = NULL, deleted_by = NULL WHERE id = $1 AND deleted_at IS NOT NULL RETURNING id`;
+      query = `UPDATE ${tableName} SET deleted_at = NULL, deleted_by = NULL WHERE id = $1 AND deleted_at IS NOT NULL RETURNING id`;
       params = [id];
     } else {
-      query = `UPDATE ${entityType.table} SET deleted_at = NULL, deleted_by = NULL WHERE id = $1 AND deleted_at IS NOT NULL AND deleted_by = $2 RETURNING id`;
+      query = `UPDATE ${tableName} SET deleted_at = NULL, deleted_by = NULL WHERE id = $1 AND deleted_at IS NOT NULL AND deleted_by = $2 RETURNING id`;
       params = [id, req.user.id];
     }
 
@@ -144,16 +161,17 @@ router.delete('/:type/:id', authenticate, async (req, res, next) => {
     }
 
     const isAdmin = req.user.role === 'admin';
+    const tableName = getSafeTableName(entityType);
 
     // Verify item is in trash and user has permission
     let checkQuery;
     let checkParams;
 
     if (isAdmin) {
-      checkQuery = `SELECT * FROM ${entityType.table} WHERE id = $1 AND deleted_at IS NOT NULL`;
+      checkQuery = `SELECT * FROM ${tableName} WHERE id = $1 AND deleted_at IS NOT NULL`;
       checkParams = [id];
     } else {
-      checkQuery = `SELECT * FROM ${entityType.table} WHERE id = $1 AND deleted_at IS NOT NULL AND deleted_by = $2`;
+      checkQuery = `SELECT * FROM ${tableName} WHERE id = $1 AND deleted_at IS NOT NULL AND deleted_by = $2`;
       checkParams = [id, req.user.id];
     }
 
@@ -223,7 +241,7 @@ router.delete('/:type/:id', authenticate, async (req, res, next) => {
         await db.query('DELETE FROM action_item_assignees WHERE action_item_id = $1', [id]);
       }
 
-      await db.query(`DELETE FROM ${entityType.table} WHERE id = $1`, [id]);
+      await db.query(`DELETE FROM ${tableName} WHERE id = $1`, [id]);
     }
 
     res.json({ message: 'Item permanently deleted' });
