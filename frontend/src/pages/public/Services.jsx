@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ChevronDown } from 'lucide-react'
 
 const pillars = [
   {
@@ -76,6 +78,12 @@ const pillars = [
 ]
 
 export default function Services() {
+  const [expandedPillars, setExpandedPillars] = useState({})
+
+  const togglePillar = (name) => {
+    setExpandedPillars((prev) => ({ ...prev, [name]: !prev[name] }))
+  }
+
   return (
     <div>
       {/* Hero */}
@@ -93,65 +101,90 @@ export default function Services() {
       </section>
 
       {/* Service Pillars */}
-      {pillars.map((pillar) => (
-        <section key={pillar.name} className="section-white py-16 md:py-20 border-b border-slate-100">
-          <div className="max-w-container mx-auto px-6">
-            <div className="mb-12">
-              <p className="text-sm font-semibold text-teal uppercase tracking-widest mb-2">Pillar</p>
-              <h2 className="font-display text-h1 text-midnight">{pillar.name}</h2>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {pillar.services.map((service) => (
-                <div
-                  key={service.title}
-                  className={service.oxford ? 'card-oxford' : 'card-service'}
+      <section className="section-white py-16 md:py-20">
+        <div className="max-w-container mx-auto px-6 space-y-4">
+          {pillars.map((pillar) => {
+            const isExpanded = expandedPillars[pillar.name] || false
+            return (
+              <div key={pillar.name} className="border border-slate-200 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => togglePillar(pillar.name)}
+                  className="w-full flex items-center justify-between px-8 py-6 bg-white hover:bg-slate-50 transition-colors text-left"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-display text-h3 text-midnight">{service.title}</h3>
-                    {service.oxford && (
-                      <span className="badge badge-oxford text-xs">Oxford</span>
-                    )}
+                  <div>
+                    <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-1">Pillar</p>
+                    <h2 className="font-display text-h2 text-midnight">{pillar.name}</h2>
+                    <p className="text-sm text-muted mt-1">
+                      {pillar.services.length} service{pillar.services.length > 1 ? 's' : ''}
+                    </p>
                   </div>
-                  <p className="text-body-text mb-5 leading-relaxed">{service.description}</p>
+                  <ChevronDown
+                    size={24}
+                    className={`text-teal transition-transform duration-300 flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`}
+                  />
+                </button>
 
-                  <div className="mb-4">
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Best For</p>
-                    <div className="flex flex-wrap gap-2">
-                      {service.bestFor.map((tag) => (
-                        <span key={tag} className="badge badge-teal text-xs">{tag}</span>
+                <div
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                    isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="px-8 pb-8 pt-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      {pillar.services.map((service) => (
+                        <div
+                          key={service.title}
+                          className={service.oxford ? 'card-oxford' : 'card-service'}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <h3 className="font-display text-h3 text-midnight">{service.title}</h3>
+                            {service.oxford && (
+                              <span className="badge badge-oxford text-xs">Oxford</span>
+                            )}
+                          </div>
+                          <p className="text-body-text mb-5 leading-relaxed">{service.description}</p>
+
+                          <div className="mb-4">
+                            <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Best For</p>
+                            <div className="flex flex-wrap gap-2">
+                              {service.bestFor.map((tag) => (
+                                <span key={tag} className="badge badge-teal text-xs">{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mb-4">
+                            <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Deliverables</p>
+                            <ul className="space-y-1">
+                              {service.deliverables.map((d) => (
+                                <li key={d} className="flex items-start gap-2 text-sm text-secondary-text">
+                                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-teal flex-shrink-0" />
+                                  {d}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="flex items-center gap-6 pt-4 border-t border-slate-100 text-sm">
+                            <div>
+                              <span className="text-muted">Timeline: </span>
+                              <span className="font-medium text-midnight">{service.timeline}</span>
+                            </div>
+                            <div>
+                              <span className="text-muted">Investment: </span>
+                              <span className="font-mono font-medium text-midnight">{service.investment}</span>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Deliverables</p>
-                    <ul className="space-y-1">
-                      {service.deliverables.map((d) => (
-                        <li key={d} className="flex items-start gap-2 text-sm text-secondary-text">
-                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-teal flex-shrink-0" />
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="flex items-center gap-6 pt-4 border-t border-slate-100 text-sm">
-                    <div>
-                      <span className="text-muted">Timeline: </span>
-                      <span className="font-medium text-midnight">{service.timeline}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted">Investment: </span>
-                      <span className="font-mono font-medium text-midnight">{service.investment}</span>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      ))}
+              </div>
+            )
+          })}
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="section-dark py-20">
