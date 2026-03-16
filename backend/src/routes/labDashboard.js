@@ -252,7 +252,7 @@ router.post('/resources/upload', requireRole('admin'), (req, res, _next) => {
 });
 
 // DELETE /api/lab-dashboard/resources/file/:filename  (admin only)
-router.delete('/resources/file/:filename', requireRole('admin'), (req, res) => {
+router.delete('/resources/file/:filename', authenticate, requireRole('admin'), (req, res) => {
   const filename = path.basename(req.params.filename); // prevent path traversal
   const filePath = path.join(resourceUploadDir, filename);
 
