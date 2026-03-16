@@ -16,12 +16,12 @@ const SECTION_LABELS = {
 function JsonField({ label, value, onChange }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-text-primary mb-1">{label}</label>
       <input
         type="text"
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm"
+        className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm"
       />
     </div>
   )
@@ -30,12 +30,12 @@ function JsonField({ label, value, onChange }) {
 function JsonTextarea({ label, value, onChange, rows = 3 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-text-primary mb-1">{label}</label>
       <textarea
         value={typeof value === 'string' ? value : ''}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
-        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm resize-none"
+        className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm resize-none"
       />
     </div>
   )
@@ -80,10 +80,10 @@ function StatsEditor({ data, onChange }) {
           <div className="flex-1">
             <JsonField label="Label" value={stat.label} onChange={(v) => update(i, 'label', v)} />
           </div>
-          <button onClick={() => removeStat(i)} className="px-3 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg text-sm mb-0.5">Remove</button>
+          <button onClick={() => removeStat(i)} className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg text-sm mb-0.5">Remove</button>
         </div>
       ))}
-      <button onClick={addStat} className="text-sm text-primary-600 dark:text-primary-400 hover:underline">+ Add stat</button>
+      <button onClick={addStat} className="text-sm text-primary-600 hover:underline">+ Add stat</button>
     </div>
   )
 }
@@ -101,19 +101,19 @@ function AboutEditor({ data, onChange }) {
       <JsonField label="Title" value={data.title} onChange={(v) => onChange({ ...data, title: v })} />
       <JsonTextarea label="Description" value={data.description} onChange={(v) => onChange({ ...data, description: v })} />
       <div>
-        <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Highlights</label>
+        <label className="block text-sm font-medium text-text-primary mb-1">Highlights</label>
         {(data.highlights || []).map((h, i) => (
           <div key={i} className="flex gap-2 mb-2">
             <input
               type="text"
               value={h}
               onChange={(e) => updateHighlights(i, e.target.value)}
-              className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+              className="flex-1 px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
             />
             <button onClick={() => onChange({ ...data, highlights: data.highlights.filter((_, idx) => idx !== i) })} className="text-red-500 text-sm px-2">Remove</button>
           </div>
         ))}
-        <button onClick={() => onChange({ ...data, highlights: [...(data.highlights || []), ''] })} className="text-sm text-primary-600 dark:text-primary-400 hover:underline">+ Add highlight</button>
+        <button onClick={() => onChange({ ...data, highlights: [...(data.highlights || []), ''] })} className="text-sm text-primary-600 hover:underline">+ Add highlight</button>
       </div>
     </div>
   )
@@ -150,13 +150,13 @@ function FaqEditor({ data, onChange }) {
   return (
     <div className="space-y-4">
       {data.map((faq, i) => (
-        <div key={i} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg space-y-2">
+        <div key={i} className="p-3 bg-gray-50 rounded-lg space-y-2">
           <JsonField label={`Question ${i + 1}`} value={faq.question} onChange={(v) => update(i, 'question', v)} />
           <JsonTextarea label="Answer" value={faq.answer} onChange={(v) => update(i, 'answer', v)} rows={2} />
           <button onClick={() => onChange(data.filter((_, idx) => idx !== i))} className="text-red-500 text-sm hover:underline">Remove Q&A</button>
         </div>
       ))}
-      <button onClick={() => onChange([...data, { question: '', answer: '' }])} className="text-sm text-primary-600 dark:text-primary-400 hover:underline">+ Add Q&A pair</button>
+      <button onClick={() => onChange([...data, { question: '', answer: '' }])} className="text-sm text-primary-600 hover:underline">+ Add Q&A pair</button>
     </div>
   )
 }
@@ -183,7 +183,7 @@ function ServicesEditor({ data, onChange }) {
   return (
     <div className="space-y-4">
       {data.map((svc, i) => (
-        <div key={i} className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg space-y-2">
+        <div key={i} className="p-3 bg-gray-50 rounded-lg space-y-2">
           <div className="grid grid-cols-2 gap-3">
             <JsonField label="Icon" value={svc.icon} onChange={(v) => update(i, 'icon', v)} />
             <JsonField label="Title" value={svc.title} onChange={(v) => update(i, 'title', v)} />
@@ -192,7 +192,7 @@ function ServicesEditor({ data, onChange }) {
           <button onClick={() => onChange(data.filter((_, idx) => idx !== i))} className="text-red-500 text-sm hover:underline">Remove</button>
         </div>
       ))}
-      <button onClick={() => onChange([...data, { icon: 'BarChart3', title: '', description: '' }])} className="text-sm text-primary-600 dark:text-primary-400 hover:underline">+ Add service</button>
+      <button onClick={() => onChange([...data, { icon: 'BarChart3', title: '', description: '' }])} className="text-sm text-primary-600 hover:underline">+ Add service</button>
     </div>
   )
 }
@@ -222,7 +222,7 @@ function RawJsonEditor({ data, onChange }) {
         onChange={(e) => setText(e.target.value)}
         onBlur={handleBlur}
         rows={10}
-        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-primary-300 resize-y"
+        className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary font-mono text-xs focus:outline-none focus:ring-2 focus:ring-primary-300 resize-y"
       />
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
@@ -301,39 +301,39 @@ export default function SiteContentTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="font-display font-semibold text-lg text-text-primary dark:text-gray-100">Site Content</h2>
+        <h2 className="font-display font-semibold text-lg text-text-primary">Site Content</h2>
       </div>
 
       {message && (
         <div className={`p-3 rounded-lg text-sm ${
           message.type === 'success'
-            ? 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300'
-            : 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-400'
+            ? 'bg-green-50 border border-green-200 text-green-700'
+            : 'bg-red-50 border border-red-200 text-red-600'
         }`}>
           {message.text}
         </div>
       )}
 
       {Object.entries(sections).map(([sectionKey, keys]) => (
-        <div key={sectionKey} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div key={sectionKey} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <button
             onClick={() => toggleExpand(sectionKey)}
-            className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
           >
-            <span className="font-medium text-text-primary dark:text-gray-100">
+            <span className="font-medium text-text-primary">
               {SECTION_LABELS[sectionKey] || sectionKey}
             </span>
             {expanded[sectionKey] ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
           </button>
 
           {expanded[sectionKey] && (
-            <div className="px-5 pb-5 space-y-6 border-t border-gray-100 dark:border-gray-700 pt-4">
+            <div className="px-5 pb-5 space-y-6 border-t border-gray-100 pt-4">
               {Object.entries(keys).map(([keyName, entry]) => {
                 const editKey = `${sectionKey}:${keyName}`
                 return (
                   <div key={keyName}>
                     {Object.keys(keys).length > 1 && (
-                      <p className="text-xs text-text-secondary dark:text-gray-400 mb-2 uppercase tracking-wide">{keyName}</p>
+                      <p className="text-xs text-text-secondary mb-2 uppercase tracking-wide">{keyName}</p>
                     )}
                     <SectionEditor
                       sectionKey={sectionKey}
@@ -351,7 +351,7 @@ export default function SiteContentTab() {
                         {saving[editKey] ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
                         Save
                       </Button>
-                      <span className="text-xs text-text-secondary dark:text-gray-400">
+                      <span className="text-xs text-text-secondary">
                         Last updated: {entry.updated_at ? new Date(entry.updated_at).toLocaleDateString() : 'never'}
                       </span>
                     </div>

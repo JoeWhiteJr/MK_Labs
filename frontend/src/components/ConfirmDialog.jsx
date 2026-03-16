@@ -16,11 +16,11 @@ export default function ConfirmDialog({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
       <div className="flex flex-col items-center text-center">
-        <div className="p-3 rounded-full bg-red-50 dark:bg-red-900/30 mb-4">
-          <AlertTriangle size={24} className="text-red-500 dark:text-red-400" />
+        <div className="p-3 rounded-full bg-red-50 mb-4">
+          <AlertTriangle size={24} className="text-red-500" />
         </div>
         {message && (
-          <p className="text-sm text-text-secondary dark:text-gray-400 mb-6">{message}</p>
+          <p className="text-sm text-text-secondary mb-6">{message}</p>
         )}
         <div className="flex gap-3 w-full">
           <Button

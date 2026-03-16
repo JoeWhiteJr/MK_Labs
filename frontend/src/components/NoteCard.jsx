@@ -12,14 +12,14 @@ const NoteCard = memo(function NoteCard({ note, onEdit, onDelete, onTogglePin, o
 
   return (
     <div
-      className={`group bg-white dark:bg-gray-800 rounded-lg border ${isPinned ? 'border-primary-300 dark:border-primary-600' : 'border-gray-200 dark:border-gray-700'} p-4 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-sm transition-all cursor-pointer`}
+      className={`group bg-white rounded-lg border ${isPinned ? 'border-primary-300' : 'border-gray-200'} p-4 hover:border-primary-300 hover:shadow-sm transition-all cursor-pointer`}
       onClick={() => onEdit(note)}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
-          <h4 className="font-medium text-text-primary dark:text-gray-100 line-clamp-1" title={note.title}>{note.title}</h4>
+          <h4 className="font-medium text-text-primary line-clamp-1" title={note.title}>{note.title}</h4>
           {note.pinned_for_project && (
-            <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded">
+            <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-medium bg-primary-100 text-primary-600 rounded">
               Project Pin
             </span>
           )}
@@ -28,7 +28,7 @@ const NoteCard = memo(function NoteCard({ note, onEdit, onDelete, onTogglePin, o
           {onTogglePin && (
             <button
               onClick={() => onTogglePin(note.id)}
-              className={`p-1.5 rounded ${note.is_pinned ? 'text-primary-600 dark:text-primary-400' : 'text-text-secondary dark:text-gray-400'} hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30`}
+              className={`p-1.5 rounded ${note.is_pinned ? 'text-primary-600' : 'text-text-secondary'} hover:text-primary-600 hover:bg-primary-50`}
               aria-label={note.is_pinned ? 'Unpin note' : 'Pin note'}
               title={note.is_pinned ? 'Unpin' : 'Pin for me'}
             >
@@ -38,7 +38,7 @@ const NoteCard = memo(function NoteCard({ note, onEdit, onDelete, onTogglePin, o
           {canManageProject && onToggleProjectPin && (
             <button
               onClick={() => onToggleProjectPin(note.id)}
-              className={`p-1.5 rounded text-xs font-medium ${note.pinned_for_project ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30' : 'text-text-secondary dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'}`}
+              className={`p-1.5 rounded text-xs font-medium ${note.pinned_for_project ? 'text-primary-600 bg-primary-50' : 'text-text-secondary hover:text-primary-600 hover:bg-primary-50'}`}
               title={note.pinned_for_project ? 'Unpin from project' : 'Pin for project'}
             >
               P
@@ -46,7 +46,7 @@ const NoteCard = memo(function NoteCard({ note, onEdit, onDelete, onTogglePin, o
           )}
           <button
             onClick={() => onDelete(note.id)}
-            className="p-1.5 rounded text-text-secondary dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+            className="p-1.5 rounded text-text-secondary hover:text-red-600 hover:bg-red-50"
             aria-label="Delete note"
           >
             <Trash2 size={16} />
@@ -54,11 +54,11 @@ const NoteCard = memo(function NoteCard({ note, onEdit, onDelete, onTogglePin, o
         </div>
       </div>
 
-      <p className="mt-2 text-sm text-text-secondary dark:text-gray-400 line-clamp-3">
+      <p className="mt-2 text-sm text-text-secondary line-clamp-3">
         {previewText}
       </p>
 
-      <div className="mt-3 flex items-center gap-4 text-xs text-text-secondary dark:text-gray-400">
+      <div className="mt-3 flex items-center gap-4 text-xs text-text-secondary">
         <span className="flex items-center gap-1">
           <User size={12} />
           {note.creator_name}

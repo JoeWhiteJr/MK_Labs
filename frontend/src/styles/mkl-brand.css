@@ -229,7 +229,7 @@ a:hover { color: var(--color-teal-dark); }
   background: var(--color-midnight);
   color: var(--color-white);
 }
-.btn-dark:hover { background: var(--color-deep-slate); }
+.btn- { background: var(--color-deep-slate); }
 
 /* Cards */
 .card {

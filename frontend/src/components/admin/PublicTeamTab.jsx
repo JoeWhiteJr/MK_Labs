@@ -139,7 +139,7 @@ export default function PublicTeamTab() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-lg text-text-primary dark:text-gray-100">Public Team Members</h2>
+        <h2 className="font-display font-semibold text-lg text-text-primary">Public Team Members</h2>
         <Button size="sm" onClick={openAdd}>
           <Plus size={16} />
           Add Member
@@ -149,8 +149,8 @@ export default function PublicTeamTab() {
       {message && (
         <div className={`p-3 rounded-lg text-sm ${
           message.type === 'success'
-            ? 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300'
-            : 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-400'
+            ? 'bg-green-50 border border-green-200 text-green-700'
+            : 'bg-red-50 border border-red-200 text-red-600'
         }`}>
           {message.text}
         </div>
@@ -162,7 +162,7 @@ export default function PublicTeamTab() {
 
         return (
           <div key={cat}>
-            <h3 className="text-sm font-semibold text-text-primary dark:text-gray-100 mb-3 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-text-primary mb-3 uppercase tracking-wide">
               {CATEGORY_LABELS[cat]} ({catMembers.length})
             </h3>
             <div className="space-y-2">
@@ -171,44 +171,44 @@ export default function PublicTeamTab() {
                   key={member.id}
                   className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
                     member.is_visible
-                      ? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-                      : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 opacity-60'
+                      ? 'bg-white border-gray-200'
+                      : 'bg-gray-50 border-gray-200 opacity-60'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
                       {member.photo_url ? (
                         <img src={member.photo_url} alt="" className="w-full h-full rounded-full object-cover" />
                       ) : (
-                        <span className="text-primary-700 dark:text-primary-300 font-medium text-sm">
+                        <span className="text-primary-700 font-medium text-sm">
                           {member.name?.charAt(0)?.toUpperCase()}
                         </span>
                       )}
                     </div>
                     <div>
-                      <p className="font-medium text-text-primary dark:text-gray-100 text-sm">{member.name}</p>
-                      <p className="text-xs text-text-secondary dark:text-gray-400">{member.role}{member.email ? ` · ${member.email}` : ''}</p>
+                      <p className="font-medium text-text-primary text-sm">{member.name}</p>
+                      <p className="text-xs text-text-secondary">{member.role}{member.email ? ` · ${member.email}` : ''}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => toggleVisibility(member)}
-                      className="p-1.5 rounded text-text-secondary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="p-1.5 rounded text-text-secondary hover:bg-gray-100"
                       title={member.is_visible ? 'Hide from public' : 'Show on public site'}
                     >
                       {member.is_visible ? <Eye size={16} /> : <EyeOff size={16} />}
                     </button>
                     <button
                       onClick={() => openEdit(member)}
-                      className="p-1.5 rounded text-text-secondary dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30"
+                      className="p-1.5 rounded text-text-secondary hover:text-primary-600 hover:bg-primary-50"
                       title="Edit"
                     >
                       <Edit3 size={16} />
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(member)}
-                      className="p-1.5 rounded text-text-secondary dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                      className="p-1.5 rounded text-text-secondary hover:text-red-600 hover:bg-red-50"
                       title="Delete"
                     >
                       <Trash2 size={16} />
@@ -222,7 +222,7 @@ export default function PublicTeamTab() {
       })}
 
       {members.length === 0 && (
-        <div className="text-center py-12 text-text-secondary dark:text-gray-400">
+        <div className="text-center py-12 text-text-secondary">
           <p>No team members yet.</p>
           <p className="text-sm mt-1">Click &quot;Add Member&quot; to get started.</p>
         </div>
@@ -236,31 +236,31 @@ export default function PublicTeamTab() {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Name *</label>
+            <label className="block text-sm font-medium text-text-primary mb-1">Name *</label>
             <input
               type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Role</label>
+              <label className="block text-sm font-medium text-text-primary mb-1">Role</label>
               <input
                 type="text"
                 value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
                 placeholder="e.g. Director, Lab Lead"
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Category *</label>
+              <label className="block text-sm font-medium text-text-primary mb-1">Category *</label>
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
               >
                 {CATEGORIES.map(c => (
                   <option key={c.value} value={c.value}>{c.label}</option>
@@ -269,52 +269,52 @@ export default function PublicTeamTab() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Bio</label>
+            <label className="block text-sm font-medium text-text-primary mb-1">Bio</label>
             <textarea
               value={form.bio}
               onChange={(e) => setForm({ ...form, bio: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Email</label>
+              <label className="block text-sm font-medium text-text-primary mb-1">Email</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">LinkedIn URL</label>
+              <label className="block text-sm font-medium text-text-primary mb-1">LinkedIn URL</label>
               <input
                 type="text"
                 value={form.linkedin_url}
                 onChange={(e) => setForm({ ...form, linkedin_url: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Photo URL</label>
+              <label className="block text-sm font-medium text-text-primary mb-1">Photo URL</label>
               <input
                 type="text"
                 value={form.photo_url}
                 onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
                 placeholder="https://..."
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text-primary dark:text-gray-100 mb-1">Display Order</label>
+              <label className="block text-sm font-medium text-text-primary mb-1">Display Order</label>
               <input
                 type="number"
                 value={form.display_order}
                 onChange={(e) => setForm({ ...form, display_order: parseInt(e.target.value) || 0 })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text-primary dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-300"
               />
             </div>
           </div>
@@ -322,14 +322,14 @@ export default function PublicTeamTab() {
             <button
               onClick={() => setForm({ ...form, is_visible: !form.is_visible })}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                form.is_visible ? 'bg-primary-500' : 'bg-gray-300 dark:bg-gray-600'
+                form.is_visible ? 'bg-primary-500' : 'bg-gray-300'
               }`}
             >
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                 form.is_visible ? 'translate-x-6' : 'translate-x-1'
               }`} />
             </button>
-            <span className="text-sm text-text-primary dark:text-gray-100">Visible on public site</span>
+            <span className="text-sm text-text-primary">Visible on public site</span>
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-6">
@@ -347,8 +347,8 @@ export default function PublicTeamTab() {
         title="Delete Team Member"
         size="sm"
       >
-        <p className="text-text-secondary dark:text-gray-400">
-          Are you sure you want to delete <strong className="text-text-primary dark:text-gray-100">{showDeleteConfirm?.name}</strong>?
+        <p className="text-text-secondary">
+          Are you sure you want to delete <strong className="text-text-primary">{showDeleteConfirm?.name}</strong>?
           This cannot be undone.
         </p>
         <div className="flex justify-end gap-3 mt-6">
