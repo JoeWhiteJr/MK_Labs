@@ -21,6 +21,15 @@ const forgotPasswordLimiter = rateLimit({
   validate: false,
 });
 
+// Rate limit for the actual password reset endpoint (IP-based)
+const resetPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  message: { error: { message: 'Too many password reset attempts, please try again later' } },
+  keyGenerator: (req) => req.ip,
+  validate: false, // Avoid ERR_ERL_KEY_GEN_IPV6
+});
+
 // Register - disabled, users must apply and be approved by an admin
 // New accounts are created via the application approval flow (see routes/applications.js)
 router.post('/register', (req, res) => {
@@ -134,7 +143,7 @@ router.post('/forgot-password', forgotPasswordLimiter, [
 });
 
 // Reset password with token
-router.post('/reset-password', [
+router.post('/reset-password', resetPasswordLimiter, [
   body('token').notEmpty(),
   body('password').isLength({ min: 8 })
 ], async (req, res, next) => {
