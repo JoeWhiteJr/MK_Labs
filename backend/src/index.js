@@ -42,8 +42,24 @@ const PORT = process.env.PORT || 3001;
 // Trust proxy (behind Nginx)
 app.set('trust proxy', 1);
 
-// Security headers
-app.use(helmet());
+// Security headers with strict CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],  // unsafe-inline needed for Tailwind
+      imgSrc: ["'self'", "data:"],
+      fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
+      connectSrc: ["'self'"],
+    },
+  },
+  frameguard: { action: 'deny' },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+  },
+}));
 
 // Structured HTTP request logging
 app.use(pinoHttp({ logger, autoLogging: { ignore: (req) => req.url === '/api/health' } }));
