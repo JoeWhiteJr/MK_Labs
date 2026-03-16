@@ -10,6 +10,7 @@ const { authenticate, requireRole } = require('../middleware/auth');
 const { createNotification, createNotificationForUsers } = require('./notifications');
 const socketService = require('../services/socketService');
 const { logAdminAction } = require('../middleware/auditLog');
+const { parsePagination } = require('../utils/pagination');
 
 const router = express.Router();
 
@@ -47,8 +48,7 @@ const coverUpload = multer({
 router.get('/', authenticate, async (req, res, next) => {
   try {
     const { status } = req.query;
-    const limit = Math.min(parseInt(req.query.limit) || 50, 200);
-    const offset = parseInt(req.query.offset) || 0;
+    const { limit, offset } = parsePagination(req.query);
     const validStatuses = ['active', 'completed', 'archived', 'inactive'];
     if (status && !validStatuses.includes(status)) {
       return res.status(400).json({ error: { message: 'Invalid status filter' } });
