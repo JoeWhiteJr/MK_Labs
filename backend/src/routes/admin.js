@@ -8,38 +8,18 @@ const router = express.Router();
 // Get dashboard statistics
 router.get('/stats', authenticate, requireRole('admin'), async (req, res, next) => {
   try {
-    const [
-      userStats,
-      applicationStats,
-      projectStats,
-      chatStats,
-      recentApplications
-    ] = await Promise.all([
-      // User stats
+    const [userStats, projectStats] = await Promise.all([
       db.query(`
         SELECT
           COUNT(*) as total_users,
           COUNT(*) FILTER (WHERE role = 'admin') as admin_count,
-          COUNT(*) FILTER (WHERE role = 'project_lead') as project_lead_count,
-          COUNT(*) FILTER (WHERE role = 'researcher') as researcher_count,
-          COUNT(*) FILTER (WHERE role = 'viewer') as viewer_count,
+          COUNT(*) FILTER (WHERE role = 'member') as member_count,
+          COUNT(*) FILTER (WHERE role = 'client') as client_count,
           COUNT(*) FILTER (WHERE created_at > CURRENT_DATE - INTERVAL '7 days') as new_this_week,
           COUNT(*) FILTER (WHERE created_at > CURRENT_DATE - INTERVAL '30 days') as new_this_month
         FROM users
         WHERE deleted_at IS NULL
       `),
-      // Application stats
-      db.query(`
-        SELECT
-          COUNT(*) as total_applications,
-          COUNT(*) FILTER (WHERE status = 'pending') as pending,
-          COUNT(*) FILTER (WHERE status = 'approved') as approved,
-          COUNT(*) FILTER (WHERE status = 'rejected') as rejected,
-          COUNT(*) FILTER (WHERE created_at > CURRENT_DATE - INTERVAL '7 days') as new_this_week,
-          AVG(EXTRACT(EPOCH FROM (reviewed_at - created_at))/3600) FILTER (WHERE reviewed_at IS NOT NULL) as avg_response_hours
-        FROM applications
-      `),
-      // Project stats
       db.query(`
         SELECT
           COUNT(*) as total_projects,
@@ -48,32 +28,14 @@ router.get('/stats', authenticate, requireRole('admin'), async (req, res, next) 
           COUNT(*) FILTER (WHERE status = 'archived') as archived,
           AVG(progress) FILTER (WHERE status = 'active') as avg_active_progress
         FROM projects
-      `),
-      // Chat stats
-      db.query(`
-        SELECT
-          (SELECT COUNT(*) FROM chat_rooms) as total_rooms,
-          (SELECT COUNT(*) FROM chat_rooms WHERE type = 'group') as group_rooms,
-          (SELECT COUNT(*) FROM messages WHERE created_at > CURRENT_DATE - INTERVAL '7 days') as messages_this_week,
-          (SELECT COUNT(*) FROM messages) as total_messages
-      `),
-      // Recent applications
-      db.query(`
-        SELECT id, name, email, status, created_at
-        FROM applications
-        ORDER BY created_at DESC
-        LIMIT 5
       `)
     ]);
 
     res.json({
       stats: {
         users: userStats.rows[0],
-        applications: applicationStats.rows[0],
-        projects: projectStats.rows[0],
-        chats: chatStats.rows[0]
-      },
-      recentApplications: recentApplications.rows
+        projects: projectStats.rows[0]
+      }
     });
   } catch (error) {
     next(error);
@@ -179,28 +141,6 @@ router.get('/users/search', authenticate, requireRole('admin'), [
 
     const result = await db.query(query, params);
     res.json({ users: result.rows });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get application trends (for charts)
-router.get('/applications/trends', authenticate, requireRole('admin'), async (req, res, next) => {
-  try {
-    const result = await db.query(`
-      SELECT
-        DATE(created_at) as date,
-        COUNT(*) as total,
-        COUNT(*) FILTER (WHERE status = 'approved') as approved,
-        COUNT(*) FILTER (WHERE status = 'rejected') as rejected,
-        COUNT(*) FILTER (WHERE status = 'pending') as pending
-      FROM applications
-      WHERE created_at > CURRENT_DATE - INTERVAL '30 days'
-      GROUP BY DATE(created_at)
-      ORDER BY date ASC
-    `);
-
-    res.json({ trends: result.rows });
   } catch (error) {
     next(error);
   }
