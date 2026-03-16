@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const db = require('../config/database');
+const logger = require('../config/logger');
 const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
@@ -227,12 +228,12 @@ router.delete('/:type/:id', authenticate, async (req, res, next) => {
       // Delete file from disk for meetings and files
       if (type === 'meeting' && item.audio_path) {
         fs.unlink(item.audio_path, (err) => {
-          if (err) console.error('Error deleting audio file:', err);
+          if (err) logger.error({ err }, 'Error deleting audio file');
         });
       }
       if (type === 'file' && item.storage_path) {
         fs.unlink(item.storage_path, (err) => {
-          if (err) console.error('Error deleting file:', err);
+          if (err) logger.error({ err }, 'Error deleting file');
         });
       }
 
