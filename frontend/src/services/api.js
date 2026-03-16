@@ -354,6 +354,11 @@ export const resourcesApi = {
   deleteFile: (filename) => api.delete(`/lab-dashboard/resources/file/${filename}`),
 }
 
+// Contact (public, no auth)
+export const contactApi = {
+  submit: (data) => api.post('/contact', data),
+}
+
 // Pipeline (CRM)
 export const pipelineApi = {
   list: (params) => api.get('/pipeline', { params }),
