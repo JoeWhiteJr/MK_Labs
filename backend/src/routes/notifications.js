@@ -208,7 +208,10 @@ const sendNotificationEmails = async (userIds, type, title, body, _referenceId) 
     logger.error({ type, prefColumn }, 'Invalid email preference column');
     return;
   }
-  const appUrl = process.env.APP_URL || 'http://localhost:5173';
+  const appUrl = process.env.APP_URL || process.env.FRONTEND_URL || process.env.CORS_ORIGIN || 'http://localhost:5173';
+  if (!process.env.APP_URL && !process.env.FRONTEND_URL && !process.env.CORS_ORIGIN) {
+    logger.warn('APP_URL, FRONTEND_URL, and CORS_ORIGIN are all unset — email links will use http://localhost:5173');
+  }
 
   try {
     // prefColumn is safe — validated against ALLOWED_PREF_COLUMNS whitelist above
