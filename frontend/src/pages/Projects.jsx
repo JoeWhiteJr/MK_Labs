@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { useProjectStore } from '../store/projectStore'
 import { usersApi } from '../services/api'
+import { toast } from '../store/toastStore'
 import ProjectCard from '../components/ProjectCard'
 import ProjectPreviewModal from '../components/ProjectPreviewModal'
 import Button from '../components/Button'
@@ -147,6 +148,7 @@ export default function Projects() {
       setShowCreateModal(false)
       setNewProject({ title: '', description: '', lead_id: '', subheader: '' })
       setCreateError('')
+      toast.success('Project created')
     } else {
       setCreateError(useProjectStore.getState().error || 'Failed to create project')
     }

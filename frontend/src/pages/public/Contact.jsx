@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Mail, Phone, Clock, Loader2 } from 'lucide-react'
 import { contactApi } from '../../services/api'
+import { toast } from '../../store/toastStore'
 
 const serviceOptions = [
   'MaxDiff & Conjoint Analysis',
@@ -38,6 +39,7 @@ export default function Contact() {
         message: form.message,
       })
       setSubmitted(true)
+      toast.success('Message sent! We\'ll be in touch shortly.')
     } catch (err) {
       const msg = err.response?.data?.error?.message || 'Something went wrong. Please try again.'
       setError(msg)
