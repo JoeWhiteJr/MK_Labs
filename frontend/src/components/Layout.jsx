@@ -90,11 +90,16 @@ export default function Layout() {
           >
             {navOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-          <div className="hidden sm:block">
-            <h1 className="font-display font-bold text-lg leading-tight text-white">Michael Kairos Labs</h1>
-            <p className="text-xs text-slate-400 leading-tight">Research. Analytics. Impact.</p>
-          </div>
-          <span className="sm:hidden font-display font-semibold text-lg text-white">MKL</span>
+          <img
+            src="/brand/mkl-logo-horizontal-transparent.png"
+            alt="Michael Kairos Labs"
+            className="hidden sm:block h-9 w-auto invert"
+          />
+          <img
+            src="/brand/mkl-logo-horizontal-transparent.png"
+            alt="MKL"
+            className="sm:hidden h-7 w-auto invert"
+          />
           <div className="hidden md:flex items-center gap-2 ml-2 pl-3 border-l border-slate-600">
             <div className="w-7 h-7 rounded-full bg-midnight-light flex items-center justify-center overflow-hidden">
               {user?.avatar_url ? (
