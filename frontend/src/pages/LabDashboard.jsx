@@ -92,8 +92,8 @@ function ResourceListEditor({ items, onSave, saving }) {
             {item.description && <p className="text-sm text-text-secondary mt-0.5">{item.description}</p>}
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
-            {!item.isFile && <button onClick={() => openEdit(i)} className="p-1 rounded text-gray-400 hover:text-teal-600 transition-colors"><Pencil size={14} /></button>}
-            <button onClick={() => handleDelete(i)} className="p-1 rounded text-gray-400 hover:text-red-600 transition-colors"><Trash2 size={14} /></button>
+            {!item.isFile && <button onClick={() => openEdit(i)} className="p-1 rounded text-gray-400 hover:text-teal-600 transition-colors" aria-label="Edit resource"><Pencil size={14} /></button>}
+            <button onClick={() => handleDelete(i)} className="p-1 rounded text-gray-400 hover:text-red-600 transition-colors" aria-label="Delete resource"><Trash2 size={14} /></button>
           </div>
         </div>
       ))}
@@ -411,8 +411,8 @@ export default function LabDashboard() {
                           </div>
                           {isAdmin && (
                             <div className="flex items-center gap-1 flex-shrink-0">
-                              <button onClick={() => openNewsModal(item)} className="p-1.5 rounded-lg text-gray-400 hover:text-teal-600 hover:bg-teal-50 transition-colors"><Pencil size={14} /></button>
-                              <button onClick={() => handleDeleteNews(item.id)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"><Trash2 size={14} /></button>
+                              <button onClick={() => openNewsModal(item)} className="p-1.5 rounded-lg text-gray-400 hover:text-teal-600 hover:bg-teal-50 transition-colors" aria-label="Edit announcement"><Pencil size={14} /></button>
+                              <button onClick={() => handleDeleteNews(item.id)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors" aria-label="Delete announcement"><Trash2 size={14} /></button>
                             </div>
                           )}
                         </div>

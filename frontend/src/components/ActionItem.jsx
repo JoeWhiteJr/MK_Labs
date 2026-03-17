@@ -107,6 +107,7 @@ const ActionItem = memo(function ActionItem({
               ? 'bg-secondary-500 border-secondary-500'
               : 'border-gray-300 hover:border-primary-400'
           }`}
+          aria-label={action.completed ? 'Mark task incomplete' : 'Mark task complete'}
         >
           {action.completed && (
             <svg className="w-full h-full text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -218,6 +219,7 @@ const ActionItem = memo(function ActionItem({
             <button
               onClick={() => setShowComments(!showComments)}
               className={`flex items-center gap-1 text-xs text-text-secondary hover:text-primary-600 ${showComments ? 'text-primary-600' : ''}`}
+              aria-label={showComments ? 'Hide comments' : 'Show comments'}
             >
               <MessageSquare size={12} />
               {commentCount > 0 && <span>{commentCount}</span>}
@@ -265,6 +267,7 @@ const ActionItem = memo(function ActionItem({
                       onClick={() => setDeleteCommentTarget(c)}
                       className="ml-auto opacity-0 group-hover/comment:opacity-100 p-0.5 text-gray-400 hover:text-red-500 transition-opacity"
                       title="Delete comment"
+                      aria-label="Delete comment"
                     >
                       <Trash2 size={10} />
                     </button>
@@ -293,7 +296,7 @@ const ActionItem = memo(function ActionItem({
                   placeholder="Add a comment..."
                   className="flex-1 text-xs px-2 py-1.5 rounded border border-gray-300 bg-white text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary-300"
                 />
-                <button type="submit" className="p-1.5 rounded bg-primary-500 text-white hover:bg-primary-600">
+                <button type="submit" className="p-1.5 rounded bg-primary-500 text-white hover:bg-primary-600" aria-label="Send comment">
                   <SendIcon size={12} />
                 </button>
               </form>
