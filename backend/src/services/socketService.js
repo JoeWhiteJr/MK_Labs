@@ -13,7 +13,7 @@ const onlineUsers = new Map();
 const initialize = (httpServer, corsOrigin) => {
   io = new Server(httpServer, {
     cors: {
-      origin: corsOrigin || 'http://localhost:5173',
+      origin: corsOrigin || process.env.CORS_ORIGIN || process.env.FRONTEND_URL || 'http://localhost:5173',
       methods: ['GET', 'POST'],
       credentials: true
     },
