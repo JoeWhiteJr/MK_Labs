@@ -192,17 +192,14 @@ const createNotification = async (userId, type, title, body = null, referenceId 
 
 // Map notification type to user preference column
 const typeToEmailPref = {
-  chat_message: 'email_chat',
   mention: 'email_mentions',
-  application_received: 'email_applications',
-  application_status: 'email_applications',
 };
 
 // Send email notifications to users who have opted in
 const sendNotificationEmails = async (userIds, type, title, body, _referenceId) => {
   if (!userIds || userIds.length === 0) return;
 
-  const ALLOWED_PREF_COLUMNS = ['email_chat', 'email_mentions', 'email_applications', 'email_system'];
+  const ALLOWED_PREF_COLUMNS = ['email_mentions', 'email_system'];
   const prefColumn = typeToEmailPref[type] || 'email_system';
   if (!ALLOWED_PREF_COLUMNS.includes(prefColumn)) {
     logger.error({ type, prefColumn }, 'Invalid email preference column');
@@ -225,23 +222,10 @@ const sendNotificationEmails = async (userIds, type, title, body, _referenceId) 
 
     for (const user of result.rows) {
       let template;
-      if (type === 'chat_message') {
-        template = emailTemplates.chatMessageEmail({
-          senderName: title.replace(/^New message from /, '').replace(/ in .*$/, '') || 'Someone',
-          roomName: title.replace(/^.*in /, '') || 'a chat room',
-          messagePreview: body || '',
-          appUrl,
-        });
-      } else if (type === 'mention') {
+      if (type === 'mention') {
         template = emailTemplates.mentionEmail({
           senderName: title.replace(/ mentioned you.*$/, '') || 'Someone',
           context: body || '',
-          appUrl,
-        });
-      } else if (type === 'application_status') {
-        template = emailTemplates.applicationStatusEmail({
-          applicantName: user.name,
-          status: body || 'updated',
           appUrl,
         });
       } else {
