@@ -45,6 +45,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick, pendingJoinReq
                 : 'bg-white/70 text-gray-500 opacity-0 group-hover:opacity-100'
             }`}
             title={isPinned ? 'Unpin project' : 'Pin project'}
+            aria-label={isPinned ? 'Unpin project' : 'Pin project'}
           >
             <Pin size={13} className={isPinned ? 'fill-current' : ''} />
             {isPinned ? 'Unpin' : 'Pin'}
@@ -66,6 +67,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick, pendingJoinReq
             onClick={(e) => { e.stopPropagation(); onPreview(project) }}
             className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-white/70 text-gray-500 text-xs font-medium opacity-0 group-hover:opacity-100 transition-all hover:bg-white/90 hover:text-primary-600"
             title="Preview project"
+            aria-label="Preview project"
           >
             <Eye size={13} />
             Preview

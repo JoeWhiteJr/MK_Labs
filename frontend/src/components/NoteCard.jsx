@@ -40,6 +40,7 @@ const NoteCard = memo(function NoteCard({ note, onEdit, onDelete, onTogglePin, o
               onClick={() => onToggleProjectPin(note.id)}
               className={`p-1.5 rounded text-xs font-medium ${note.pinned_for_project ? 'text-primary-600 bg-primary-50' : 'text-text-secondary hover:text-primary-600 hover:bg-primary-50'}`}
               title={note.pinned_for_project ? 'Unpin from project' : 'Pin for project'}
+              aria-label={note.pinned_for_project ? 'Unpin from project' : 'Pin for project'}
             >
               P
             </button>
