@@ -10,20 +10,20 @@ router.use(authenticate);
 const VALID_STATUSES = ['discovery', 'proposal', 'negotiation', 'won', 'lost'];
 
 // GET /api/pipeline — list all leads
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const result = await db.query(
       `SELECT * FROM leads WHERE created_by = $1 ORDER BY updated_at DESC`,
       [req.user.id]
     );
     res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: { message: 'Failed to fetch leads' } });
+  } catch (error) {
+    next(error);
   }
 });
 
 // GET /api/pipeline/metrics — pipeline summary
-router.get('/metrics', async (req, res) => {
+router.get('/metrics', async (req, res, next) => {
   try {
     const result = await db.query(
       `SELECT
@@ -42,13 +42,13 @@ router.get('/metrics', async (req, res) => {
       ...row,
       win_rate: total > 0 ? (Number(row.won_leads) / total * 100).toFixed(1) : null,
     });
-  } catch (err) {
-    res.status(500).json({ error: { message: 'Failed to fetch metrics' } });
+  } catch (error) {
+    next(error);
   }
 });
 
 // GET /api/pipeline/:id — single lead
-router.get('/:id', param('id').isUUID(), async (req, res) => {
+router.get('/:id', param('id').isUUID(), async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid ID' } });
 
@@ -56,8 +56,8 @@ router.get('/:id', param('id').isUUID(), async (req, res) => {
     const result = await db.query('SELECT * FROM leads WHERE id = $1', [req.params.id]);
     if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
     res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: { message: 'Failed to fetch lead' } });
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -65,7 +65,7 @@ router.get('/:id', param('id').isUUID(), async (req, res) => {
 router.post('/',
   body('company_name').trim().notEmpty(),
   body('contact_name').trim().notEmpty(),
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Company and contact name required' } });
 
@@ -78,14 +78,14 @@ router.post('/',
         [company_name, contact_name, contact_email || null, contact_phone || null, service_pillar || null, estimated_value || null, notes || null, source || null, req.user.id]
       );
       res.status(201).json(result.rows[0]);
-    } catch (err) {
-      res.status(500).json({ error: { message: 'Failed to create lead' } });
+    } catch (error) {
+      next(error);
     }
   }
 );
 
 // PUT /api/pipeline/:id — update lead
-router.put('/:id', param('id').isUUID(), async (req, res) => {
+router.put('/:id', param('id').isUUID(), async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid ID' } });
 
@@ -109,8 +109,8 @@ router.put('/:id', param('id').isUUID(), async (req, res) => {
     );
     if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
     res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: { message: 'Failed to update lead' } });
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -118,7 +118,7 @@ router.put('/:id', param('id').isUUID(), async (req, res) => {
 router.put('/:id/stage',
   param('id').isUUID(),
   body('status').isIn(VALID_STATUSES),
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid status' } });
 
@@ -129,14 +129,14 @@ router.put('/:id/stage',
       );
       if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
       res.json(result.rows[0]);
-    } catch (err) {
-      res.status(500).json({ error: { message: 'Failed to update stage' } });
+    } catch (error) {
+      next(error);
     }
   }
 );
 
 // DELETE /api/pipeline/:id — delete lead
-router.delete('/:id', param('id').isUUID(), async (req, res) => {
+router.delete('/:id', param('id').isUUID(), async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid ID' } });
 
@@ -144,8 +144,8 @@ router.delete('/:id', param('id').isUUID(), async (req, res) => {
     const result = await db.query('DELETE FROM leads WHERE id = $1 RETURNING id', [req.params.id]);
     if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
     res.json({ message: 'Lead deleted' });
-  } catch (err) {
-    res.status(500).json({ error: { message: 'Failed to delete lead' } });
+  } catch (error) {
+    next(error);
   }
 });
 
