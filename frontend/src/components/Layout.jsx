@@ -76,6 +76,9 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-cloud">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-teal-700 focus:outline-none">
+        Skip to main content
+      </a>
       {/* Unified header */}
       <div className="fixed top-0 left-0 right-0 h-16 bg-midnight text-white flex items-center justify-between px-4 lg:px-6 z-50 shadow-nav">
         {/* Left: hamburger + branding + user */}
@@ -224,7 +227,7 @@ export default function Layout() {
       )}
 
       {/* Main content */}
-      <main className={`pt-16 min-h-screen transition-[margin] ${assistantIsOpen ? 'lg:mr-96' : ''} ${socketStatus === 'reconnecting' ? 'mt-8' : ''}`}>
+      <main id="main-content" className={`pt-16 min-h-screen transition-[margin] ${assistantIsOpen ? 'lg:mr-96' : ''} ${socketStatus === 'reconnecting' ? 'mt-8' : ''}`}>
         <div className="p-6 lg:p-8">
           <Breadcrumbs />
           <Outlet />

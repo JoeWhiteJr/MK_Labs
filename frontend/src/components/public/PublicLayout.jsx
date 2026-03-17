@@ -11,6 +11,9 @@ const navLinks = [
 export default function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-cloud">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-teal-700 focus:outline-none">
+        Skip to main content
+      </a>
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-midnight shadow-nav">
         <div className="max-w-container mx-auto px-6 flex items-center justify-between h-[72px]">
@@ -52,7 +55,7 @@ export default function PublicLayout() {
       </nav>
 
       {/* Page Content */}
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <Outlet />
       </main>
 
