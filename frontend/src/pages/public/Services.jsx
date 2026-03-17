@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 
@@ -79,6 +79,22 @@ const pillars = [
 
 export default function Services() {
   const [expandedPillars, setExpandedPillars] = useState({})
+
+  useEffect(() => {
+    const services = pillars.flatMap(p => p.services.map(s => ({
+      '@type': 'Service',
+      name: s.title,
+      description: s.description,
+      provider: { '@type': 'LocalBusiness', name: 'Michael Kairos Labs', url: 'https://michaelkairoslabs.com' },
+      areaServed: 'US',
+      priceRange: s.investment,
+    })))
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.text = JSON.stringify({ '@context': 'https://schema.org', '@graph': services })
+    document.head.appendChild(script)
+    return () => { document.head.removeChild(script) }
+  }, [])
 
   const togglePillar = (name) => {
     setExpandedPillars((prev) => ({ ...prev, [name]: !prev[name] }))
