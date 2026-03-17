@@ -239,28 +239,6 @@ router.post('/', authenticate, requireRole('admin', 'project_lead'), [
       );
     }
 
-    // Auto-create project chat room
-    try {
-      const chatResult = await db.query(
-        "INSERT INTO chat_rooms (name, type, created_by, project_id, image_url) VALUES ($1, 'group', $2, $3, $4) RETURNING *",
-        [title, req.user.id, projectId, header_image || null]
-      );
-      await db.query(
-        "INSERT INTO chat_members (room_id, user_id, role) VALUES ($1, $2, 'admin')",
-        [chatResult.rows[0].id, req.user.id]
-      );
-      // If lead differs from creator, add lead to chat room too
-      if (lead_id && lead_id !== req.user.id) {
-        await db.query(
-          "INSERT INTO chat_members (room_id, user_id, role) VALUES ($1, $2, 'member') ON CONFLICT DO NOTHING",
-          [chatResult.rows[0].id, lead_id]
-        );
-      }
-    } catch (chatError) {
-      // Non-critical: project still created even if chat fails
-      logger.error({ err: chatError }, 'Failed to create project chat room');
-    }
-
     logAdminAction(req, 'create_project', 'project', projectId, null, { title, description });
     res.status(201).json({ project: result.rows[0] });
   } catch (error) {
