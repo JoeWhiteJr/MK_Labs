@@ -191,7 +191,7 @@ export default function MyDashboard() {
     }
   }
 
-  const handleDeleteNote = (e, id, title) => {
+  const handleDeleteNote = (e, id, _title) => {
     e.stopPropagation()
     setConfirmAction({
       title: 'Delete Note',
