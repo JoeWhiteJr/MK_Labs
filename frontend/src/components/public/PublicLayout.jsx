@@ -1,4 +1,5 @@
-import { Outlet, NavLink, Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { Linkedin, Github } from 'lucide-react'
 
 const navLinks = [
@@ -10,6 +11,20 @@ const navLinks = [
 ]
 
 export default function PublicLayout() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    const url = `https://michaelkairoslabs.com${pathname}`
+    let link = document.querySelector('link[rel="canonical"]')
+    if (!link) {
+      link = document.createElement('link')
+      link.setAttribute('rel', 'canonical')
+      document.head.appendChild(link)
+    }
+    link.setAttribute('href', url)
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <div className="min-h-screen flex flex-col bg-cloud">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-teal-700 focus:outline-none">
