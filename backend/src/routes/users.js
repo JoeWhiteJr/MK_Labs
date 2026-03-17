@@ -4,7 +4,7 @@ const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
 const { authenticate, requireRole } = require('../middleware/auth');
 const { parsePagination } = require('../utils/pagination');
-const { isStrongPassword, PASSWORD_RULES_MESSAGE } = require('./auth');
+const { isStrongPassword, PASSWORD_RULES_MESSAGE } = require('../utils/passwordValidation');
 
 const router = express.Router();
 

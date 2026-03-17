@@ -10,18 +10,9 @@ const logger = require('../config/logger');
 const { sendPasswordResetEmail } = require('../services/email');
 const rateLimit = require('express-rate-limit');
 
-const router = express.Router();
+const { isStrongPassword, PASSWORD_RULES_MESSAGE } = require('../utils/passwordValidation');
 
-// Password complexity: 8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special character
-const PASSWORD_RULES_MESSAGE = 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character';
-function isStrongPassword(value) {
-  if (value.length < 8) return false;
-  if (!/[A-Z]/.test(value)) return false;
-  if (!/[a-z]/.test(value)) return false;
-  if (!/[0-9]/.test(value)) return false;
-  if (!/[^A-Za-z0-9]/.test(value)) return false;
-  return true;
-}
+const router = express.Router();
 
 // --- Account lockout after failed login attempts ---
 // NOTE: In-memory store is suitable for single-instance deployments.
@@ -253,5 +244,3 @@ router.post('/reset-password', resetPasswordLimiter, [
 });
 
 module.exports = router;
-module.exports.isStrongPassword = isStrongPassword;
-module.exports.PASSWORD_RULES_MESSAGE = PASSWORD_RULES_MESSAGE;

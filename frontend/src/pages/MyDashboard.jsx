@@ -11,6 +11,7 @@ import Modal from '../components/Modal'
 import RichTextEditor from '../components/RichTextEditor'
 import Button from '../components/Button'
 import ConfirmDialog from '../components/ConfirmDialog'
+import { SkeletonListItem, SkeletonText } from '../components/SkeletonLoader'
 import DailyPlanCard from '../components/planner/DailyPlanCard'
 import PlannerEmptyState from '../components/planner/PlannerEmptyState'
 import CheckinModal from '../components/planner/CheckinModal'
@@ -190,7 +191,7 @@ export default function MyDashboard() {
     }
   }
 
-  const handleDeleteNote = (e, id, title) => {
+  const handleDeleteNote = (e, id, _title) => {
     e.stopPropagation()
     setConfirmAction({
       title: 'Delete Note',
