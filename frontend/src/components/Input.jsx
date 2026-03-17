@@ -3,18 +3,24 @@ import { forwardRef } from 'react'
 const Input = forwardRef(({
   label,
   error,
+  id,
+  name,
   className = '',
   ...props
 }, ref) => {
+  const inputId = id || name || undefined
+
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-medium text-text-primary mb-1.5">
+        <label htmlFor={inputId} className="block text-sm font-medium text-text-primary mb-1.5">
           {label}
         </label>
       )}
       <input
         ref={ref}
+        id={inputId}
+        name={name}
         className={`
           w-full px-4 py-2.5 rounded-organic border bg-white
           text-text-primary placeholder:text-text-secondary
