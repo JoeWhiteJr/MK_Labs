@@ -20,9 +20,9 @@ export default function PublicLayout() {
         <div className="max-w-container mx-auto px-6 flex items-center justify-between h-[72px]">
           <Link to="/" className="flex items-center gap-2">
             <img
-              src="/brand/mkl-logo-horizontal-transparent.png"
+              src="/brand/mkl-logo-white.png"
               alt="Michael Kairos Labs"
-              className="h-10 w-auto invert"
+              className="h-14 w-auto"
             />
           </Link>
 
@@ -68,9 +68,9 @@ export default function PublicLayout() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-2">
               <img
-                src="/brand/mkl-logo-horizontal-transparent.png"
+                src="/brand/mkl-logo-white.png"
                 alt="Michael Kairos Labs"
-                className="h-8 w-auto invert mb-3"
+                className="h-10 w-auto mb-3"
               />
               <p className="text-sm leading-relaxed max-w-md">
                 Research. Analytics. Impact. A boutique consultancy delivering Oxford-caliber

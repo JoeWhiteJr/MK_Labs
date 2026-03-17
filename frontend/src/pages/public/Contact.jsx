@@ -199,10 +199,10 @@ export default function Contact() {
                       <Phone size={20} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-midnight mb-1">Joe White</p>
-                      <p className="text-sm text-secondary-text">joe@michaelkairoslabs.com</p>
-                      <p className="text-sm font-medium text-midnight mb-1 mt-3">Jared Wasden</p>
-                      <p className="text-sm text-secondary-text">jared@michaelkairoslabs.com</p>
+                      <p className="text-sm font-medium text-midnight">Phone</p>
+                      <a href="tel:+13852045537" className="text-sm text-teal hover:text-teal-dark">
+                        (385) 204-5537
+                      </a>
                     </div>
                   </div>
 

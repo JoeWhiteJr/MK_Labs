@@ -91,14 +91,14 @@ export default function Layout() {
             {navOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
           <img
-            src="/brand/mkl-logo-horizontal-transparent.png"
+            src="/brand/mkl-logo-white.png"
             alt="Michael Kairos Labs"
-            className="hidden sm:block h-9 w-auto invert"
+            className="hidden sm:block h-12 w-auto"
           />
           <img
-            src="/brand/mkl-logo-horizontal-transparent.png"
+            src="/brand/mkl-logo-white.png"
             alt="MKL"
-            className="sm:hidden h-7 w-auto invert"
+            className="sm:hidden h-9 w-auto"
           />
           <div className="hidden md:flex items-center gap-2 ml-2 pl-3 border-l border-slate-600">
             <div className="w-7 h-7 rounded-full bg-midnight-light flex items-center justify-center overflow-hidden">
