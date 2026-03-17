@@ -51,7 +51,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'"],  // unsafe-inline needed for Tailwind
       imgSrc: ["'self'", "data:"],
       fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", "ws:", "wss:", "https://michaelkairoslabs.com", "wss://michaelkairoslabs.com"],
     },
   },
   frameguard: { action: 'deny' },
