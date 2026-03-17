@@ -25,6 +25,22 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({})
+
+  const validateField = (name, value) => {
+    if (name === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return 'Please enter a valid email address'
+    }
+    if ((name === 'name' || name === 'message') && !value.trim()) {
+      return 'This field is required'
+    }
+    return ''
+  }
+
+  const handleBlur = (e) => {
+    const err = validateField(e.target.name, e.target.value)
+    setFieldErrors(prev => ({ ...prev, [e.target.name]: err }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -94,9 +110,11 @@ export default function Contact() {
                         required
                         value={form.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors"
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-3 rounded-lg border ${fieldErrors.name ? 'border-red-400' : 'border-slate-200'} focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors`}
                         placeholder="Your name"
                       />
+                      {fieldErrors.name && <p className="text-xs text-red-500 mt-1">{fieldErrors.name}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-midnight mb-2">Email *</label>
@@ -106,9 +124,11 @@ export default function Contact() {
                         required
                         value={form.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors"
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-3 rounded-lg border ${fieldErrors.email ? 'border-red-400' : 'border-slate-200'} focus:border-teal focus:ring-2 focus:ring-teal/20 outline-none transition-colors`}
                         placeholder="you@company.com"
                       />
+                      {fieldErrors.email && <p className="text-xs text-red-500 mt-1">{fieldErrors.email}</p>}
                     </div>
                   </div>
 
