@@ -5,13 +5,11 @@ const founders = [
     name: 'Joe White',
     role: 'Co-Founder & Managing Partner',
     bio: 'Full-stack engineer and data scientist with deep expertise in AI systems, quantitative modeling, and research platform architecture. Joe builds the technical infrastructure that powers MKL\'s analytical capabilities.',
-    email: 'joe@michaelkairoslabs.com',
   },
   {
-    name: 'Jared Wasden',
+    name: 'Jared Williams',
     role: 'Co-Founder & Managing Partner',
     bio: 'Research methodologist with Oxford-level training in psychometrics, survey design, and statistical analysis. Jared leads the methodological rigor that sets MKL apart from generalist consultancies.',
-    email: 'jared@michaelkairoslabs.com',
   },
 ]
 
@@ -50,10 +48,7 @@ export default function About() {
                 </div>
                 <h3 className="font-display text-h3 text-midnight mb-1">{founder.name}</h3>
                 <p className="text-sm text-teal font-medium mb-4">{founder.role}</p>
-                <p className="text-body-text leading-relaxed mb-4">{founder.bio}</p>
-                <a href={`mailto:${founder.email}`} className="text-sm text-teal hover:text-teal-dark transition-colors">
-                  {founder.email}
-                </a>
+                <p className="text-body-text leading-relaxed">{founder.bio}</p>
               </div>
             ))}
           </div>
