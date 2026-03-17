@@ -54,6 +54,7 @@ export default function Projects() {
   const { user } = useAuthStore()
   const { projects, fetchProjects, createProject, togglePin, isLoading } = useProjectStore()
   const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState('updated')
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showInactive, setShowInactive] = useState(false)
   const [sidebarFilter, setSidebarFilter] = useState('active')
@@ -105,12 +106,18 @@ export default function Projects() {
   const myMemberProjects = searchFiltered
     .filter((p) => p.membership_status === 'member')
     .sort((a, b) => {
+      // Pinned always first
       if (a.is_pinned && !b.is_pinned) return -1
       if (!a.is_pinned && b.is_pinned) return 1
       if (a.is_pinned && b.is_pinned) {
         return new Date(b.pinned_at) - new Date(a.pinned_at)
       }
-      return 0
+      // Then apply user sort
+      if (sortBy === 'name-asc') return (a.title || '').localeCompare(b.title || '')
+      if (sortBy === 'name-desc') return (b.title || '').localeCompare(a.title || '')
+      if (sortBy === 'status') return (a.status || '').localeCompare(b.status || '')
+      // Default: recently updated
+      return new Date(b.updated_at || 0) - new Date(a.updated_at || 0)
     })
 
   const myActiveCompleted = myMemberProjects.filter((p) => p.status === 'active' || p.status === 'completed')
@@ -169,6 +176,16 @@ export default function Projects() {
             className="w-full pl-10 pr-4 py-2.5 rounded-organic border border-gray-300 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-teal-400"
           />
         </div>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="px-3 py-2.5 rounded-organic border border-gray-300 bg-white text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-teal-400"
+        >
+          <option value="updated">Recently Updated</option>
+          <option value="name-asc">Name (A-Z)</option>
+          <option value="name-desc">Name (Z-A)</option>
+          <option value="status">Status</option>
+        </select>
         {canCreate && (
           <Button onClick={handleOpenCreateModal} className="flex-shrink-0 ml-auto">
             <Plus size={18} />
