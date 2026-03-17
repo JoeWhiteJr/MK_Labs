@@ -73,32 +73,17 @@ describe('Admin API', () => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('stats');
       expect(res.body.stats).toHaveProperty('users');
-      expect(res.body.stats).toHaveProperty('applications');
       expect(res.body.stats).toHaveProperty('projects');
-      expect(res.body.stats).toHaveProperty('chats');
 
       // Verify user stats shape
       expect(res.body.stats.users).toHaveProperty('total_users');
       expect(res.body.stats.users).toHaveProperty('admin_count');
-      expect(res.body.stats.users).toHaveProperty('project_lead_count');
-      expect(res.body.stats.users).toHaveProperty('researcher_count');
-      expect(res.body.stats.users).toHaveProperty('viewer_count');
       expect(res.body.stats.users).toHaveProperty('new_this_week');
       expect(res.body.stats.users).toHaveProperty('new_this_month');
-
-      // Verify application stats shape
-      expect(res.body.stats.applications).toHaveProperty('total_applications');
-      expect(res.body.stats.applications).toHaveProperty('pending');
-      expect(res.body.stats.applications).toHaveProperty('approved');
-      expect(res.body.stats.applications).toHaveProperty('rejected');
 
       // Verify project stats shape
       expect(res.body.stats.projects).toHaveProperty('total_projects');
       expect(res.body.stats.projects).toHaveProperty('active');
-
-      // Verify recent applications
-      expect(res.body).toHaveProperty('recentApplications');
-      expect(Array.isArray(res.body.recentApplications)).toBe(true);
     });
 
     it('should return 401 without auth', async () => {

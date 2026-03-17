@@ -198,7 +198,7 @@ describe('Users API', () => {
         .set('Authorization', `Bearer ${regularToken}`)
         .send({
           currentPassword: 'password123',
-          newPassword: 'newpassword456'
+          newPassword: 'NewPassword456!'
         });
 
       expect(res.status).toBe(200);
@@ -209,7 +209,7 @@ describe('Users API', () => {
         .post('/api/auth/login')
         .send({
           email: 'usertest-regular@example.com',
-          password: 'newpassword456'
+          password: 'NewPassword456!'
         });
 
       expect(loginRes.status).toBe(200);
@@ -222,7 +222,7 @@ describe('Users API', () => {
         .set('Authorization', `Bearer ${regularToken}`)
         .send({
           currentPassword: 'wrongpassword',
-          newPassword: 'newpassword789'
+          newPassword: 'NewPassword789!'
         });
 
       expect(res.status).toBe(401);
