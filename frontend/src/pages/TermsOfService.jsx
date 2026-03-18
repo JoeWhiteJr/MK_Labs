@@ -9,7 +9,7 @@ export default function TermsOfService() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-pub-blue-600 to-pub-blue-800 text-white py-16">
+      <section className="section-dark text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold mb-4">Terms of Service</h1>
           <p className="text-white/80 text-lg">Last updated: February 9, 2026</p>
@@ -30,7 +30,7 @@ export default function TermsOfService() {
             By accessing our website at michaelkairoslabs.com or using any of our services, you
             acknowledge that you have read, understood, and agree to be bound by these Terms of
             Service and our{' '}
-            <Link to="/privacy" className="text-pub-blue-600 hover:text-pub-blue-700">
+            <Link to="/privacy" className="text-teal hover:text-teal-dark">
               Privacy Policy
             </Link>
             . These terms apply to all visitors, users, and members of the lab.
@@ -121,15 +121,15 @@ export default function TermsOfService() {
             If you have any questions about these Terms of Service, please contact us:
           </p>
           <ul className="list-none pl-0 text-gray-600 space-y-1 mb-8">
-            <li><strong>Email:</strong> ronald.miller@uvu.edu</li>
-            <li><strong>Phone:</strong> (801) 863-8232</li>
+            <li><strong>Email:</strong> jmw@michaelkairoslabs.com</li>
+            <li><strong>Phone:</strong> (385) 204-5537</li>
             <li><strong>Address:</strong> MS 119, 800 W. University Parkway, Orem, UT 84058</li>
           </ul>
 
           <div className="border-t border-gray-200 pt-8 mt-12">
             <p className="text-gray-500 text-sm">
               See also our{' '}
-              <Link to="/privacy" className="text-pub-blue-600 hover:text-pub-blue-700">
+              <Link to="/privacy" className="text-teal hover:text-teal-dark">
                 Privacy Policy
               </Link>.
             </p>
