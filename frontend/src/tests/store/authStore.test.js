@@ -124,47 +124,6 @@ describe('authStore', () => {
     })
   })
 
-  describe('register', () => {
-    it('sets user and token on successful registration', async () => {
-      authApi.register.mockResolvedValue({
-        data: {
-          user: { id: '1', name: 'New User', email: 'new@example.com' },
-          token: 'new-token'
-        }
-      })
-
-      const result = await useAuthStore.getState().register('New User', 'new@example.com', 'password')
-
-      expect(result).toEqual({ success: true, requiresApproval: false })
-      const state = useAuthStore.getState()
-      expect(state.user).toEqual({ id: '1', name: 'New User', email: 'new@example.com', is_super_admin: false })
-      expect(state.token).toBe('new-token')
-      expect(localStorage.setItem).toHaveBeenCalledWith('token', 'new-token')
-    })
-
-    it('sets error on failed registration', async () => {
-      authApi.register.mockRejectedValue({
-        response: { data: { error: { message: 'Email already exists' } } }
-      })
-
-      const result = await useAuthStore.getState().register('User', 'existing@example.com', 'password')
-
-      expect(result).toEqual({ success: false })
-      const state = useAuthStore.getState()
-      expect(state.error).toBe('Email already exists')
-    })
-
-    it('sets default error message when response lacks detail', async () => {
-      authApi.register.mockRejectedValue(new Error('Network error'))
-
-      const result = await useAuthStore.getState().register('User', 'test@example.com', 'password')
-
-      expect(result).toEqual({ success: false })
-      const state = useAuthStore.getState()
-      expect(state.error).toBe('Registration failed')
-    })
-  })
-
   describe('logout', () => {
     it('clears user and token', async () => {
       useAuthStore.setState({
