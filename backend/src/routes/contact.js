@@ -1,11 +1,19 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 const logger = require('../config/logger');
 const { sendContactNotification } = require('../services/email');
 
 const router = express.Router();
 
-router.post('/', [
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { error: { message: 'Too many contact form submissions. Please try again later.' } },
+  validate: false,
+});
+
+router.post('/', contactLimiter, [
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
   body('message').trim().notEmpty().withMessage('Message is required'),

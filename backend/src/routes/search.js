@@ -20,21 +20,22 @@ router.get('/', authenticate, async (req, res, next) => {
 
     // Count total results across all types
     const projectCountQuery = isAdmin
-      ? `SELECT COUNT(*) FROM projects WHERE title ILIKE $1 OR description ILIKE $1`
+      ? `SELECT COUNT(*) FROM projects WHERE (title ILIKE $1 OR description ILIKE $1) AND deleted_at IS NULL`
       : `SELECT COUNT(DISTINCT p.id)
          FROM projects p
          LEFT JOIN action_items ai ON ai.project_id = p.id
          LEFT JOIN action_item_assignees aia ON aia.action_item_id = ai.id
          WHERE (p.title ILIKE $1 OR p.description ILIKE $1)
+         AND p.deleted_at IS NULL
          AND (p.created_by = $2 OR ai.assigned_to = $2 OR aia.user_id = $2)`;
 
     const taskCountQuery = isAdmin
-      ? `SELECT COUNT(*) FROM action_items a WHERE a.title ILIKE $1`
+      ? `SELECT COUNT(*) FROM action_items a WHERE a.title ILIKE $1 AND a.deleted_at IS NULL`
       : `SELECT COUNT(DISTINCT a.id)
          FROM action_items a
          LEFT JOIN projects p ON a.project_id = p.id
          LEFT JOIN action_item_assignees aia ON aia.action_item_id = a.id
-         WHERE a.title ILIKE $1
+         WHERE a.title ILIKE $1 AND a.deleted_at IS NULL
          AND (p.created_by = $2 OR a.assigned_to = $2 OR aia.user_id = $2)`;
 
     const [projectCount, taskCount] = await Promise.all([
@@ -48,12 +49,13 @@ router.get('/', authenticate, async (req, res, next) => {
 
     // Search projects (user has access to)
     const projectsQuery = isAdmin
-      ? `SELECT id, title, 'project' as type, status as subtitle FROM projects WHERE title ILIKE $1 OR description ILIKE $1 LIMIT $2`
+      ? `SELECT id, title, 'project' as type, status as subtitle FROM projects WHERE (title ILIKE $1 OR description ILIKE $1) AND deleted_at IS NULL LIMIT $2`
       : `SELECT DISTINCT p.id, p.title, 'project' as type, p.status as subtitle
          FROM projects p
          LEFT JOIN action_items ai ON ai.project_id = p.id
          LEFT JOIN action_item_assignees aia ON aia.action_item_id = ai.id
          WHERE (p.title ILIKE $1 OR p.description ILIKE $1)
+         AND p.deleted_at IS NULL
          AND (p.created_by = $2 OR ai.assigned_to = $2 OR aia.user_id = $2)
          LIMIT $3`;
 
@@ -66,12 +68,12 @@ router.get('/', authenticate, async (req, res, next) => {
     const tasksQuery = isAdmin
       ? `SELECT a.id, a.title, 'task' as type, p.title as subtitle, a.project_id
          FROM action_items a LEFT JOIN projects p ON a.project_id = p.id
-         WHERE a.title ILIKE $1 LIMIT $2`
+         WHERE a.title ILIKE $1 AND a.deleted_at IS NULL LIMIT $2`
       : `SELECT DISTINCT a.id, a.title, 'task' as type, p.title as subtitle, a.project_id
          FROM action_items a
          LEFT JOIN projects p ON a.project_id = p.id
          LEFT JOIN action_item_assignees aia ON aia.action_item_id = a.id
-         WHERE a.title ILIKE $1
+         WHERE a.title ILIKE $1 AND a.deleted_at IS NULL
          AND (p.created_by = $2 OR a.assigned_to = $2 OR aia.user_id = $2)
          LIMIT $3`;
 

@@ -290,7 +290,7 @@ router.post('/generate', authenticate, [
       });
     }
 
-    const systemPrompt = `You are an AI daily planner for a research lab project management tool. Generate a prioritized daily plan for the user.
+    const systemPrompt = `You are an AI daily planner for Michael Kairos Labs, a research and analytics consulting platform. Generate a prioritized daily plan for the user.
 
 RULES:
 - Break tasks into actionable steps of 15-60 minutes each
@@ -676,7 +676,7 @@ router.post('/weekly-review', authenticate, async (req, res, next) => {
 
     contextText += `\nSTATS: ${completionRate}% step completion rate, ${completedActions.length} tasks completed, ${plans.length} days planned`;
 
-    const systemPrompt = `You are an AI weekly reviewer for a research lab project management tool. Generate an encouraging but honest weekly review.
+    const systemPrompt = `You are an AI weekly reviewer for Michael Kairos Labs, a research and analytics consulting platform. Generate an encouraging but honest weekly review.
 
 Write in markdown format with these sections:
 ## What Got Done

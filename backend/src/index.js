@@ -89,8 +89,8 @@ app.use(cors({
   },
   credentials: true
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Serve cover images statically (these are public project images, not sensitive files)
 // Other file uploads remain behind authenticated /api/files/:id/download endpoint
@@ -175,9 +175,10 @@ app.use((req, res) => {
 const server = http.createServer(app);
 
 // Initialize Socket.io
-const SOCKET_CORS = process.env.CORS_ORIGIN && process.env.CORS_ORIGIN !== '*'
-  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-  : '*';
+const corsOrigin = process.env.CORS_ORIGIN;
+const SOCKET_CORS = corsOrigin && corsOrigin !== '*'
+  ? corsOrigin.split(',').map(o => o.trim())
+  : (process.env.NODE_ENV === 'production' ? ['https://michaelkairoslabs.com'] : '*');
 socketService.initialize(server, SOCKET_CORS);
 
 // Graceful shutdown
