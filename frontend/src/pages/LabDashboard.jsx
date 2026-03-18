@@ -529,19 +529,20 @@ export default function LabDashboard() {
                   <h2 className="font-display font-bold text-lg text-text-primary">Contact Info</h2>
                 </div>
 
-                {/* Professors */}
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-3">Professors</h3>
+                {/* Partners */}
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-3">Partners</h3>
                 <div className="space-y-3 mb-5">
                   {[
-                    { name: 'Dr. Ronald Miller', email: 'ronald.miller@mklabs.com', linkedin: 'https://www.linkedin.com/in/ronald-miller/' },
-                    { name: 'Dr. David Benson', email: 'david.benson@mklabs.com', linkedin: 'https://www.linkedin.com/in/david-benson/' },
+                    { name: 'Joe White', role: 'Co-Founder & Technical Lead', email: 'jmw@michaelkairoslabs.com', linkedin: 'https://www.linkedin.com/in/joseph-whitejr' },
+                    { name: 'Jared Williams', role: 'Co-Founder & Growth Strategy', email: 'jmw@michaelkairoslabs.com', linkedin: 'https://www.linkedin.com/in/jared-williams-me/' },
                   ].map(person => (
                     <div key={person.name} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                       <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
-                        <span className="text-teal-700 font-bold text-sm">{person.name.split(' ').pop()?.charAt(0)}</span>
+                        <span className="text-teal-700 font-bold text-sm">{person.name.charAt(0)}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm text-text-primary">{person.name}</p>
+                        <p className="text-xs text-text-secondary">{person.role}</p>
                         <div className="flex items-center gap-3 mt-0.5">
                           <a href={`mailto:${person.email}`} className="inline-flex items-center gap-1 text-xs text-teal-600 hover:underline">
                             <Mail size={11} /> {person.email}
@@ -553,45 +554,6 @@ export default function LabDashboard() {
                       </div>
                     </div>
                   ))}
-                </div>
-
-                {/* Team Leads */}
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-3">Team Leads</h3>
-                <div className="space-y-3 mb-5">
-                  {[
-                    { name: 'Sam Johnston', email: 'sam.johnston@mklabs.com', linkedin: 'https://www.linkedin.com/in/sam-johnston/' },
-                    { name: 'Joseph White Jr', email: 'joseph.white@mklabs.com', linkedin: 'https://www.linkedin.com/in/joseph-white-jr/' },
-                  ].map(person => (
-                    <div key={person.name} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                      <div className="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center flex-shrink-0">
-                        <span className="text-secondary-700 font-bold text-sm">{person.name.charAt(0)}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-text-primary">{person.name}</p>
-                        <div className="flex items-center gap-3 mt-0.5">
-                          <a href={`mailto:${person.email}`} className="inline-flex items-center gap-1 text-xs text-teal-600 hover:underline">
-                            <Mail size={11} /> {person.email}
-                          </a>
-                          <a href={person.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-teal-600 hover:underline">
-                            <Linkedin size={11} /> LinkedIn
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Signal Chat */}
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <MessageSquare size={16} className="text-blue-600" />
-                    <h3 className="font-semibold text-sm text-blue-900">Join the Signal Group Chat</h3>
-                  </div>
-                  <p className="text-sm text-blue-800">
-                    Download <a href="https://signal.org/download/" target="_blank" rel="noopener noreferrer" className="font-medium underline hover:no-underline">Signal</a> and
-                    message a team lead to be added to the group chat.
-                  </p>
-                </div>
               </section>
 
               {/* Team Directory */}
