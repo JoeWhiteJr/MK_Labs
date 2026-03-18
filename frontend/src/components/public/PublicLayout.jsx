@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
-import { Linkedin, Github } from 'lucide-react'
+import { Linkedin, Github, Menu, X } from 'lucide-react'
 
 const navLinks = [
   { to: '/services', label: 'Services' },
@@ -12,6 +12,7 @@ const navLinks = [
 
 export default function PublicLayout() {
   const { pathname } = useLocation()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const url = `https://michaelkairoslabs.com${pathname}`
@@ -23,6 +24,7 @@ export default function PublicLayout() {
     }
     link.setAttribute('href', url)
     window.scrollTo(0, 0)
+    setMobileMenuOpen(false)
   }, [pathname])
 
   return (
@@ -63,13 +65,42 @@ export default function PublicLayout() {
             </Link>
           </div>
 
-          {/* Mobile: simplified - just CTA */}
-          <div className="md:hidden">
-            <Link to="/contact" className="btn btn-primary text-sm px-4 py-2">
-              Contact
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden text-white p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-menu"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile menu panel */}
+        {mobileMenuOpen && (
+          <div id="mobile-nav-menu" className="md:hidden bg-midnight border-t border-slate-700 px-6 py-4 space-y-1">
+            {navLinks.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `block py-3 text-sm font-medium transition-colors ${
+                    isActive ? 'text-teal' : 'text-slate-400 hover:text-white'
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+            <Link
+              to="/contact"
+              className="block mt-3 btn btn-primary text-sm text-center px-5 py-2.5"
+            >
+              Schedule a Call
             </Link>
           </div>
-        </div>
+        )}
       </nav>
 
       {/* Page Content */}
