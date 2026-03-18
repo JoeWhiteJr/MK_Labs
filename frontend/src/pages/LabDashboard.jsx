@@ -12,7 +12,7 @@ import {
   FolderKanban, Users, Sparkles, Calendar, LayoutGrid, Brain, Loader2,
   Newspaper, Target, Plus, Pencil, Trash2, Library,
   BookOpen, GraduationCap, ExternalLink, ChevronDown, ChevronRight,
-  Linkedin, Mail, MessageSquare, FileText, Upload
+  Linkedin, Mail, FileText, Upload
 } from 'lucide-react'
 import { format, isAfter, subDays } from 'date-fns'
 import { toast } from '../store/toastStore'
