@@ -554,6 +554,7 @@ export default function LabDashboard() {
                       </div>
                     </div>
                   ))}
+                </div>
               </section>
 
               {/* Team Directory */}
