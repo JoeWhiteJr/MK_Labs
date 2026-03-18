@@ -70,7 +70,19 @@ router.get('/:id', authenticate, async (req, res, next) => {
       return res.status(404).json({ error: { message: 'Note not found' } });
     }
 
-    res.json({ note: result.rows[0] });
+    // Verify project access (admins can access all)
+    const note = result.rows[0];
+    if (req.user.role !== 'admin') {
+      const access = await db.query(
+        'SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1',
+        [note.project_id, req.user.id]
+      );
+      if (access.rows.length === 0) {
+        return res.status(403).json({ error: { message: 'Access denied' } });
+      }
+    }
+
+    res.json({ note });
   } catch (error) {
     next(error);
   }
