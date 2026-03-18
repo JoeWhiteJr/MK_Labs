@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Linkedin } from 'lucide-react'
 
 const founders = [
   {
@@ -10,6 +11,7 @@ const founders = [
     name: 'Jared Williams',
     role: 'Co-Founder & Managing Partner',
     bio: 'Research methodologist with Oxford-level training in psychometrics, survey design, and statistical analysis. Jared leads the methodological rigor that sets MKL apart from generalist consultancies.',
+    linkedin: 'https://www.linkedin.com/in/jared-williams-me/',
   },
 ]
 
@@ -48,7 +50,12 @@ export default function About() {
                 </div>
                 <h3 className="font-display text-h3 text-midnight mb-1">{founder.name}</h3>
                 <p className="text-sm text-teal font-medium mb-4">{founder.role}</p>
-                <p className="text-body-text leading-relaxed">{founder.bio}</p>
+                <p className="text-body-text leading-relaxed mb-4">{founder.bio}</p>
+                {founder.linkedin && (
+                  <a href={founder.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm text-teal hover:text-teal-dark transition-colors">
+                    <Linkedin size={16} /> LinkedIn
+                  </a>
+                )}
               </div>
             ))}
           </div>

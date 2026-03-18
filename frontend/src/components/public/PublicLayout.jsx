@@ -123,7 +123,7 @@ export default function PublicLayout() {
           <div className="border-t border-midnight-light mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm">&copy; {new Date().getFullYear()} Michael Kairos Labs LLC. All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <a href="https://www.linkedin.com/company/michael-kairos-labs" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-slate-400 hover:text-teal transition-colors">
+              <a href="https://www.linkedin.com/in/jared-williams-me/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-slate-400 hover:text-teal transition-colors">
                 <Linkedin size={20} />
               </a>
               <a href="https://github.com/JoeWhiteJr" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-slate-400 hover:text-teal transition-colors">
