@@ -90,18 +90,18 @@ export default function Layout() {
           >
             {navOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-          <div className="hidden sm:flex items-center gap-2">
-            <div className="w-8 h-8 bg-teal rounded-lg flex items-center justify-center">
-              <span className="font-display font-bold text-base text-white">K</span>
-            </div>
-            <span className="font-display font-bold text-lg text-white tracking-tight">Michael Kairos Labs</span>
-          </div>
-          <div className="sm:hidden flex items-center gap-2">
-            <div className="w-7 h-7 bg-teal rounded-lg flex items-center justify-center">
-              <span className="font-display font-bold text-sm text-white">K</span>
-            </div>
-            <span className="font-display font-semibold text-base text-white">MKL</span>
-          </div>
+          <img
+            src="/brand/mkl-logo-horizontal.png"
+            alt="Michael Kairos Labs"
+            className="hidden sm:block h-11 w-auto"
+            style={{ filter: 'brightness(0) invert(1)' }}
+          />
+          <img
+            src="/brand/mkl-logo-horizontal.png"
+            alt="MKL"
+            className="sm:hidden h-8 w-auto"
+            style={{ filter: 'brightness(0) invert(1)' }}
+          />
           <div className="hidden md:flex items-center gap-2 ml-2 pl-3 border-l border-slate-600">
             <div className="w-7 h-7 rounded-full bg-midnight-light flex items-center justify-center overflow-hidden">
               {user?.avatar_url ? (
