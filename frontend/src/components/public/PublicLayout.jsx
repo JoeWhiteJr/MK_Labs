@@ -35,12 +35,13 @@ export default function PublicLayout() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-midnight shadow-nav">
         <div className="max-w-container mx-auto px-6 flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/brand/mkl-logo-white.png"
-              alt="Michael Kairos Labs"
-              className="h-16 w-auto"
-            />
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-teal rounded-lg flex items-center justify-center">
+              <span className="font-display font-bold text-xl text-white">K</span>
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-display font-bold text-xl text-white tracking-tight">Michael Kairos Labs</span>
+            </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -113,11 +114,12 @@ export default function PublicLayout() {
         <div className="max-w-container mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="md:col-span-2">
-              <img
-                src="/brand/mkl-logo-white.png"
-                alt="Michael Kairos Labs"
-                className="h-10 w-auto mb-3"
-              />
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-teal rounded-lg flex items-center justify-center">
+                  <span className="font-display font-bold text-base text-white">K</span>
+                </div>
+                <span className="font-display font-bold text-lg text-white tracking-tight">Michael Kairos Labs</span>
+              </div>
               <p className="text-sm leading-relaxed max-w-md">
                 Research. Analytics. Impact. A boutique consultancy delivering Oxford-caliber
                 rigor and practical results for mission-driven organizations.
