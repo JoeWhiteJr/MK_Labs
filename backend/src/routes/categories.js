@@ -1,12 +1,21 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireProjectAccess } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Helper: verify user has access to category's project
+async function verifyCategoryAccess(categoryId, userId, role) {
+  if (role === 'admin') return true;
+  const cat = await db.query('SELECT project_id FROM categories WHERE id = $1', [categoryId]);
+  if (cat.rows.length === 0) return false;
+  const access = await db.query('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1', [cat.rows[0].project_id, userId]);
+  return access.rows.length > 0;
+}
+
 // Get all categories for a project
-router.get('/project/:projectId', authenticate, async (req, res, next) => {
+router.get('/project/:projectId', authenticate, requireProjectAccess(), async (req, res, next) => {
   try {
     const limit = Math.min(parseInt(req.query.limit) || 50, 200);
     const offset = parseInt(req.query.offset) || 0;
@@ -78,6 +87,9 @@ router.put('/:id', authenticate, [
   body('color').optional().matches(/^#[0-9A-Fa-f]{6}$/)
 ], async (req, res, next) => {
   try {
+    if (!(await verifyCategoryAccess(req.params.id, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
@@ -130,6 +142,9 @@ router.put('/:id', authenticate, [
 // Delete category
 router.delete('/:id', authenticate, async (req, res, next) => {
   try {
+    if (!(await verifyCategoryAccess(req.params.id, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     // Null out category_id on affected action items before deleting
     await db.query('UPDATE action_items SET category_id = NULL WHERE category_id = $1', [req.params.id]);
 

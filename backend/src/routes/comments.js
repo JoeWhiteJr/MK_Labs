@@ -6,9 +6,24 @@ const { sanitizeBody } = require('../middleware/sanitize');
 
 const router = express.Router();
 
+// Helper: verify user has access to action item's project
+async function verifyActionAccess(actionId, userId, role) {
+  if (role === 'admin') return true;
+  const action = await db.query('SELECT project_id FROM action_items WHERE id = $1', [actionId]);
+  if (action.rows.length === 0) return false;
+  const access = await db.query(
+    'SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1',
+    [action.rows[0].project_id, userId]
+  );
+  return access.rows.length > 0;
+}
+
 // Get comments for an action item
 router.get('/actions/:actionId/comments', authenticate, async (req, res, next) => {
   try {
+    if (!(await verifyActionAccess(req.params.actionId, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     const result = await db.query(`
       SELECT c.*, u.name as user_name
       FROM action_item_comments c
@@ -27,6 +42,9 @@ router.post('/actions/:actionId/comments', authenticate, sanitizeBody('content')
   body('content').trim().notEmpty()
 ], async (req, res, next) => {
   try {
+    if (!(await verifyActionAccess(req.params.actionId, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: { message: 'Content is required' } });

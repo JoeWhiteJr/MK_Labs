@@ -215,6 +215,12 @@ router.put('/:id/move', authenticate, async (req, res, next) => {
       return res.status(404).json({ error: { message: 'File not found' } });
     }
 
+    // Verify project access
+    if (req.user.role !== 'admin') {
+      const access = await db.query('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1', [existing.rows[0].project_id, req.user.id]);
+      if (access.rows.length === 0) return res.status(403).json({ error: { message: 'Access denied' } });
+    }
+
     // If folder_id provided, verify folder exists
     if (folder_id) {
       const folder = await db.query('SELECT id FROM folders WHERE id = $1 AND deleted_at IS NULL', [folder_id]);

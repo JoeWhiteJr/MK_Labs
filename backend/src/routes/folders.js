@@ -5,6 +5,14 @@ const { authenticate, requireProjectAccess } = require('../middleware/auth');
 
 const router = express.Router();
 
+async function verifyFolderAccess(folderId, userId, role) {
+  if (role === 'admin') return true;
+  const folder = await db.query('SELECT project_id FROM folders WHERE id = $1', [folderId]);
+  if (folder.rows.length === 0) return false;
+  const access = await db.query('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1', [folder.rows[0].project_id, userId]);
+  return access.rows.length > 0;
+}
+
 // GET /api/folders/project/:projectId - List folders for a project (flat list with parent_id)
 router.get('/project/:projectId', authenticate, requireProjectAccess(), async (req, res, next) => {
   try {
@@ -67,6 +75,9 @@ router.put('/:id', authenticate, [
   body('name').trim().notEmpty().isLength({ max: 255 })
 ], async (req, res, next) => {
   try {
+    if (!(await verifyFolderAccess(req.params.id, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
@@ -93,6 +104,9 @@ router.put('/:id/move', authenticate, [
   body('parent_id').optional({ nullable: true }).isUUID()
 ], async (req, res, next) => {
   try {
+    if (!(await verifyFolderAccess(req.params.id, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     const existing = await db.query('SELECT * FROM folders WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
     if (existing.rows.length === 0) {
       return res.status(404).json({ error: { message: 'Folder not found' } });
@@ -140,6 +154,9 @@ router.put('/:id/move', authenticate, [
 // DELETE /api/folders/:id - Soft-delete folder (cascades to subfolders)
 router.delete('/:id', authenticate, async (req, res, next) => {
   try {
+    if (!(await verifyFolderAccess(req.params.id, req.user.id, req.user.role))) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
     const existing = await db.query('SELECT * FROM folders WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
     if (existing.rows.length === 0) {
       return res.status(404).json({ error: { message: 'Folder not found' } });
