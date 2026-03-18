@@ -54,11 +54,17 @@ async function sendPasswordResetEmail(email, resetToken, baseUrl) {
 }
 
 async function sendContactNotification({ name, email, subject, organization, message }) {
+  const { escapeHtml } = require('./emailTemplates');
   const adminEmail = process.env.CONTACT_EMAIL || process.env.SMTP_FROM || 'jmw@michaelkairoslabs.com';
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeSubject = escapeHtml(subject || 'N/A');
+  const safeOrg = escapeHtml(organization || 'N/A');
+  const safeMessage = escapeHtml(message);
   return sendEmail({
     to: adminEmail,
     subject: `Contact Form: ${subject || 'New Message'} from ${name}`,
-    html: `<h3>New Contact Form Submission</h3><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Organization:</strong> ${organization || 'N/A'}</p><p><strong>Subject:</strong> ${subject || 'N/A'}</p><p><strong>Message:</strong></p><p>${message}</p>`,
+    html: `<h3>New Contact Form Submission</h3><p><strong>Name:</strong> ${safeName}</p><p><strong>Email:</strong> ${safeEmail}</p><p><strong>Organization:</strong> ${safeOrg}</p><p><strong>Subject:</strong> ${safeSubject}</p><p><strong>Message:</strong></p><p>${safeMessage}</p>`,
     text: `New Contact Form Submission\n\nName: ${name}\nEmail: ${email}\nOrganization: ${organization || 'N/A'}\nSubject: ${subject || 'N/A'}\n\nMessage:\n${message}`,
   });
 }

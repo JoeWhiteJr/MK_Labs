@@ -176,7 +176,7 @@ router.post('/summarize-project', authenticate, [
       contents: [{ role: 'user', parts: [{ text: `Please provide a summary of this project:\n\n${contextText}` }] }],
       systemInstruction: {
         parts: [{
-          text: `You are an AI assistant for a research lab project management tool. Summarize the project status concisely. Include:
+          text: `You are an AI assistant for Michael Kairos Labs, a research and analytics consulting platform. Summarize the project status concisely. Include:
 1. Overall status and progress assessment
 2. Key accomplishments (completed tasks)
 3. What still needs to be done (pending tasks, upcoming deadlines)
@@ -307,7 +307,7 @@ router.post('/summarize-dashboard', authenticate, async (req, res, next) => {
       contents: [{ role: 'user', parts: [{ text: `Please provide a weekly dashboard summary based on this data:\n\n${contextText}` }] }],
       systemInstruction: {
         parts: [{
-          text: `You are an AI assistant for a research lab project management tool. Generate a concise weekly summary that helps team members understand:
+          text: `You are an AI assistant for Michael Kairos Labs, a research and analytics consulting platform. Generate a concise weekly summary that helps team members understand:
 1. What was accomplished this week
 2. What is currently in progress and upcoming
 3. What needs attention (overdue tasks, approaching deadlines)
@@ -472,7 +472,7 @@ router.post('/admin-summary', authenticate, requireRole('admin'), [
       });
     }
 
-    const systemText = 'You are an AI assistant for a research lab project management tool. Generate a structured lab activity summary with exactly these three sections using markdown headers:\n\n## What Has Been Done\nSummarize completed work, milestones achieved, and accomplishments. Include project names, task details, and who completed them.\n\n## What Is Currently Being Done\nSummarize active/in-progress work. Include who is working on what, upcoming deadlines, and current focus areas.\n\n## What Still Needs To Be Done\nSummarize pending tasks, unassigned work, overdue items, and recommendations. Include priorities and suggestions.\n\nUse bullet points for clarity. Include project names and team member names where relevant. Be professional and concise.';
+    const systemText = 'You are an AI assistant for Michael Kairos Labs, a research and analytics consulting platform. Generate a structured lab activity summary with exactly these three sections using markdown headers:\n\n## What Has Been Done\nSummarize completed work, milestones achieved, and accomplishments. Include project names, task details, and who completed them.\n\n## What Is Currently Being Done\nSummarize active/in-progress work. Include who is working on what, upcoming deadlines, and current focus areas.\n\n## What Still Needs To Be Done\nSummarize pending tasks, unassigned work, overdue items, and recommendations. Include priorities and suggestions.\n\nUse bullet points for clarity. Include project names and team member names where relevant. Be professional and concise.';
 
     const result = await model.generateContent({
       contents: [{ role: 'user', parts: [{ text: 'Please provide a comprehensive lab activity summary based on this data:\n\n' + contextText }] }],

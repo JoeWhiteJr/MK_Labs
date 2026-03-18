@@ -29,7 +29,7 @@ const authenticate = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, jwtSecret);
+    const decoded = jwt.verify(token, jwtSecret, { algorithms: ['HS256'] });
 
     // Check token blocklist (cache-first, then DB)
     const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
@@ -124,7 +124,7 @@ const requireProjectAccess = (paramName = 'projectId') => {
 };
 
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, jwtSecret, { expiresIn: '7d' });
+  return jwt.sign({ userId }, jwtSecret, { algorithm: 'HS256', expiresIn: '7d' });
 };
 
 const optionalAuthenticate = async (req, res, next) => {
@@ -135,7 +135,7 @@ const optionalAuthenticate = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, jwtSecret);
+    const decoded = jwt.verify(token, jwtSecret, { algorithms: ['HS256'] });
 
     const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
     const cachedAt = blockedTokenCache.get(tokenHash);
