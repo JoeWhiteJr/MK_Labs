@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { usePipelineStore } from '../store/pipelineStore'
-import { Plus, X, DollarSign, Calendar, GripVertical } from 'lucide-react'
+import { Plus, X, DollarSign, Calendar, GripVertical, AlertCircle, RefreshCw } from 'lucide-react'
 
 const STAGES = [
   { key: 'discovery', label: 'Discovery', color: 'bg-info' },
@@ -12,7 +12,7 @@ const STAGES = [
 
 const SERVICE_PILLARS = ['Research Methods', 'Data & Intelligence', 'Operations & Impact']
 
-function LeadCard({ lead, onDragStart }) {
+function LeadCard({ lead, onDragStart, onStageChange }) {
   return (
     <div
       draggable
@@ -24,7 +24,7 @@ function LeadCard({ lead, onDragStart }) {
     >
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
-          <GripVertical size={14} className="text-muted" />
+          <GripVertical size={14} className="text-muted hidden md:block" />
           <h4 className="font-medium text-midnight text-sm">{lead.company_name}</h4>
         </div>
       </div>
@@ -32,6 +32,15 @@ function LeadCard({ lead, onDragStart }) {
       {lead.service_pillar && (
         <span className="badge badge-teal text-xs mb-2 inline-flex">{lead.service_pillar}</span>
       )}
+      {/* Mobile stage change dropdown */}
+      <select
+        value={lead.status}
+        onChange={(e) => onStageChange?.(lead.id, e.target.value)}
+        className="md:hidden w-full mt-2 text-xs px-2 py-1.5 rounded border border-slate-200 bg-white text-midnight"
+        aria-label="Move to stage"
+      >
+        {STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
+      </select>
       <div className="flex items-center justify-between text-xs text-muted mt-2 pt-2 border-t border-slate-100">
         {lead.estimated_value ? (
           <span className="flex items-center gap-1 font-mono">
@@ -52,7 +61,7 @@ function LeadCard({ lead, onDragStart }) {
   )
 }
 
-function StageColumn({ stage, leads, onDrop }) {
+function StageColumn({ stage, leads, onDrop, onStageChange }) {
   const [dragOver, setDragOver] = useState(false)
   const stageLeads = leads.filter((l) => l.status === stage.key)
 
@@ -89,7 +98,7 @@ function StageColumn({ stage, leads, onDrop }) {
       </div>
       <div className="p-2 space-y-2 flex-1 min-h-[200px]">
         {stageLeads.map((lead) => (
-          <LeadCard key={lead.id} lead={lead} />
+          <LeadCard key={lead.id} lead={lead} onStageChange={onStageChange} />
         ))}
       </div>
     </div>
@@ -225,8 +234,12 @@ function NewLeadModal({ onClose, onCreate }) {
 }
 
 export default function Pipeline() {
-  const { leads, isLoading, fetchLeads, fetchMetrics, createLead, updateStage } = usePipelineStore()
+  const { leads, isLoading, error, fetchLeads, fetchMetrics, createLead, updateStage } = usePipelineStore()
   const [showNewLead, setShowNewLead] = useState(false)
+
+  const handleStageChange = useCallback((leadId, newStatus) => {
+    updateStage(leadId, newStatus)
+  }, [updateStage])
 
   useEffect(() => {
     fetchLeads()
@@ -286,6 +299,17 @@ export default function Pipeline() {
         </div>
       </div>
 
+      {/* Error State */}
+      {error && (
+        <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl mb-4">
+          <AlertCircle size={20} className="text-red-500 flex-shrink-0" />
+          <p className="text-sm text-red-700 flex-1">{error}</p>
+          <button onClick={() => fetchLeads()} className="flex items-center gap-1 text-sm font-medium text-teal hover:text-teal-dark">
+            <RefreshCw size={14} /> Retry
+          </button>
+        </div>
+      )}
+
       {/* Kanban Board */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
@@ -302,6 +326,7 @@ export default function Pipeline() {
               stage={stage}
               leads={leads}
               onDrop={handleDrop}
+              onStageChange={handleStageChange}
             />
           ))}
         </div>

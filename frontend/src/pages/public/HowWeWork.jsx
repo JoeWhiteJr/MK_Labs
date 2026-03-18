@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MessageSquare, FileText, Rocket, CheckCircle2 } from 'lucide-react'
+import { MessageSquare, FileText, Rocket, CheckCircle2, ChevronDown } from 'lucide-react'
 
 const steps = [
   {
@@ -79,6 +79,30 @@ const faqs = [
   },
 ]
 
+function FaqAccordion({ faqs }) {
+  const [open, setOpen] = useState({})
+  const toggle = (q) => setOpen(prev => ({ ...prev, [q]: !prev[q] }))
+  return (
+    <div className="max-w-3xl mx-auto space-y-3">
+      {faqs.map(({ q, a }) => (
+        <div key={q} className="border border-slate-200 rounded-xl overflow-hidden">
+          <button
+            onClick={() => toggle(q)}
+            aria-expanded={open[q] || false}
+            className="w-full flex items-center justify-between px-6 py-4 bg-white hover:bg-slate-50 transition-colors text-left"
+          >
+            <h4 className="font-display text-h4 text-midnight pr-4">{q}</h4>
+            <ChevronDown size={20} className={`text-teal flex-shrink-0 transition-transform duration-300 ${open[q] ? 'rotate-180' : ''}`} />
+          </button>
+          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${open[q] ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <p className="px-6 pb-5 text-body-text leading-relaxed">{a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function HowWeWork() {
   useEffect(() => { document.title = "How We Work | Michael Kairos Labs" }, [])
   return (
@@ -148,14 +172,7 @@ export default function HowWeWork() {
             <p className="text-sm font-semibold text-teal uppercase tracking-widest mb-3">FAQ</p>
             <h2 className="font-display text-h1 text-midnight">Common Questions</h2>
           </div>
-          <div className="max-w-3xl mx-auto space-y-6">
-            {faqs.map(({ q, a }) => (
-              <div key={q} className="card">
-                <h4 className="font-display text-h4 text-midnight mb-2">{q}</h4>
-                <p className="text-body-text leading-relaxed">{a}</p>
-              </div>
-            ))}
-          </div>
+          <FaqAccordion faqs={faqs} />
         </div>
       </section>
 
