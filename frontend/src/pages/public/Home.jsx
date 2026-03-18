@@ -35,7 +35,7 @@ const stats = [
 ]
 
 export default function Home() {
-  useEffect(() => { document.title = "Research. Analytics. Impact. | Michael Kairos Labs" }, [])
+  useEffect(() => { document.title = 'Research. Analytics. Impact. | Michael Kairos Labs'; document.querySelector('meta[name="description"]')?.setAttribute('content', 'Michael Kairos Labs — boutique research and analytics consultancy. Oxford-caliber rigor, practical delivery, fair pricing for mission-driven organizations.') }, [])
   return (
     <div>
       {/* Hero */}

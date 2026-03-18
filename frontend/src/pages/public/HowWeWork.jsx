@@ -104,7 +104,14 @@ function FaqAccordion({ faqs }) {
 }
 
 export default function HowWeWork() {
-  useEffect(() => { document.title = "How We Work | Michael Kairos Labs" }, [])
+  useEffect(() => {
+    document.title = 'How We Work | Michael Kairos Labs'
+    document.querySelector('meta[name="description"]')?.setAttribute('content', 'Our engagement process: Discovery Call, Proposal, Execution, Delivery. Senior-led, transparent methodology, no junior bait-and-switch.')
+    // FAQ structured data
+    const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
+    const script = document.createElement('script'); script.type = 'application/ld+json'; script.text = JSON.stringify(faqSchema); document.head.appendChild(script)
+    return () => { document.head.removeChild(script) }
+  }, [])
   return (
     <div>
       {/* Hero */}

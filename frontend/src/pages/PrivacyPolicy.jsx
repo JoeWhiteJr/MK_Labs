@@ -33,10 +33,6 @@ export default function PrivacyPolicy() {
               your name, email address, organization, and message content.
             </li>
             <li>
-              <strong>Applications:</strong> When you apply to join the lab, we collect your name,
-              email, and any information you provide in your application.
-            </li>
-            <li>
               <strong>Account Information:</strong> If you create an account, we collect your name,
               email address, and login credentials.
             </li>
@@ -51,9 +47,8 @@ export default function PrivacyPolicy() {
           <p className="text-gray-600 mb-4">We use the information we collect to:</p>
           <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-6">
             <li>Respond to your inquiries and contact form submissions</li>
-            <li>Process and evaluate applications to the lab</li>
-            <li>Provide and maintain our research project management platform</li>
-            <li>Communicate with team members about projects and lab activities</li>
+            <li>Provide and maintain our consulting platform</li>
+            <li>Communicate with team members about projects and engagements</li>
             <li>Improve our website and services</li>
             <li>Comply with legal obligations</li>
           </ul>

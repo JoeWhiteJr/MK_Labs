@@ -35,7 +35,7 @@ const caseStudies = [
 ]
 
 export default function CaseStudies() {
-  useEffect(() => { document.title = "Case Studies | Michael Kairos Labs" }, [])
+  useEffect(() => { document.title = 'Case Studies | Michael Kairos Labs'; document.querySelector('meta[name="description"]')?.setAttribute('content', 'Real results from Michael Kairos Labs engagements. MaxDiff analysis, AI automation, and impact measurement case studies across industries.') }, [])
   const [activeFilter, setActiveFilter] = useState('All')
 
   const filtered = activeFilter === 'All'
