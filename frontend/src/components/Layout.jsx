@@ -101,7 +101,7 @@ export default function Layout() {
               <span className="font-display font-bold text-sm text-white">K</span>
             </div>
             <span className="font-display font-semibold text-base text-white">MKL</span>
-          />
+          </div>
           <div className="hidden md:flex items-center gap-2 ml-2 pl-3 border-l border-slate-600">
             <div className="w-7 h-7 rounded-full bg-midnight-light flex items-center justify-center overflow-hidden">
               {user?.avatar_url ? (
