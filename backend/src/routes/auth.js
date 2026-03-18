@@ -228,7 +228,8 @@ router.post('/reset-password', resetPasswordLimiter, [
       const hashedPassword = await bcrypt.hash(password, 12);
 
       await client.query('UPDATE users SET password_hash = $1 WHERE id = $2', [hashedPassword, resetToken.user_id]);
-      await client.query('UPDATE password_reset_tokens SET used_at = NOW() WHERE id = $1', [resetToken.id]);
+      // Invalidate ALL reset tokens for this user, not just the one used
+      await client.query('UPDATE password_reset_tokens SET used_at = NOW() WHERE user_id = $1 AND used_at IS NULL', [resetToken.user_id]);
 
       await client.query('COMMIT');
       res.json({ message: 'Password has been reset successfully. You can now log in.' });

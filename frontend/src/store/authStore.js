@@ -46,22 +46,6 @@ export const useAuthStore = create((set, _get) => ({
     }
   },
 
-  register: async (name, email, password) => {
-    set({ error: null })
-    try {
-      const { data } = await authApi.register({ name, email, password })
-      if (data.requiresApproval) {
-        return { success: true, requiresApproval: true }
-      }
-      localStorage.setItem('token', data.token)
-      set({ user: { ...data.user, is_super_admin: data.user.is_super_admin || false }, token: data.token })
-      return { success: true, requiresApproval: false }
-    } catch (error) {
-      set({ error: error.response?.data?.error?.message || 'Registration failed' })
-      return { success: false }
-    }
-  },
-
   logout: async () => {
     try {
       await authApi.logout()

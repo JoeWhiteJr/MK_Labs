@@ -8,7 +8,6 @@ import {
   servicesData,
   siteInfo,
   faqData,
-  donatePageData,
   teamData,
 } from '../data/publicSiteData'
 
@@ -84,11 +83,6 @@ export const useSiteContentStore = create((set, get) => ({
   getFaqData: () => {
     const content = get().sections.faq?.main
     return content || faqData
-  },
-
-  getDonateData: () => {
-    const content = get().sections.donate?.main
-    return content || { hero: donatePageData.hero, intro: donatePageData.intro }
   },
 
   getTeamData: () => {
