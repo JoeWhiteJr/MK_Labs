@@ -91,12 +91,12 @@ export default function Layout() {
             {navOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
           <img
-            src="/brand/mkl-logo-horizontal-white.png"
+            src="/brand/mkl-logo-horizontal.svg" style={{ filter: 'invert(1)' }}
             alt="Michael Kairos Labs"
             className="hidden sm:block h-11 w-auto"
           />
           <img
-            src="/brand/mkl-logo-horizontal-white.png"
+            src="/brand/mkl-logo-horizontal.svg" style={{ filter: 'invert(1)' }}
             alt="MKL"
             className="sm:hidden h-8 w-auto"
           />
