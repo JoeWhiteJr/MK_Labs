@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Shield, Users, Target, BarChart3 } from 'lucide-react'
 
@@ -34,6 +35,7 @@ const stats = [
 ]
 
 export default function Home() {
+  useEffect(() => { document.title = "Research. Analytics. Impact. | Michael Kairos Labs" }, [])
   return (
     <div>
       {/* Hero */}

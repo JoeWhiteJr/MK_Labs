@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
@@ -34,6 +35,7 @@ const caseStudies = [
 ]
 
 export default function CaseStudies() {
+  useEffect(() => { document.title = "Case Studies | Michael Kairos Labs" }, [])
   const [activeFilter, setActiveFilter] = useState('All')
 
   const filtered = activeFilter === 'All'
