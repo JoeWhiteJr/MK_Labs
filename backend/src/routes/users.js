@@ -5,6 +5,10 @@ const db = require('../config/database');
 const { authenticate, requireRole } = require('../middleware/auth');
 const { parsePagination } = require('../utils/pagination');
 const { isStrongPassword, PASSWORD_RULES_MESSAGE } = require('../utils/passwordValidation');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
@@ -395,11 +399,6 @@ router.delete('/:id', authenticate, requireRole('admin'), async (req, res, next)
 });
 
 // Avatar upload
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
-
 const avatarStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = path.join(process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads'), 'avatars');

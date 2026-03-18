@@ -212,7 +212,6 @@ export const adminApi = {
     api.get('/admin/audit-log', { params: { limit, offset, action, entity_type } }),
   searchUsers: (q, role) =>
     api.get('/admin/users/search', { params: { q, role } }),
-  getApplicationTrends: () => api.get('/admin/applications/trends'),
   getPublishedProjects: () => api.get('/admin/published-projects'),
   publishProject: (data) => api.post('/admin/publish-project', data),
   updatePublishedProject: (id, data) => api.put(`/admin/published-projects/${id}`, data),

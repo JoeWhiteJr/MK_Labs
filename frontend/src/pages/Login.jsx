@@ -95,9 +95,9 @@ export default function Login() {
           </form>
 
           <p className="mt-6 text-center text-sm text-text-secondary">
-            Want to join the team?{' '}
-            <Link to="/apply" className="text-primary-600 hover:text-primary-700 font-medium">
-              Apply here
+            Want to work with us?{' '}
+            <Link to="/contact" className="text-primary-600 hover:text-primary-700 font-medium">
+              Get in touch
             </Link>
           </p>
         </div>

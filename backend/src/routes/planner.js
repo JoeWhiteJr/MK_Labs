@@ -339,7 +339,7 @@ RESPOND WITH JSON ONLY (no markdown, no explanation):
     }
 
     // Store plan + steps in a transaction
-    const client = await db.pool.connect();
+    const client = await db.getClient();
     try {
       await client.query('BEGIN');
 

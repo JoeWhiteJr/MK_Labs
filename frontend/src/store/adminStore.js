@@ -3,11 +3,9 @@ import { adminApi, aiApi } from '../services/api'
 
 export const useAdminStore = create((set) => ({
   stats: null,
-  recentApplications: [],
   auditLog: [],
   auditLogTotal: 0,
   searchResults: [],
-  applicationTrends: [],
   isLoading: false,
   error: null,
   aiSummary: null,
@@ -18,11 +16,7 @@ export const useAdminStore = create((set) => ({
     set({ isLoading: true, error: null })
     try {
       const { data } = await adminApi.getStats()
-      set({
-        stats: data.stats,
-        recentApplications: data.recentApplications,
-        isLoading: false
-      })
+      set({ stats: data.stats, isLoading: false })
     } catch (error) {
       set({ error: error.response?.data?.error?.message || 'Failed to fetch admin stats', isLoading: false })
     }
@@ -49,15 +43,6 @@ export const useAdminStore = create((set) => ({
       set({ searchResults: data.users, isLoading: false })
     } catch (error) {
       set({ error: error.response?.data?.error?.message || 'Failed to search users', isLoading: false })
-    }
-  },
-
-  fetchApplicationTrends: async () => {
-    try {
-      const { data } = await adminApi.getApplicationTrends()
-      set({ applicationTrends: data.trends })
-    } catch (error) {
-      set({ error: error.response?.data?.error?.message || 'Failed to fetch trends' })
     }
   },
 

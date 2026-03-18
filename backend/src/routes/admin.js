@@ -28,6 +28,7 @@ router.get('/stats', authenticate, requireRole('admin'), async (req, res, next) 
           COUNT(*) FILTER (WHERE status = 'archived') as archived,
           AVG(progress) FILTER (WHERE status = 'active') as avg_active_progress
         FROM projects
+        WHERE deleted_at IS NULL
       `)
     ]);
 
