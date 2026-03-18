@@ -151,7 +151,6 @@ router.post('/generate', authenticate, [
         WHERE (created_by = $1 OR scope IN ('lab'))
           AND start_time >= $2::date
           AND start_time < ($2::date + INTERVAL '4 days')
-          AND deleted_at IS NULL
         ORDER BY start_time ASC
       `, [userId, today]),
 

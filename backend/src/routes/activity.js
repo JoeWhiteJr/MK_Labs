@@ -1,11 +1,11 @@
 const express = require('express');
 const db = require('../config/database');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Get recent activity
-router.get('/', authenticate, async (req, res, next) => {
+router.get('/', authenticate, requireRole('admin'), async (req, res, next) => {
   try {
     const limit = Math.min(parseInt(req.query.limit) || 20, 50);
     const offset = parseInt(req.query.offset) || 0;

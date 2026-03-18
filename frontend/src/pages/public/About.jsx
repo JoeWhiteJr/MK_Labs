@@ -49,7 +49,7 @@ export default function About() {
             {founders.map((founder) => (
               <div key={founder.name} className="card text-center">
                 <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-5 border-2 border-slate-100">
-                  <img src={founder.photo} alt={founder.name} className="w-full h-full object-cover" />
+                  <img src={founder.photo} alt={founder.name} loading="lazy" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="font-display text-h3 text-midnight mb-1">{founder.name}</h3>
                 <p className="text-sm text-teal font-medium mb-4">{founder.role}</p>
