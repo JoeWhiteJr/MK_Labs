@@ -81,7 +81,18 @@ router.get('/:id', authenticate, async (req, res, next) => {
       return res.status(404).json({ error: { message: 'Meeting not found' } });
     }
 
-    res.json({ meeting: result.rows[0] });
+    const meeting = result.rows[0];
+    if (req.user.role !== 'admin') {
+      const access = await db.query(
+        'SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1',
+        [meeting.project_id, req.user.id]
+      );
+      if (access.rows.length === 0) {
+        return res.status(403).json({ error: { message: 'Access denied' } });
+      }
+    }
+
+    res.json({ meeting });
   } catch (error) {
     next(error);
   }
@@ -184,10 +195,15 @@ router.put('/:id', authenticate, sanitizeBody('notes'), [
 // Get audio file
 router.get('/:id/audio', authenticate, async (req, res, next) => {
   try {
-    const result = await db.query('SELECT audio_path FROM meetings WHERE id = $1', [req.params.id]);
+    const result = await db.query('SELECT audio_path, project_id FROM meetings WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: { message: 'Meeting not found' } });
+    }
+
+    if (req.user.role !== 'admin') {
+      const access = await db.query('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1', [result.rows[0].project_id, req.user.id]);
+      if (access.rows.length === 0) return res.status(403).json({ error: { message: 'Access denied' } });
     }
 
     const audioPath = result.rows[0].audio_path;
@@ -249,10 +265,15 @@ router.get('/:id/audio', authenticate, async (req, res, next) => {
 // Get transcript
 router.get('/:id/transcript', authenticate, async (req, res, next) => {
   try {
-    const result = await db.query('SELECT transcript FROM meetings WHERE id = $1', [req.params.id]);
+    const result = await db.query('SELECT transcript, project_id FROM meetings WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: { message: 'Meeting not found' } });
+    }
+
+    if (req.user.role !== 'admin') {
+      const access = await db.query('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1', [result.rows[0].project_id, req.user.id]);
+      if (access.rows.length === 0) return res.status(403).json({ error: { message: 'Access denied' } });
     }
 
     res.json({ transcript: result.rows[0].transcript });
