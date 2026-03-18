@@ -127,6 +127,8 @@ export default function Services() {
               <div key={pillar.name} className="border border-slate-200 rounded-xl overflow-hidden">
                 <button
                   onClick={() => togglePillar(pillar.name)}
+                  aria-expanded={isExpanded}
+                  aria-controls={`pillar-${pillar.name.replace(/\s+/g, '-').toLowerCase()}`}
                   className="w-full flex items-center justify-between px-8 py-6 bg-white hover:bg-slate-50 transition-colors text-left"
                 >
                   <div>
@@ -143,6 +145,7 @@ export default function Services() {
                 </button>
 
                 <div
+                  id={`pillar-${pillar.name.replace(/\s+/g, '-').toLowerCase()}`}
                   className={`transition-all duration-300 ease-in-out overflow-hidden ${
                     isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
                   }`}

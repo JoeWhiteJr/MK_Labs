@@ -53,7 +53,7 @@ router.get('/:id', param('id').isUUID(), async (req, res, next) => {
   if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid ID' } });
 
   try {
-    const result = await db.query('SELECT * FROM leads WHERE id = $1', [req.params.id]);
+    const result = await db.query('SELECT * FROM leads WHERE id = $1 AND created_by = $2', [req.params.id, req.user.id]);
     if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
     res.json(result.rows[0]);
   } catch (error) {
@@ -85,9 +85,9 @@ router.post('/',
 );
 
 // PUT /api/pipeline/:id — update lead
-router.put('/:id', param('id').isUUID(), async (req, res, next) => {
+router.put('/:id', param('id').isUUID(), body('status').optional().isIn(VALID_STATUSES), async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid ID' } });
+  if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Validation failed', details: errors.array() } });
 
   const { company_name, contact_name, contact_email, contact_phone, service_pillar, estimated_value, notes, source, next_follow_up, status } = req.body;
   try {
@@ -104,8 +104,8 @@ router.put('/:id', param('id').isUUID(), async (req, res, next) => {
         next_follow_up = COALESCE($9, next_follow_up),
         status = COALESCE($10, status),
         updated_at = NOW()
-      WHERE id = $11 RETURNING *`,
-      [company_name, contact_name, contact_email, contact_phone, service_pillar, estimated_value, notes, source, next_follow_up, status, req.params.id]
+      WHERE id = $11 AND created_by = $12 RETURNING *`,
+      [company_name, contact_name, contact_email, contact_phone, service_pillar, estimated_value, notes, source, next_follow_up, status, req.params.id, req.user.id]
     );
     if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
     res.json(result.rows[0]);
@@ -124,8 +124,8 @@ router.put('/:id/stage',
 
     try {
       const result = await db.query(
-        `UPDATE leads SET status = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
-        [req.body.status, req.params.id]
+        `UPDATE leads SET status = $1, updated_at = NOW() WHERE id = $2 AND created_by = $3 RETURNING *`,
+        [req.body.status, req.params.id, req.user.id]
       );
       if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
       res.json(result.rows[0]);
@@ -141,7 +141,7 @@ router.delete('/:id', param('id').isUUID(), async (req, res, next) => {
   if (!errors.isEmpty()) return res.status(400).json({ error: { message: 'Invalid ID' } });
 
   try {
-    const result = await db.query('DELETE FROM leads WHERE id = $1 RETURNING id', [req.params.id]);
+    const result = await db.query('DELETE FROM leads WHERE id = $1 AND created_by = $2 RETURNING id', [req.params.id, req.user.id]);
     if (!result.rows.length) return res.status(404).json({ error: { message: 'Lead not found' } });
     res.json({ message: 'Lead deleted' });
   } catch (error) {
