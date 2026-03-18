@@ -3,4 +3,4 @@ Allow: /
 Disallow: /dashboard/
 Disallow: /api/
 
-Sitemap: https://utahvalleyresearchlab.com/sitemap.xml
+Sitemap: https://michaelkairoslabs.com/sitemap.xml

@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://utahvalleyresearchlab.com/</loc>
+    <loc>https://michaelkairoslabs.com/</loc>
     <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://utahvalleyresearchlab.com/about</loc>
+    <loc>https://michaelkairoslabs.com/services</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://michaelkairoslabs.com/about</loc>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://utahvalleyresearchlab.com/projects</loc>
+    <loc>https://michaelkairoslabs.com/how-we-work</loc>
     <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://utahvalleyresearchlab.com/team</loc>
+    <loc>https://michaelkairoslabs.com/case-studies</loc>
     <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://utahvalleyresearchlab.com/blog</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://utahvalleyresearchlab.com/contact</loc>
+    <loc>https://michaelkairoslabs.com/contact</loc>
     <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://utahvalleyresearchlab.com/donate</loc>
-    <priority>0.6</priority>
+    <loc>https://michaelkairoslabs.com/privacy</loc>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
   </url>
   <url>
-    <loc>https://utahvalleyresearchlab.com/apply</loc>
-    <priority>0.5</priority>
+    <loc>https://michaelkairoslabs.com/terms</loc>
+    <priority>0.3</priority>
+    <changefreq>yearly</changefreq>
   </url>
 </urlset>
