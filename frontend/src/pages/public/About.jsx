@@ -4,8 +4,9 @@ import { Linkedin } from 'lucide-react'
 const founders = [
   {
     name: 'Joe White',
-    role: 'Co-Founder & Managing Partner',
-    bio: 'Full-stack engineer and data scientist with deep expertise in AI systems, quantitative modeling, and research platform architecture. Joe builds the technical infrastructure that powers MKL\'s analytical capabilities.',
+    role: 'Co-Founder & Technical Lead',
+    bio: 'Data analyst and full-stack engineer specializing in AI systems, statistical modeling, and research platform architecture. With expertise spanning Python, React, and agentic AI pipelines, Joe builds the technical infrastructure that powers MKL\u2019s analytical capabilities \u2014 from factor analysis to production-grade RAG systems.',
+    linkedin: 'https://www.linkedin.com/in/joseph-whitejr',
   },
   {
     name: 'Jared Williams',
