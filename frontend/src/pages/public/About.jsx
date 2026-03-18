@@ -7,12 +7,14 @@ const founders = [
     role: 'Co-Founder & Technical Lead',
     bio: 'Data analyst and full-stack engineer specializing in AI systems, statistical modeling, and research platform architecture. With expertise spanning Python, React, and agentic AI pipelines, Joe builds the technical infrastructure that powers MKL\u2019s analytical capabilities \u2014 from factor analysis to production-grade RAG systems.',
     linkedin: 'https://www.linkedin.com/in/joseph-whitejr',
+    photo: '/brand/joe-white.jpg',
   },
   {
     name: 'Jared Williams',
     role: 'Co-Founder & Managing Partner',
     bio: 'Research methodologist with Oxford-level training in psychometrics, survey design, and statistical analysis. Jared leads the methodological rigor that sets MKL apart from generalist consultancies.',
     linkedin: 'https://www.linkedin.com/in/jared-williams-me/',
+    photo: '/brand/jared-williams.jpg',
   },
 ]
 
@@ -44,10 +46,8 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             {founders.map((founder) => (
               <div key={founder.name} className="card text-center">
-                <div className="w-24 h-24 rounded-full bg-teal-50 text-teal flex items-center justify-center mx-auto mb-5">
-                  <span className="font-display text-3xl font-bold">
-                    {founder.name.split(' ').map(n => n[0]).join('')}
-                  </span>
+                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-5 border-2 border-slate-100">
+                  <img src={founder.photo} alt={founder.name} className="w-full h-full object-cover" />
                 </div>
                 <h3 className="font-display text-h3 text-midnight mb-1">{founder.name}</h3>
                 <p className="text-sm text-teal font-medium mb-4">{founder.role}</p>
