@@ -11,8 +11,8 @@ const founders = [
   },
   {
     name: 'Jared Williams',
-    role: 'Co-Founder & Managing Partner',
-    bio: 'Research methodologist with Oxford-level training in psychometrics, survey design, and statistical analysis. Jared leads the methodological rigor that sets MKL apart from generalist consultancies.',
+    role: 'Co-Founder & Growth Strategy',
+    bio: 'Market researcher and data analyst with expertise in business analytics, SEO strategy, and digital marketing. Jared combines statistical rigor with growth-driven thinking \u2014 from Tableau dashboards and SPSS analysis to HubSpot campaigns and search optimization. Fluent in Korean, enabling MKL to serve global clients.',
     linkedin: 'https://www.linkedin.com/in/jared-williams-me/',
     photo: '/brand/jared-williams.jpg',
   },
