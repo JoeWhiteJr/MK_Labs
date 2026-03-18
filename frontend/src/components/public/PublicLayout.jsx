@@ -34,12 +34,12 @@ export default function PublicLayout() {
       </a>
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-midnight shadow-nav">
-        <div className="max-w-container mx-auto px-6 flex items-center justify-between h-[72px]">
+        <div className="max-w-container mx-auto px-6 flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-2">
             <img
               src="/brand/mkl-logo-white.png"
               alt="Michael Kairos Labs"
-              className="h-14 w-auto"
+              className="h-16 w-auto"
             />
           </Link>
 

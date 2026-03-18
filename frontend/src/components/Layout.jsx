@@ -93,12 +93,12 @@ export default function Layout() {
           <img
             src="/brand/mkl-logo-white.png"
             alt="Michael Kairos Labs"
-            className="hidden sm:block h-12 w-auto"
+            className="hidden sm:block h-14 w-auto"
           />
           <img
             src="/brand/mkl-logo-white.png"
             alt="MKL"
-            className="sm:hidden h-9 w-auto"
+            className="sm:hidden h-10 w-auto"
           />
           <div className="hidden md:flex items-center gap-2 ml-2 pl-3 border-l border-slate-600">
             <div className="w-7 h-7 rounded-full bg-midnight-light flex items-center justify-center overflow-hidden">
