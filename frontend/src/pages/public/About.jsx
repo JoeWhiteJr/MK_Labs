@@ -20,7 +20,7 @@ const founders = [
 ]
 
 export default function About() {
-  useEffect(() => { document.title = "About Us | Michael Kairos Labs" }, [])
+  useEffect(() => { document.title = 'About Us | Michael Kairos Labs'; document.querySelector('meta[name="description"]')?.setAttribute('content', 'Meet Joe White and Jared Williams — the partners behind Michael Kairos Labs. A 50/50 partnership delivering Oxford-caliber research at fair prices.') }, [])
   return (
     <div>
       {/* Hero */}

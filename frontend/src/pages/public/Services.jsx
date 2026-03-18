@@ -80,7 +80,7 @@ const pillars = [
 export default function Services() {
   const [expandedPillars, setExpandedPillars] = useState({})
 
-  useEffect(() => { document.title = 'Services | Michael Kairos Labs' }, [])
+  useEffect(() => { document.title = 'Services | Michael Kairos Labs'; document.querySelector('meta[name="description"]')?.setAttribute('content', 'Seven consulting services across three pillars: Research Methods, Data & Intelligence, and Operations & Impact. From MaxDiff analysis to AI integration.') }, [])
 
   useEffect(() => {
     const services = pillars.flatMap(p => p.services.map(s => ({

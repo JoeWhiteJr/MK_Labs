@@ -15,7 +15,7 @@ const serviceOptions = [
 ]
 
 export default function Contact() {
-  useEffect(() => { document.title = 'Contact | Michael Kairos Labs' }, [])
+  useEffect(() => { document.title = 'Contact | Michael Kairos Labs'; document.querySelector('meta[name="description"]')?.setAttribute('content', 'Get in touch with Michael Kairos Labs. Schedule a free discovery call or send us a message. We respond within one business day.') }, [])
   const [form, setForm] = useState({
     name: '',
     email: '',

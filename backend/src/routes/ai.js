@@ -109,7 +109,7 @@ router.post('/summarize-project', authenticate, [
       SELECT p.*, u.name as creator_name
       FROM projects p
       JOIN users u ON p.created_by = u.id
-      WHERE p.id = $1
+      WHERE p.id = $1 AND p.deleted_at IS NULL
     `, [projectId]);
 
     if (projectRes.rows.length === 0) {
@@ -229,7 +229,7 @@ router.post('/summarize-dashboard', authenticate, async (req, res, next) => {
           (SELECT COUNT(*) FROM action_items ai WHERE ai.project_id = p.id) as total_actions,
           (SELECT COUNT(*) FROM action_items ai WHERE ai.project_id = p.id AND ai.completed = true) as completed_actions
         FROM projects p
-        WHERE p.status IN ('active', 'inactive')
+        WHERE p.status IN ('active', 'inactive') AND p.deleted_at IS NULL
         ORDER BY p.updated_at DESC
       `),
       db.query(`
@@ -377,6 +377,7 @@ router.post('/admin-summary', authenticate, requireRole('admin'), [
           (SELECT COUNT(*) FROM action_items ai WHERE ai.project_id = p.id AND ai.completed = false) as pending_count
         FROM projects p
         JOIN users u ON p.created_by = u.id
+        WHERE p.deleted_at IS NULL
         ORDER BY p.updated_at DESC
       `),
       db.query(`

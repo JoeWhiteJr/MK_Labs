@@ -1,4 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import RecommendationButton from './RecommendationButton'
 import { useAuthStore } from '../store/authStore'
 import { getUploadUrl } from '../services/api'
 import { useNotificationStore } from '../store/notificationStore'
@@ -238,6 +239,7 @@ export default function Layout() {
           <Outlet />
         </div>
       </main>
+      <RecommendationButton />
 
       {/* AI Research Assistant Sidebar */}
       <AssistantSidebar />
