@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MessageSquare, FileText, Rocket, CheckCircle2 } from 'lucide-react'
 
@@ -79,6 +80,7 @@ const faqs = [
 ]
 
 export default function HowWeWork() {
+  useEffect(() => { document.title = "How We Work | Michael Kairos Labs" }, [])
   return (
     <div>
       {/* Hero */}

@@ -80,6 +80,8 @@ const pillars = [
 export default function Services() {
   const [expandedPillars, setExpandedPillars] = useState({})
 
+  useEffect(() => { document.title = 'Services | Michael Kairos Labs' }, [])
+
   useEffect(() => {
     const services = pillars.flatMap(p => p.services.map(s => ({
       '@type': 'Service',

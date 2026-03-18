@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Mail, Phone, Clock, Loader2 } from 'lucide-react'
 import { contactApi } from '../../services/api'
 import { toast } from '../../store/toastStore'
@@ -15,6 +15,7 @@ const serviceOptions = [
 ]
 
 export default function Contact() {
+  useEffect(() => { document.title = 'Contact | Michael Kairos Labs' }, [])
   const [form, setForm] = useState({
     name: '',
     email: '',

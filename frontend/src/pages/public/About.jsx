@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Linkedin } from 'lucide-react'
 
@@ -19,6 +20,7 @@ const founders = [
 ]
 
 export default function About() {
+  useEffect(() => { document.title = "About Us | Michael Kairos Labs" }, [])
   return (
     <div>
       {/* Hero */}
