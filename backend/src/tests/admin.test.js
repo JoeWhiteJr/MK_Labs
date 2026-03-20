@@ -6,8 +6,8 @@ const { createTestUser } = require('./testHelper');
 describe('Admin API', () => {
   let adminToken;
   let adminUserId;
-  let researcherToken;
-  let viewerToken;
+  let memberToken;
+  let clientToken;
   let testProjectId;
   let publishedProjectId;
 
@@ -24,21 +24,21 @@ describe('Admin API', () => {
     adminToken = admin.token;
     adminUserId = admin.id;
 
-    // Create researcher user (non-admin)
-    const researcher = await createTestUser({
+    // Create member user (non-admin)
+    const member = await createTestUser({
       name: 'Admin Test Researcher',
-      email: 'admintest-researcher@example.com',
-      role: 'researcher'
+      email: 'admintest-member@example.com',
+      role: 'member'
     });
-    researcherToken = researcher.token;
+    memberToken = member.token;
 
-    // Create viewer user (non-admin)
-    const viewer = await createTestUser({
+    // Create client user (non-admin)
+    const client = await createTestUser({
       name: 'Admin Test Viewer',
-      email: 'admintest-viewer@example.com',
-      role: 'viewer'
+      email: 'admintest-client@example.com',
+      role: 'client'
     });
-    viewerToken = viewer.token;
+    clientToken = client.token;
 
     // Create a test project for publish tests
     const projectRes = await request(app)
@@ -93,18 +93,18 @@ describe('Admin API', () => {
       expect(res.status).toBe(401);
     });
 
-    it('should return 403 for researcher', async () => {
+    it('should return 403 for member', async () => {
       const res = await request(app)
         .get('/api/admin/stats')
-        .set('Authorization', `Bearer ${researcherToken}`);
+        .set('Authorization', `Bearer ${memberToken}`);
 
       expect(res.status).toBe(403);
     });
 
-    it('should return 403 for viewer', async () => {
+    it('should return 403 for client', async () => {
       const res = await request(app)
         .get('/api/admin/stats')
-        .set('Authorization', `Bearer ${viewerToken}`);
+        .set('Authorization', `Bearer ${clientToken}`);
 
       expect(res.status).toBe(403);
     });
@@ -134,7 +134,7 @@ describe('Admin API', () => {
     it('should return 403 for non-admin', async () => {
       const res = await request(app)
         .get('/api/admin/published-projects')
-        .set('Authorization', `Bearer ${researcherToken}`);
+        .set('Authorization', `Bearer ${memberToken}`);
 
       expect(res.status).toBe(403);
     });
@@ -208,7 +208,7 @@ describe('Admin API', () => {
     it('should return 403 for non-admin', async () => {
       const res = await request(app)
         .post('/api/admin/publish-project')
-        .set('Authorization', `Bearer ${researcherToken}`)
+        .set('Authorization', `Bearer ${memberToken}`)
         .send({
           project_id: testProjectId,
           title: 'Not admin',
@@ -239,7 +239,7 @@ describe('Admin API', () => {
     it('should return 403 for non-admin', async () => {
       const res = await request(app)
         .get('/api/admin/audit-log')
-        .set('Authorization', `Bearer ${viewerToken}`);
+        .set('Authorization', `Bearer ${clientToken}`);
 
       expect(res.status).toBe(403);
     });
@@ -274,7 +274,7 @@ describe('Admin API', () => {
     it('should return 403 for non-admin', async () => {
       const res = await request(app)
         .get('/api/admin/users/search?q=test')
-        .set('Authorization', `Bearer ${researcherToken}`);
+        .set('Authorization', `Bearer ${memberToken}`);
 
       expect(res.status).toBe(403);
     });

@@ -26,7 +26,7 @@ describe('Users API', () => {
     const regular = await createTestUser({
       name: 'Regular User Test',
       email: 'usertest-regular@example.com',
-      role: 'researcher'
+      role: 'member'
     });
     regularToken = regular.token;
     regularUserId = regular.id;
@@ -258,15 +258,15 @@ describe('Users API', () => {
         .put(`/api/users/${regularUserId}/role`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
-          role: 'project_lead'
+          role: 'member'
         });
 
       expect(res.status).toBe(200);
-      expect(res.body.user.role).toBe('project_lead');
+      expect(res.body.user.role).toBe('member');
     });
 
     it('should allow all valid roles', async () => {
-      const roles = ['admin', 'project_lead', 'researcher', 'viewer'];
+      const roles = ['admin', 'member', 'client'];
 
       for (const role of roles) {
         const res = await request(app)
@@ -291,13 +291,13 @@ describe('Users API', () => {
     });
 
     it('should reject non-admin users', async () => {
-      await db.query("UPDATE users SET role = 'researcher' WHERE id = $1", [regularUserId]);
+      await db.query("UPDATE users SET role = 'member' WHERE id = $1", [regularUserId]);
 
       const res = await request(app)
         .put(`/api/users/${adminUserId}/role`)
         .set('Authorization', `Bearer ${regularToken}`)
         .send({
-          role: 'viewer'
+          role: 'client'
         });
 
       expect(res.status).toBe(403);
@@ -308,7 +308,7 @@ describe('Users API', () => {
         .put('/api/users/00000000-0000-0000-0000-000000000000/role')
         .set('Authorization', `Bearer ${adminToken}`)
         .send({
-          role: 'researcher'
+          role: 'member'
         });
 
       expect(res.status).toBe(404);
