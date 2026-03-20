@@ -194,7 +194,6 @@ export const usersApi = {
   getPreferences: () => api.get('/users/preferences'),
   updatePreferences: (data) => api.put('/users/preferences', data),
   getStreak: () => api.get('/users/streak'),
-  blockUser: (userId) => api.post(`/users/${userId}/block`),
   uploadAvatar: (file) => {
     const formData = new FormData()
     formData.append('avatar', file)

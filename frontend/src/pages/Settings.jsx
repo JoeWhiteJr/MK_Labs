@@ -307,6 +307,9 @@ export default function Settings() {
                             <p className="text-xs text-text-secondary">{desc}</p>
                           </div>
                           <button
+                            role="switch"
+                            aria-checked={!!preferences[key]}
+                            aria-label={label}
                             onClick={() => handleTogglePref(key)}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                               preferences[key] ? 'bg-primary-500' : 'bg-gray-300'
@@ -336,6 +339,9 @@ export default function Settings() {
                             <p className="text-xs text-text-secondary">{desc}</p>
                           </div>
                           <button
+                            role="switch"
+                            aria-checked={!!preferences[key]}
+                            aria-label={label}
                             onClick={() => handleTogglePref(key)}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                               preferences[key] ? 'bg-primary-500' : 'bg-gray-300'

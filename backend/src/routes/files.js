@@ -165,7 +165,14 @@ router.get('/:id/download', authenticate, async (req, res, next) => {
       }
     }
 
-    res.download(file.storage_path, file.original_filename);
+    // Path traversal protection: ensure file is within upload directory
+    const uploadDir = path.resolve(process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads'));
+    const resolvedPath = path.resolve(file.storage_path);
+    if (!resolvedPath.startsWith(uploadDir)) {
+      return res.status(403).json({ error: { message: 'Access denied' } });
+    }
+
+    res.download(resolvedPath, file.original_filename);
   } catch (error) {
     next(error);
   }

@@ -236,9 +236,14 @@ router.get('/:id/audio', authenticate, async (req, res, next) => {
     if (range) {
       const parts = range.replace(/bytes=/, '').split('-');
       const start = parseInt(parts[0], 10);
-      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-      const chunkSize = (end - start) + 1;
+      const end = Math.min(parts[1] ? parseInt(parts[1], 10) : fileSize - 1, fileSize - 1);
 
+      if (isNaN(start) || start < 0 || start >= fileSize || end < start) {
+        res.writeHead(416, { 'Content-Range': `bytes */${fileSize}` });
+        return res.end();
+      }
+
+      const chunkSize = (end - start) + 1;
       const file = fs.createReadStream(audioPath, { start, end });
 
       res.writeHead(206, {
@@ -285,13 +290,18 @@ router.get('/:id/transcript', authenticate, async (req, res, next) => {
 // Trigger transcription (placeholder - would integrate with Whisper API)
 router.post('/:id/transcribe', authenticate, async (req, res, next) => {
   try {
-    const result = await db.query('SELECT * FROM meetings WHERE id = $1', [req.params.id]);
+    const result = await db.query('SELECT * FROM meetings WHERE id = $1 AND deleted_at IS NULL', [req.params.id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: { message: 'Meeting not found' } });
     }
 
     const meeting = result.rows[0];
+
+    if (req.user.role !== 'admin') {
+      const access = await db.query('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2 LIMIT 1', [meeting.project_id, req.user.id]);
+      if (access.rows.length === 0) return res.status(403).json({ error: { message: 'Access denied' } });
+    }
 
     if (!meeting.audio_path) {
       return res.status(400).json({ error: { message: 'No audio file associated with this meeting' } });
