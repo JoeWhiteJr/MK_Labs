@@ -114,7 +114,7 @@ router.get('/audit-log', authenticate, requireRole('admin'), [
 // Search users
 router.get('/users/search', authenticate, requireRole('admin'), [
   query('q').optional().trim(),
-  query('role').optional().isIn(['admin', 'project_lead', 'researcher', 'viewer'])
+  query('role').optional().isIn(['admin', 'member', 'client'])
 ], async (req, res, next) => {
   try {
     const { q, role } = req.query;

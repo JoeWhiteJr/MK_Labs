@@ -97,12 +97,8 @@ router.get('/preferences', authenticate, async (req, res, next) => {
 
 // Update user notification preferences
 router.put('/preferences', authenticate, [
-  body('email_chat').optional().isBoolean(),
-  body('email_applications').optional().isBoolean(),
   body('email_mentions').optional().isBoolean(),
   body('email_system').optional().isBoolean(),
-  body('in_app_chat').optional().isBoolean(),
-  body('in_app_applications').optional().isBoolean(),
   body('in_app_mentions').optional().isBoolean(),
   body('in_app_system').optional().isBoolean()
 ], async (req, res, next) => {
@@ -113,8 +109,8 @@ router.put('/preferences', authenticate, [
     }
 
     const allowedFields = [
-      'email_chat', 'email_applications', 'email_mentions', 'email_system',
-      'in_app_chat', 'in_app_applications', 'in_app_mentions', 'in_app_system'
+      'email_mentions', 'email_system',
+      'in_app_mentions', 'in_app_system'
     ];
 
     const updates = [];
@@ -185,52 +181,6 @@ router.get('/streak', authenticate, async (req, res, next) => {
     }
 
     res.json({ streak, lastActive: rows[0].activity_date });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Get blocked users list
-router.get('/blocks', authenticate, async (req, res, next) => {
-  try {
-    const result = await db.query(
-      `SELECT ub.id, ub.blocked_id, ub.created_at, u.name, u.avatar_url
-       FROM user_blocks ub
-       JOIN users u ON ub.blocked_id = u.id
-       WHERE ub.blocker_id = $1
-       ORDER BY ub.created_at DESC`,
-      [req.user.id]
-    );
-    res.json({ blocks: result.rows });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Block a user
-router.post('/:userId/block', authenticate, async (req, res, next) => {
-  try {
-    if (req.params.userId === req.user.id) {
-      return res.status(400).json({ error: { message: 'Cannot block yourself' } });
-    }
-    await db.query(
-      'INSERT INTO user_blocks (blocker_id, blocked_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
-      [req.user.id, req.params.userId]
-    );
-    res.json({ message: 'User blocked' });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Unblock a user
-router.delete('/:userId/block', authenticate, async (req, res, next) => {
-  try {
-    await db.query(
-      'DELETE FROM user_blocks WHERE blocker_id = $1 AND blocked_id = $2',
-      [req.user.id, req.params.userId]
-    );
-    res.json({ message: 'User unblocked' });
   } catch (error) {
     next(error);
   }
@@ -340,7 +290,7 @@ router.put('/password', authenticate, [
 
 // Update user role (admin only, super admin required for admin role changes)
 router.put('/:id/role', authenticate, requireRole('admin'), [
-  body('role').isIn(['admin', 'project_lead', 'researcher', 'viewer'])
+  body('role').isIn(['admin', 'member', 'client'])
 ], async (req, res, next) => {
   try {
     const errors = validationResult(req);

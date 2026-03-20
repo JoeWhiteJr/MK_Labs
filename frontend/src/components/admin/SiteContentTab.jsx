@@ -10,7 +10,6 @@ const SECTION_LABELS = {
   services: 'Services',
   contact: 'Contact Info',
   faq: 'FAQ',
-  donate: 'Donate Page',
 }
 
 function JsonField({ label, value, onChange }) {

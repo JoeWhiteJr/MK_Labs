@@ -48,7 +48,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],  // unsafe-inline needed for Tailwind
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       imgSrc: ["'self'", "data:"],
       fontSrc: ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
       connectSrc: ["'self'", "ws:", "wss:", "https://michaelkairoslabs.com", "wss://michaelkairoslabs.com"],
